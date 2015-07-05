@@ -41,9 +41,10 @@ Depends:		${shlibs:Depends},
 				${misc:Depends},
 				fonts-dejavu-core,
 				python3,
-				nvidia-cg-toolkit [!armhf]
+				nvidia-cg-toolkit [!armhf],
+				retroarch-assets
 Replaces: ssnes
-Suggests: retroarch-joypad-autoconfig, libretro-common-shaders, libretro-common-overlays, retroarch-assets
+Suggests: retroarch-joypad-autoconfig, libretro-common-shaders, libretro-common-overlays
 Description: Simple frontend for the libretro library
  RetroArch is an open source, multi-platform frontend for the libretro API. 
  It can be used as a modular multi emulator system, game engine, media player 
