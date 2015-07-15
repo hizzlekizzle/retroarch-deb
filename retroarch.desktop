@@ -10,3 +10,4 @@ Exec=retroarch
 Terminal=false
 StartupNotify=false
 Categories=Game
+Keywords=emulator;game;libretro;engine;
