@@ -6,7 +6,6 @@ usr/lib/retroarch/filters/audio
 usr/share/applications
 usr/share/libretro/assets
 usr/share/libretro/autoconfig
-usr/share/libretro/cheats
 usr/share/libretro/info
 usr/share/libretro/overlays
 usr/share/libretro/shaders
