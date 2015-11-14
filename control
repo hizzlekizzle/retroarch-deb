@@ -30,7 +30,7 @@ Build-Depends: debhelper (>= 9),
                python3-dev,
                x11proto-xext-dev,
                zlib1g-dev
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Homepage: http://www.libretro.com/
 
 Package: retroarch
@@ -48,4 +48,20 @@ Description: Simple frontend for the libretro library
  and 3D technical demonstration. These features are available through
  libretro cores.
  .
- It provides a simple built-in GUI, the RGUI.
+ It provides three built-in GUI: RGUI, XMB and GLUI.
+
+Package: retroarch-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: retroarch (= ${binary:Version})
+         ${misc:Depends},
+         ${shlibs:Depends}
+Description: Simple frontend for the libretro library - debug symbols
+ RetroArch is an open source, multi-platform frontend for the libretro API.
+ It can be used as a modular multi emulator system, game engine, media player
+ and 3D technical demonstration. These features are available through
+ libretro cores.
+ .
+ This package provides the debug symbols for RetroArch.
+ 

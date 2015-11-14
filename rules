@@ -17,11 +17,8 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
-
-%:
-	dh $@ --parallel
+export DEB_CXXFLAGS_MAINT_STRIP=-O2
+export DEB_CFLAGS_MAINT_STRIP=-O2
 
 ARCH=$(shell dpkg-architecture -qDEB_HOST_ARCH)
 
@@ -30,6 +27,9 @@ CONFIG_EXTRA_FLAGS=--enable-sse --disable-oss
 else ifeq ($(ARCH),armhf)
 CONFIG_EXTRA_FLAGS=--disable-vg --disable-cg --disable-oss --enable-gles --enable-neon --enable-floathard
 endif
+
+%:
+	dh $@ --parallel
 
 override_dh_auto_configure:
 	# See ./configure --help for valid flags
@@ -42,6 +42,9 @@ override_dh_auto_build:
 	dh_auto_build -- -C gfx/video_filters/
 	# Audio DSP plugins
 	dh_auto_build -- -C audio/audio_filters/
+
+override_dh_strip:
+	dh_strip -pretroarch --dbg-package=retroarch-dbg
 
 override_dh_auto_install:
 	# Add here commands to install the package into debian/retroarch.
