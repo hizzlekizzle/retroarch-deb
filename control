@@ -6,6 +6,7 @@ Uploaders: Sergio Benjamim (sergio-br2) <sergio_br2@yahoo.com.br>
 Build-Depends: debhelper (>= 9),
                libasound2-dev,
                libavcodec-dev,
+               libavdevice-dev,
                libavformat-dev,
                libavutil-dev,
                libc6-dev (>= 2.13),
@@ -37,8 +38,6 @@ Package: retroarch
 Architecture: any
 Depends: fonts-dejavu-core,
          libretro-core-info,
-         nvidia-cg-toolkit [!armhf],
-         python3,
          ${misc:Depends},
          ${shlibs:Depends}
 Suggests: retroarch-assets, retroarch-joypad-autoconfig
@@ -64,4 +63,15 @@ Description: Simple frontend for the libretro library - debug symbols
  libretro cores.
  .
  This package provides the debug symbols for RetroArch.
- 
+
+Package: retroarch-cg2glsl
+Architecture: amd64 i386
+Depends: nvidia-cg-toolkit, python3, ${misc:Depends}, ${shlibs:Depends}
+Breaks: retroarch (<< 1.2.2+r259~17~)
+Description: Cg to GLSL shaders converter
+ retroarch-cg2glsl converts Cg shaders to GLSL shaders. It can convert single
+ shaders as well as whole folder structures in batch. 100% compatibility
+ is not guaranteed, but almost all shaders should work fine. Cg presets (.cgp)
+ are not converted at the moment, but converting them is as simple as copying
+ over the .cgp, rename it to .glslp and replace references to .cg files
+ to .glsl.
