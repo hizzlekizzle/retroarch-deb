@@ -3,7 +3,7 @@ Index: RetroArch-git/menu/menu_displaylist.c
 ===================================================================
 --- RetroArch-git.orig/menu/menu_displaylist.c	2015-12-26 00:03:29.348472081 -0200
 +++ RetroArch-git/menu/menu_displaylist.c	2015-12-26 00:07:30.040035622 -0200
-@@ -1940,7 +1940,7 @@
+@@ -1938,7 +1938,7 @@
           menu_hash_to_str(MENU_LABEL_UPDATE_LAKKA),
           MENU_SETTING_ACTION, 0, 0);
  #endif
@@ -12,7 +12,7 @@ Index: RetroArch-git/menu/menu_displaylist.c
     menu_entries_push(info->list,
           menu_hash_to_str(MENU_LABEL_VALUE_CORE_UPDATER_LIST),
           menu_hash_to_str(MENU_LABEL_CORE_UPDATER_LIST),
-@@ -1960,7 +1960,7 @@
+@@ -1958,7 +1958,7 @@
           menu_hash_to_str(MENU_LABEL_VALUE_UPDATE_AUTOCONFIG_PROFILES),
           menu_hash_to_str(MENU_LABEL_UPDATE_AUTOCONFIG_PROFILES),
           MENU_SETTING_ACTION, 0, 0);

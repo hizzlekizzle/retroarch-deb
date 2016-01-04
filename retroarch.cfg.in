@@ -10,7 +10,7 @@
 
 # If set to a directory, Content which is temporarily extracted
 # will be extracted to this directory.
-extraction_directory = "/tmp/"
+cache_directory = "/tmp"
 
 # Save all input remapping files to this directory.
 # input_remapping_directory =

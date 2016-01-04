@@ -1,0 +1,47 @@
+Index: RetroArch-git/libretro-db/Makefile
+===================================================================
+--- RetroArch-git.orig/libretro-db/Makefile	2015-12-28 11:52:06.757140583 -0200
++++ RetroArch-git/libretro-db/Makefile	2015-12-28 11:54:14.491015827 -0200
+@@ -65,7 +65,7 @@
+ 
+ RMSGPACK_OBJS := $(RMSGPACK_C:.c=.o)
+ 
+-LUA_FLAGS     = `pkg-config lua --libs`
++LUA_FLAGS     = `pkg-config lua5.2 --libs`
+ TESTLIB_FLAGS = ${CFLAGS} ${LUA_FLAGS} -shared -fpic
+ 
+ .PHONY: all clean check
+Index: RetroArch-git/libretro-db/lua_common.h
+===================================================================
+--- RetroArch-git.orig/libretro-db/lua_common.h	2015-12-28 11:52:13.657241880 -0200
++++ RetroArch-git/libretro-db/lua_common.h	2015-12-28 11:54:26.163187185 -0200
+@@ -1,9 +1,9 @@
+ #ifndef __RARCHDB_LUA_COMMON_H__
+ #define __RARCHDB_LUA_COMMON_H__
+ 
+-#include <lua.h>
+-#include <lualib.h>
+-#include <lauxlib.h>
++#include <lua5.2/lua.h>
++#include <lua5.2/lualib.h>
++#include <lua5.2/lauxlib.h>
+ 
+ #include "rmsgpack_dom.h"
+ 
+Index: RetroArch-git/libretro-db/lua_converter.c
+===================================================================
+--- RetroArch-git.orig/libretro-db/lua_converter.c	2015-12-28 11:52:10.329192818 -0200
++++ RetroArch-git/libretro-db/lua_converter.c	2015-12-28 11:54:20.531104501 -0200
+@@ -5,9 +5,9 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
+-#include <lua.h>
+-#include <lualib.h>
+-#include <lauxlib.h>
++#include <lua5.2/lua.h>
++#include <lua5.2/lualib.h>
++#include <lua5.2/lauxlib.h>
+ 
+ #include "libretrodb.h"
+ #include "lua_common.h"
