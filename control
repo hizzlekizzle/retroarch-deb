@@ -38,9 +38,10 @@ Package: retroarch
 Architecture: any
 Depends: fonts-dejavu-core,
          libretro-core-info,
+         retroarch-assets,
+         retroarch-joypad-autoconfig,
          ${misc:Depends},
          ${shlibs:Depends}
-Suggests: retroarch-assets, retroarch-joypad-autoconfig
 Description: Simple frontend for the libretro library
  RetroArch is an open source, multi-platform frontend for the libretro API.
  It can be used as a modular multi emulator system, game engine, media player
