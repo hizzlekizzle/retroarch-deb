@@ -1,8 +1,8 @@
 Description: There are packages for these stuff, let's avoid confusion in the Online Updater
 Index: RetroArch-git/menu/menu_displaylist.c
 ===================================================================
---- RetroArch-git.orig/menu/menu_displaylist.c	2015-12-26 00:03:29.348472081 -0200
-+++ RetroArch-git/menu/menu_displaylist.c	2015-12-26 00:07:30.040035622 -0200
+--- RetroArch-git.orig/menu/menu_displaylist.c	2016-01-15 16:02:30.311472263 -0200
++++ RetroArch-git/menu/menu_displaylist.c	2016-01-15 16:02:50.191748316 -0200
 @@ -1938,7 +1938,7 @@
           menu_hash_to_str(MENU_LABEL_UPDATE_LAKKA),
           MENU_SETTING_ACTION, 0, 0);
@@ -12,12 +12,12 @@ Index: RetroArch-git/menu/menu_displaylist.c
     menu_entries_push(info->list,
           menu_hash_to_str(MENU_LABEL_VALUE_CORE_UPDATER_LIST),
           menu_hash_to_str(MENU_LABEL_CORE_UPDATER_LIST),
-@@ -1958,7 +1958,7 @@
-          menu_hash_to_str(MENU_LABEL_VALUE_UPDATE_AUTOCONFIG_PROFILES),
-          menu_hash_to_str(MENU_LABEL_UPDATE_AUTOCONFIG_PROFILES),
+@@ -1953,7 +1953,7 @@
+          menu_hash_to_str(MENU_LABEL_VALUE_UPDATE_ASSETS),
+          menu_hash_to_str(MENU_LABEL_UPDATE_ASSETS),
           MENU_SETTING_ACTION, 0, 0);
 -
 +*/
     menu_entries_push(info->list,
-          menu_hash_to_str(MENU_LABEL_VALUE_UPDATE_CHEATS),
-          menu_hash_to_str(MENU_LABEL_UPDATE_CHEATS),
+          menu_hash_to_str(MENU_LABEL_VALUE_UPDATE_AUTOCONFIG_PROFILES),
+          menu_hash_to_str(MENU_LABEL_UPDATE_AUTOCONFIG_PROFILES),
