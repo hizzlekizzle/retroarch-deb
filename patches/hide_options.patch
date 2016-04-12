@@ -1,23 +1,23 @@
 Description: There are packages for these stuff, let's avoid confusion in the Online Updater
 Index: RetroArch-git/menu/menu_displaylist.c
 ===================================================================
---- RetroArch-git.orig/menu/menu_displaylist.c	2016-01-15 16:02:30.311472263 -0200
-+++ RetroArch-git/menu/menu_displaylist.c	2016-01-15 16:02:50.191748316 -0200
-@@ -1946,7 +1946,7 @@
+--- RetroArch-git.orig/menu/menu_displaylist.c	2016-04-11 23:38:21.447430228 -0300
++++ RetroArch-git/menu/menu_displaylist.c	2016-04-11 23:39:59.528924899 -0300
+@@ -2379,7 +2379,7 @@
           menu_hash_to_str(MENU_LABEL_UPDATE_LAKKA),
           MENU_SETTING_ACTION, 0, 0);
  #endif
 -
 +/*
-    menu_entries_push(info->list,
+    menu_entries_add(info->list,
           menu_hash_to_str(MENU_LABEL_VALUE_CORE_UPDATER_LIST),
           menu_hash_to_str(MENU_LABEL_CORE_UPDATER_LIST),
-@@ -1961,7 +1961,7 @@
+@@ -2394,7 +2394,7 @@
           menu_hash_to_str(MENU_LABEL_VALUE_UPDATE_ASSETS),
           menu_hash_to_str(MENU_LABEL_UPDATE_ASSETS),
           MENU_SETTING_ACTION, 0, 0);
 -
 +*/
-    menu_entries_push(info->list,
+    menu_entries_add(info->list,
           menu_hash_to_str(MENU_LABEL_VALUE_UPDATE_AUTOCONFIG_PROFILES),
           menu_hash_to_str(MENU_LABEL_UPDATE_AUTOCONFIG_PROFILES),
