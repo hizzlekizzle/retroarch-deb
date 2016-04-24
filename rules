@@ -26,7 +26,7 @@ ifeq ($(ARCH), $(filter $(ARCH), amd64 i386))
 else ifeq ($(ARCH),armhf)
 	CONFIG_EXTRA_FLAGS=--disable-cg --enable-gles --enable-neon --enable-floathard
 else ifeq ($(ARCH),arm64)
-	CONFIG_EXTRA_FLAGS=--disable-cg --enable-gles --enable-neon
+	CONFIG_EXTRA_FLAGS=--disable-cg --enable-gles
 endif
 
 # Needs to install lsb-release package
