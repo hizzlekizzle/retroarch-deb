@@ -1,9 +1,9 @@
 Description: There are packages for these stuff, let's avoid confusion in the Online Updater
 Index: RetroArch-git/menu/menu_displaylist.c
 ===================================================================
---- RetroArch-git.orig/menu/menu_displaylist.c	2016-04-11 23:38:21.447430228 -0300
-+++ RetroArch-git/menu/menu_displaylist.c	2016-04-11 23:39:59.528924899 -0300
-@@ -2379,7 +2379,7 @@
+--- RetroArch-git.orig/menu/menu_displaylist.c	2016-04-23 17:52:05.913627809 -0300
++++ RetroArch-git/menu/menu_displaylist.c	2016-04-23 17:52:43.006451143 -0300
+@@ -2391,17 +2391,17 @@
           menu_hash_to_str(MENU_LABEL_UPDATE_LAKKA),
           MENU_SETTING_ACTION, 0, 0);
  #endif
@@ -12,7 +12,19 @@ Index: RetroArch-git/menu/menu_displaylist.c
     menu_entries_add(info->list,
           menu_hash_to_str(MENU_LABEL_VALUE_CORE_UPDATER_LIST),
           menu_hash_to_str(MENU_LABEL_CORE_UPDATER_LIST),
-@@ -2394,7 +2394,7 @@
+          MENU_SETTING_ACTION, 0, 0);
+-
++*/
+    menu_entries_add(info->list,
+          menu_hash_to_str(MENU_LABEL_VALUE_THUMBNAILS_UPDATER_LIST),
+          menu_hash_to_str(MENU_LABEL_THUMBNAILS_UPDATER_LIST),
+          MENU_SETTING_ACTION, 0, 0);
+-
++/*
+    menu_entries_add(info->list,
+          menu_hash_to_str(MENU_LABEL_VALUE_UPDATE_CORE_INFO_FILES),
+          menu_hash_to_str(MENU_LABEL_UPDATE_CORE_INFO_FILES),
+@@ -2411,7 +2411,7 @@
           menu_hash_to_str(MENU_LABEL_VALUE_UPDATE_ASSETS),
           menu_hash_to_str(MENU_LABEL_UPDATE_ASSETS),
           MENU_SETTING_ACTION, 0, 0);
