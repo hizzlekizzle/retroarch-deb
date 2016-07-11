@@ -1,8 +1,8 @@
 Index: RetroArch-git/menu/menu_displaylist.c
 ===================================================================
---- RetroArch-git.orig/menu/menu_displaylist.c	2016-06-18 12:22:15.696058767 -0300
-+++ RetroArch-git/menu/menu_displaylist.c	2016-06-18 12:28:47.490487473 -0300
-@@ -2880,18 +2880,19 @@
+--- RetroArch-git.orig/menu/menu_displaylist.c	2016-07-10 21:36:36.493556916 -0300
++++ RetroArch-git/menu/menu_displaylist.c	2016-07-10 21:36:36.485556804 -0300
+@@ -3001,18 +3001,19 @@
           MENU_ENUM_LABEL_THUMBNAILS_UPDATER_LIST,
           MENU_SETTING_ACTION, 0, 0);
  #else
@@ -24,7 +24,7 @@ Index: RetroArch-git/menu/menu_displaylist.c
     menu_entries_add_enum(info->list,
           msg_hash_to_str(MENU_ENUM_LABEL_VALUE_UPDATE_CORE_INFO_FILES),
           msg_hash_to_str(MENU_ENUM_LABEL_UPDATE_CORE_INFO_FILES),
-@@ -2903,7 +2904,7 @@
+@@ -3024,7 +3025,7 @@
           msg_hash_to_str(MENU_ENUM_LABEL_UPDATE_ASSETS),
           MENU_ENUM_LABEL_UPDATE_ASSETS,
           MENU_SETTING_ACTION, 0, 0);
