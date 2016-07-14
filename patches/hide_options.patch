@@ -1,35 +1,35 @@
 Index: RetroArch-git/menu/menu_displaylist.c
 ===================================================================
---- RetroArch-git.orig/menu/menu_displaylist.c	2016-07-10 21:36:36.493556916 -0300
-+++ RetroArch-git/menu/menu_displaylist.c	2016-07-10 21:36:36.485556804 -0300
-@@ -3001,18 +3001,19 @@
+--- RetroArch-git.orig/menu/menu_displaylist.c	2016-07-13 22:14:12.932872638 -0300
++++ RetroArch-git/menu/menu_displaylist.c	2016-07-13 22:14:12.928872555 -0300
+@@ -2926,18 +2926,19 @@
           MENU_ENUM_LABEL_THUMBNAILS_UPDATER_LIST,
           MENU_SETTING_ACTION, 0, 0);
  #else
 +/*
-    menu_entries_add_enum(info->list,
+    menu_entries_append_enum(info->list,
           msg_hash_to_str(MENU_ENUM_LABEL_VALUE_CORE_UPDATER_LIST),
           msg_hash_to_str(MENU_ENUM_LABEL_CORE_UPDATER_LIST),
           MENU_ENUM_LABEL_CORE_UPDATER_LIST,
           MENU_SETTING_ACTION, 0, 0);
 -
 +*/
-    menu_entries_add_enum(info->list,
+    menu_entries_append_enum(info->list,
           msg_hash_to_str(MENU_ENUM_LABEL_VALUE_THUMBNAILS_UPDATER_LIST),
           msg_hash_to_str(MENU_ENUM_LABEL_THUMBNAILS_UPDATER_LIST),
           MENU_ENUM_LABEL_THUMBNAILS_UPDATER_LIST,
           MENU_SETTING_ACTION, 0, 0);
 -
 +/*
-    menu_entries_add_enum(info->list,
+    menu_entries_append_enum(info->list,
           msg_hash_to_str(MENU_ENUM_LABEL_VALUE_UPDATE_CORE_INFO_FILES),
           msg_hash_to_str(MENU_ENUM_LABEL_UPDATE_CORE_INFO_FILES),
-@@ -3024,7 +3025,7 @@
+@@ -2949,7 +2950,7 @@
           msg_hash_to_str(MENU_ENUM_LABEL_UPDATE_ASSETS),
           MENU_ENUM_LABEL_UPDATE_ASSETS,
           MENU_SETTING_ACTION, 0, 0);
 -
 +*/
-    menu_entries_add_enum(info->list,
+    menu_entries_append_enum(info->list,
           msg_hash_to_str(MENU_ENUM_LABEL_VALUE_UPDATE_AUTOCONFIG_PROFILES),
           msg_hash_to_str(MENU_ENUM_LABEL_UPDATE_AUTOCONFIG_PROFILES),
