@@ -31,7 +31,8 @@ Build-Depends: debhelper (>= 9),
                pkg-config,
                python3-dev,
                x11proto-xext-dev,
-               zlib1g-dev
+               zlib1g-dev,
+               libvulkan-dev
 Standards-Version: 3.9.6
 Homepage: http://www.libretro.com/
 
