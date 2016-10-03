@@ -24,9 +24,9 @@ ARCH=$(shell dpkg-architecture -qDEB_HOST_ARCH)
 ifeq ($(ARCH), $(filter $(ARCH), amd64 i386))
 	CONFIG_EXTRA_FLAGS=--enable-sse
 else ifeq ($(ARCH),armhf)
-	CONFIG_EXTRA_FLAGS=--disable-cg --enable-gles --enable-neon --enable-floathard
+	CONFIG_EXTRA_FLAGS=--disable-cg --enable-opengles --enable-neon --enable-floathard
 else ifeq ($(ARCH),arm64)
-	CONFIG_EXTRA_FLAGS=--disable-cg --enable-gles
+	CONFIG_EXTRA_FLAGS=--disable-cg --enable-opengles
 endif
 
 # Needs to install lsb-release package
