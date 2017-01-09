@@ -51,7 +51,7 @@ override_dh_auto_build:
 	# SoftFilters
 	dh_auto_build -- -C gfx/video_filters/
 	# Audio DSP plugins
-	dh_auto_build -- -C audio/audio_filters/
+	dh_auto_build -- -C libretro-common/audio/dsp_filters/
 
 override_dh_strip:
 	dh_strip -pretroarch --dbg-package=retroarch-dbg
@@ -60,4 +60,4 @@ override_dh_auto_clean:
 	touch config.mk
 	dh_auto_clean
 	dh_auto_clean -- -C gfx/video_filters/ clean
-	dh_auto_clean -- -C audio/audio_filters/ clean
+	dh_auto_clean -- -C libretro-common/audio/dsp_filters/ clean
