@@ -1,72 +1,32 @@
-retroarch (1.3.6-1) UNRELEASED; urgency=low
+retroarch (1.4.1-1) unstable; urgency=low
 
-  * New version release.
+  * New upstream release.
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Sun, 17 Jul 2016 19:37:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Thu, 02 Feb 2017 19:40:00 -0300
 
-retroarch (1.3.4-0ubuntu1) UNRELEASED; urgency=low
+retroarch (1.3.6+dfsg1-1) unstable; urgency=low
 
-  * New version release.
+  * New upstream release.
+  * Changed package maintainer to Debian Games Team.
+  * Fixed hardening-no-bindnow, hardening-no-pie.
+  * Fixed hardening-no-fortify-functions (CPPFLAGS patch).
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 03 May 2016 21:26:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 23 Aug 2016 22:44:00 -0300
 
-retroarch (1.3.0-0ubuntu1) UNRELEASED; urgency=low
+retroarch (1.3.0+dfsg1-1) unstable; urgency=low
 
-  * New version release.
+  * Removed Sony copyrighted files.
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Thu, 14 Jan 2016 19:09:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 17 May 2016 22:21:00 -0300
 
-retroarch (1.2.2-0ubuntu1) UNRELEASED; urgency=low
+retroarch (1.3.0-2) unstable; urgency=low
 
-  * New version release.
+  * Removed debug packages from control (automatic -dbgsym packages).
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Thu, 16 Jul 2015 12:14:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Sun, 10 Apr 2016 22:36:00 -0300
 
-retroarch (1.2.1-0ubuntu1) UNRELEASED; urgency=low
+retroarch (1.3.0-1) unstable; urgency=low
 
-  * New version release.
+  * Initial release (Closes: #792608).
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Wed, 15 Jul 2015 11:10:00 -0300
-
-retroarch (1.2-0ubuntu1) UNRELEASED; urgency=low
-
-  * New version release.
-
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Sat, 04 Jul 2015 20:03:00 -0300
-
-retroarch (1.0.0.3-0ubuntu1) UNRELEASED; urgency=low
-
-  * New version release (Beta)
-
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Mon, 27 Oct 2014 13:17:00 -0300
-
-retroarch (1.0.0.2-0ubuntu12) UNRELEASED; urgency=low
-
-  * Improve debian packaging
-  * Added DSP and video filters to the package
-  * Added some paths in retroarch.cfg
-  + No more quilt patch
-
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Sun, 17 Aug 2014 23:50:00 -0300
-
-retroarch (1.0.0.2-0ubuntu11) UNRELEASED; urgency=low
-
-  * Debian folder from hunterk PPA to upstream
-  * Updated /debian:
-    + control: deb-helper to >= 9 and Standards-Version to 3.9.5
-    + compat from 7 to 9
-  * Fixed lintian warnings and errors:
-    + Added missing build-dependends and depends in debian/control
-    + Added simple man pages to cg2glsl and retrolaunch tools
-    + Fixed desktop entry
-  * Added quilt patch (friendly path to libretro cores and start directory)
-
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Fri, 11 Jul 2014 13:33:00 -0300
-
-retroarch (1.0.0.2-0ubuntu10) UNRELEASED; urgency=low
-
-  * Update icon (finally) and use SVG instead of PNG.
-  * Updated to latest git. Includes recent shader changes.
-  * Includes KMS resolution updates.
-
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Thu, 03 Jul 2014 13:24:59 -0500
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Wed, 23 Mar 2016 22:55:00 -0300

@@ -1,9 +1,9 @@
 Description: There are packages for these stuff, let's avoid confusion in the Online Updater
 Index: RetroArch-git2/menu/menu_displaylist.c
 ===================================================================
---- RetroArch-git2.orig/menu/menu_displaylist.c	2017-01-23 18:22:11.521351030 -0200
-+++ RetroArch-git2/menu/menu_displaylist.c	2017-01-23 18:22:11.513350898 -0200
-@@ -2997,11 +2997,13 @@
+--- RetroArch-git2.orig/menu/menu_displaylist.c	2017-02-02 20:14:46.615530413 -0200
++++ RetroArch-git2/menu/menu_displaylist.c	2017-02-02 20:14:46.611530350 -0200
+@@ -3013,11 +3013,13 @@
           MENU_SETTING_ACTION, 0, 0);
  #else
  #if !defined(VITA)
@@ -17,7 +17,7 @@ Index: RetroArch-git2/menu/menu_displaylist.c
  #endif
  
     menu_entries_append_enum(info->list,
-@@ -3019,19 +3021,23 @@
+@@ -3035,19 +3037,23 @@
  #endif
  
  #if !defined(VITA)

@@ -1,8 +1,8 @@
 Source: retroarch
 Section: otherosfs
 Priority: optional
-Maintainer: Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>
-Uploaders: Sergio Benjamim (sergio-br2) <sergio_br2@yahoo.com.br>
+Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
+Uploaders: Sérgio Benjamim <sergio_br2@yahoo.com.br>
 Build-Depends: debhelper (>= 9),
                libasound2-dev,
                libavcodec-dev,
@@ -13,27 +13,27 @@ Build-Depends: debhelper (>= 9),
                libdrm-dev,
                libegl1-mesa-dev,
                libfreetype6-dev,
-               libgbm-dev,
+               libgbm-dev (>= 9.0),
+               libglm-dev,
                libjack-jackd2-dev,
                libopenal-dev,
                libpulse-dev,
                libsdl2-dev,
                libswscale-dev,
                libudev-dev,
-               libusb-1.0-0-dev,
+               libusb-1.0-0-dev (>= 1.0.16),
                libv4l-dev,
+               libvulkan-dev,
                libxinerama-dev,
                libxml2-dev,
                libxv-dev,
                libxxf86vm-dev,
-               lsb-release,
                nvidia-cg-dev [!armhf !arm64],
                pkg-config,
                python3-dev,
                x11proto-xext-dev,
-               zlib1g-dev,
-               libvulkan-dev
-Standards-Version: 3.9.6
+               zlib1g-dev
+Standards-Version: 3.9.8
 Homepage: http://www.libretro.com/
 
 Package: retroarch
@@ -65,15 +65,3 @@ Description: Simple frontend for the libretro library - debug symbols
  libretro cores.
  .
  This package provides the debug symbols for RetroArch.
-
-Package: retroarch-cg2glsl
-Architecture: amd64 i386
-Depends: nvidia-cg-toolkit, python3, ${misc:Depends}, ${shlibs:Depends}
-Breaks: retroarch (<< 1.2.2+r259~17~)
-Description: Cg to GLSL shaders converter
- retroarch-cg2glsl converts Cg shaders to GLSL shaders. It can convert single
- shaders as well as whole folder structures in batch. 100% compatibility
- is not guaranteed, but almost all shaders should work fine. Cg presets (.cgp)
- are not converted at the moment, but converting them is as simple as copying
- over the .cgp, rename it to .glslp and replace references to .cg files
- to .glsl.
