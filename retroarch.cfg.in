@@ -15,15 +15,18 @@ cache_directory = "/tmp"
 # Save all downloaded files to this directory.
 # core_assets_directory =
 
-# Save all input remapping files to this directory.
+# Save all remapped controls to this directory.
 # input_remapping_directory =
 
-# Save all playlist files to this directory.
+# Save all playlists/collections to this directory.
 # playlist_directory =
 
 # If set to a directory, the content history playlist will be saved
 # to this directory.
 # content_history_dir =
+
+# Saved queries are stored to this directory.
+# cursor_directory =
 
 # Automatically saves a savestate at the end of RetroArch's lifetime.
 # The path is $SRAM_PATH.auto.
@@ -56,7 +59,7 @@ libretro_info_path = "/usr/share/libretro/info/"
 # automatically added to a history list.
 # history_list_enable = true
 
-# Enable or disable RetroArch performance counters
+# Enable performance counters
 # perfcnt_enable = false
 
 # Path to core options config file.
@@ -122,9 +125,6 @@ rgui_config_directory = "~/.config/retroarch/config/"
 # Overwrites the config. #include's and comments are not preserved.
 # config_save_on_exit = true
 
-# Load up a specific config file based on the core being used.
-# core_specific_config = false
-
 # Shows hidden files and folders in directory listings.
 # show_hidden_files = true
 
@@ -161,6 +161,10 @@ rgui_config_directory = "~/.config/retroarch/config/"
 
 # Video vsync.
 # video_vsync = true
+
+# Interval at which a Vsync swap is performed.
+# 1 is normal, 2 is doubled frames, 3 is tripled frames, etc.
+# video_swap_interval = 1
 
 # Max amount of swapchain images.
 # Single buffering = 1, Double buffering = 2, 3 = Triple buffering
@@ -205,6 +209,10 @@ rgui_config_directory = "~/.config/retroarch/config/"
 # If video_force_aspect is not set, X/Y will be integer scaled independently.
 # video_scale_integer = false
 
+# Index of the aspect ratio selection in the menu.
+# 19 = Config, 20 = 1:1 PAR, 21 = Core Provided, 22 = Custom Aspect Ratio
+# aspect_ratio_index = 19
+
 # A floating point value for video aspect ratio (width / height).
 # If this is not set, aspect ratio is assumed to be automatic.
 # Behavior then is defined by video_aspect_ratio_auto.
@@ -233,13 +241,13 @@ rgui_config_directory = "~/.config/retroarch/config/"
 # video_filter =
 
 # Defines a directory where CPU-based video filters are kept.
-video_filter_dir = "/usr/lib/retroarch/filters/video/"
+video_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/video/"
 
 # Path to a font used for rendering messages. This path must be defined to enable fonts.
 # Do note that the _full_ path of the font is necessary!
 # video_font_path =
 
-# Size of the font rendered.
+# Size of the font rendered in points.
 # video_font_size = 32
 
 # Enable usage of OSD messages.
@@ -284,7 +292,7 @@ video_filter_dir = "/usr/lib/retroarch/filters/video/"
 # audio_resampler =
 
 # Audio driver backend. Depending on configuration possible candidates are: alsa, pulse, oss, jack, rsound, roar, openal, sdl, xaudio.
-# audio_driver =
+# audio_driver = "pulse"
 
 # Override the default audio device the audio_driver uses. This is driver dependant. E.g. ALSA wants a PCM device, OSS wants a path (e.g. /dev/dsp), Jack wants portnames (e.g. system:playback1,system:playback_2), and so on ...
 # audio_device =
@@ -293,7 +301,7 @@ video_filter_dir = "/usr/lib/retroarch/filters/video/"
 # audio_dsp_plugin =
 
 # Directory where DSP plugins are kept.
-audio_filter_dir = "/usr/lib/retroarch/filters/audio/"
+audio_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/audio/"
 
 # Will sync (block) on audio. Recommended.
 # audio_sync = true
@@ -322,7 +330,7 @@ audio_filter_dir = "/usr/lib/retroarch/filters/audio/"
 # Defines a directory where overlays are kept for easy access.
 # overlay_directory =
 
-# Enable or disable the current overlay.
+# Enable the overlay.
 # input_overlay_enable = true
 
 # Hide the current overlay from appearing inside the menu.
@@ -331,10 +339,10 @@ audio_filter_dir = "/usr/lib/retroarch/filters/audio/"
 # Path to input overlay.
 # input_overlay =
 
-# Overlay opacity.
+# Opacity of all the UI elements of the overlay.
 # input_overlay_opacity = 1.0
 
-# Overlay scale.
+# Scale of all UI elements of the overlay.
 # input_overlay_scale = 1.0
 
 #### Input
@@ -342,7 +350,7 @@ audio_filter_dir = "/usr/lib/retroarch/filters/audio/"
 # Input driver. Depending on video driver, it might force a different input driver.
 # input_driver = sdl
 
-# Input device driver. (Valid: linuxraw, sdl, dinput)
+# Joypad driver. (Valid: linuxraw, sdl, dinput)
 # input_joypad_driver =
 
 # Path to input remapping file.
@@ -643,10 +651,10 @@ menu_driver = "xmb"
 # If disabled, we use separate controls for menu operation.
 # menu_unified_controls = false
 
-# Enable mouse input inside the menu.
+# Enable mouse controls inside the menu.
 # menu_mouse_enable = false
 
-# Enable touch input inside the menu.
+# Enable touch controls inside the menu.
 # menu_pointer_enable = false
 
 # Shows current date and/or time inside menu.
@@ -667,10 +675,10 @@ menu_driver = "xmb"
 # Type of thumbnail to display. 0 = none, 1 = snaps, 2 = titles, 3 = boxarts
 # menu_thumbnails = 0
 
-# Wrap-around to beginning and/or end if boundary of list is reached horizontally or vertically
+# Wrap-around to beginning and/or end if boundary of list is reached horizontally or vertically.
 # menu_navigation_wraparound_enable = false
 
-# Filter files being show in 'Load Content' by supported extensions
+# Filter files being shown in filebrowser by supported extensions.
 # menu_navigation_browser_filter_supported_extensions_enable = true
 
 # Collapse subgroup settings into main group to create one big listing of settings
@@ -804,11 +812,6 @@ menu_driver = "xmb"
 # network_cmd_port = 55355
 # stdin_cmd_enable = false
 
-#### Bundle extraction
-
-
-# This option in "true" is only for consoles, fix libretro/RetroArch#1158 issue
-load_dummy_on_core_shutdown = "false"
 
 # Seems ribbon is slow in some hardwares, let's use "Ribbon (simplified)"
 menu_shader_pipeline = "1"
