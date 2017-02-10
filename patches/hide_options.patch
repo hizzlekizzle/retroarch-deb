@@ -1,8 +1,8 @@
 Description: There are packages for these stuff, let's avoid confusion in the Online Updater
 Index: RetroArch-git2/menu/menu_displaylist.c
 ===================================================================
---- RetroArch-git2.orig/menu/menu_displaylist.c	2017-02-02 20:14:46.615530413 -0200
-+++ RetroArch-git2/menu/menu_displaylist.c	2017-02-02 20:14:46.611530350 -0200
+--- RetroArch-git2.orig/menu/menu_displaylist.c	2017-02-10 19:47:17.536175660 -0200
++++ RetroArch-git2/menu/menu_displaylist.c	2017-02-10 19:47:27.936347166 -0200
 @@ -3013,11 +3013,13 @@
           MENU_SETTING_ACTION, 0, 0);
  #else
@@ -41,3 +41,19 @@ Index: RetroArch-git2/menu/menu_displaylist.c
  #endif
  
     menu_entries_append_enum(info->list,
+@@ -3646,6 +3652,7 @@
+       file_list_sort_on_alt(info->list);
+ 
+ #ifdef HAVE_NETWORKING
++/*
+    if (info->download_core)
+    {
+       menu_entries_append_enum(info->list,
+@@ -3654,6 +3661,7 @@
+             MENU_ENUM_LABEL_CORE_UPDATER_LIST,
+             MENU_SETTING_ACTION, 0, 0);
+    }
++*/
+ #endif
+    
+    if (info->push_builtin_cores)
