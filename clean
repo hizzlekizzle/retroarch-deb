@@ -4,8 +4,8 @@ config.mk
 debian/retroarch.dirs
 debian/retroarch.install
 debian/retroarch.cfg
+debian/retroarch.links
 .CONFIG_DEFINES
 .MAKEFILE_DEFINES
 .tmp
 .tmp.c
-debian/retroarch.links
