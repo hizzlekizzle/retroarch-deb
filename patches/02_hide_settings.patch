@@ -1,34 +1,9 @@
-Description: There are packages for these stuff, let's avoid confusion in the Online Updater
 Index: RetroArch-git2/menu/menu_displaylist.c
 ===================================================================
---- RetroArch-git2.orig/menu/menu_displaylist.c	2017-03-10 13:08:33.849865327 -0300
-+++ RetroArch-git2/menu/menu_displaylist.c	2017-03-10 13:08:33.845865387 -0300
-@@ -3045,11 +3045,13 @@
-          MENU_SETTING_ACTION, 0, 0);
- #else
- #if !defined(VITA)
-+/*
-    menu_entries_append_enum(info->list,
-          msg_hash_to_str(MENU_ENUM_LABEL_VALUE_CORE_UPDATER_LIST),
-          msg_hash_to_str(MENU_ENUM_LABEL_CORE_UPDATER_LIST),
-          MENU_ENUM_LABEL_CORE_UPDATER_LIST,
-          MENU_SETTING_ACTION, 0, 0);
-+*/
- #endif
- 
-    menu_entries_append_enum(info->list,
-@@ -3067,19 +3069,23 @@
- #endif
- 
- #if !defined(VITA)
-+/*
-    menu_entries_append_enum(info->list,
-          msg_hash_to_str(MENU_ENUM_LABEL_VALUE_UPDATE_CORE_INFO_FILES),
-          msg_hash_to_str(MENU_ENUM_LABEL_UPDATE_CORE_INFO_FILES),
-          MENU_ENUM_LABEL_UPDATE_CORE_INFO_FILES,
-          MENU_SETTING_ACTION, 0, 0);
-+*/
- #endif
+--- RetroArch-git2.orig/menu/menu_displaylist.c
++++ RetroArch-git2/menu/menu_displaylist.c
+@@ -3178,11 +3178,13 @@ static int menu_displaylist_parse_option
+             MENU_SETTING_ACTION, 0, 0);
  
  #ifdef HAVE_UPDATE_ASSETS
 +/*
@@ -41,19 +16,19 @@ Index: RetroArch-git2/menu/menu_displaylist.c
  #endif
  
     menu_entries_append_enum(info->list,
-@@ -3677,6 +3683,7 @@
+@@ -4005,6 +4007,7 @@ static void wifi_scan_callback(void *tas
+ bool menu_displaylist_process(menu_displaylist_info_t *info)
+ {
+    size_t idx   = 0;
++   settings_t *settings         = config_get_ptr();
+ 
+    if (info->need_navigation_clear)
+    {
+@@ -4022,6 +4025,7 @@ bool menu_displaylist_process(menu_displ
        file_list_sort_on_alt(info->list);
  
  #if defined(HAVE_NETWORKING) && !defined(HAVE_LAKKA)
-+/*
++   if (settings->bools.menu_show_core_updater)
     if (info->download_core)
     {
        menu_entries_append_enum(info->list,
-@@ -3685,6 +3692,7 @@
-             MENU_ENUM_LABEL_CORE_UPDATER_LIST,
-             MENU_SETTING_ACTION, 0, 0);
-    }
-+*/
- #endif
-    
-    if (info->push_builtin_cores)

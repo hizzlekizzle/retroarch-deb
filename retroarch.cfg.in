@@ -126,7 +126,7 @@ rgui_config_directory = "~/.config/retroarch/config/"
 # config_save_on_exit = true
 
 # Shows hidden files and folders in directory listings.
-# show_hidden_files = true
+# show_hidden_files = false
 
 #### Video
 
@@ -284,6 +284,9 @@ video_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/video/"
 # Mutes audio.
 # audio_mute_enable = false
 
+# Mutes audio mixer volume globally.
+# audio_mixer_mute_enable = false
+
 # Audio output samplerate.
 # audio_out_rate = 48000
 
@@ -292,7 +295,7 @@ video_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/video/"
 # audio_resampler =
 
 # Audio driver backend. Depending on configuration possible candidates are: alsa, pulse, oss, jack, rsound, roar, openal, sdl, xaudio.
-# audio_driver = "pulse"
+# audio_driver =
 
 # Override the default audio device the audio_driver uses. This is driver dependant. E.g. ALSA wants a PCM device, OSS wants a path (e.g. /dev/dsp), Jack wants portnames (e.g. system:playback1,system:playback_2), and so on ...
 # audio_device =
@@ -324,6 +327,10 @@ audio_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/audio/"
 # 0 dB is normal volume. No gain will be applied.
 # Gain can be controlled in runtime with input_volume_up/input_volume_down.
 # audio_volume = 0.0
+
+# Audio mixer volume. Volume is expressed in dB.
+# 0 dB is normal volume. No gain will be applied.
+# audio_mixer_volume = 0.0
 
 #### Overlay
 
@@ -644,6 +651,12 @@ audio_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/audio/"
 # Menu driver to use. "rgui", "lakka", etc.
 menu_driver = "xmb"
 
+# If disabled, will hide 'Online Updater' inside the menu.
+# menu_show_online_updater = true
+
+# If disabled, will hide the ability to update cores (and core info files) inside the menu.
+menu_show_core_updater = "false"
+
 # If disabled, the libretro core will keep running in the background when we
 # are in the menu.
 # menu_pause_libretro = false
@@ -750,6 +763,9 @@ menu_driver = "xmb"
 
 # The port of the host IP Address. Can be either a TCP or UDP port.
 # netplay_ip_port = 55435
+
+# Force game hosting to go through a man-in-the-middle server to get around firewalls and NAT/UPnP problems.
+# netplay_use_mitm_server = false
 
 #### Misc
 
