@@ -1,3 +1,4 @@
+Description: There is a package for assets, let's avoid confusion in the Online Updater
 Index: RetroArch-git2/menu/menu_displaylist.c
 ===================================================================
 --- RetroArch-git2.orig/menu/menu_displaylist.c
@@ -16,19 +17,3 @@ Index: RetroArch-git2/menu/menu_displaylist.c
  #endif
  
     menu_entries_append_enum(info->list,
-@@ -4005,6 +4007,7 @@ static void wifi_scan_callback(void *tas
- bool menu_displaylist_process(menu_displaylist_info_t *info)
- {
-    size_t idx   = 0;
-+   settings_t *settings         = config_get_ptr();
- 
-    if (info->need_navigation_clear)
-    {
-@@ -4022,6 +4025,7 @@ bool menu_displaylist_process(menu_displ
-       file_list_sort_on_alt(info->list);
- 
- #if defined(HAVE_NETWORKING) && !defined(HAVE_LAKKA)
-+   if (settings->bools.menu_show_core_updater)
-    if (info->download_core)
-    {
-       menu_entries_append_enum(info->list,
