@@ -41,6 +41,7 @@ Architecture: any
 Depends: fonts-dejavu-core,
          libretro-core-info,
          retroarch-assets,
+         libvulkan1,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Simple frontend for the libretro library
