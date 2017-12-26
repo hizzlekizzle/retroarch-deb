@@ -3,7 +3,7 @@ Index: RetroArch-git2/menu/menu_displaylist.c
 ===================================================================
 --- RetroArch-git2.orig/menu/menu_displaylist.c
 +++ RetroArch-git2/menu/menu_displaylist.c
-@@ -3277,11 +3277,13 @@ static int menu_displaylist_parse_option
+@@ -3029,11 +3029,13 @@ static int menu_displaylist_parse_option
              MENU_SETTING_ACTION, 0, 0);
  
  #ifdef HAVE_UPDATE_ASSETS
