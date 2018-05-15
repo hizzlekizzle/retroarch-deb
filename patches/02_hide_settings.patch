@@ -3,8 +3,8 @@ Index: RetroArch-git2/menu/menu_displaylist.c
 ===================================================================
 --- RetroArch-git2.orig/menu/menu_displaylist.c
 +++ RetroArch-git2/menu/menu_displaylist.c
-@@ -3109,11 +3109,13 @@ static int menu_displaylist_parse_option
-             MENU_SETTING_ACTION, 0, 0);
+@@ -3048,12 +3048,14 @@ static unsigned menu_displaylist_parse_o
+    }
  
  #ifdef HAVE_UPDATE_ASSETS
 +/*
@@ -13,6 +13,7 @@ Index: RetroArch-git2/menu/menu_displaylist.c
           msg_hash_to_str(MENU_ENUM_LABEL_UPDATE_ASSETS),
           MENU_ENUM_LABEL_UPDATE_ASSETS,
           MENU_SETTING_ACTION, 0, 0);
+    count++;
 +*/
  #endif
  
