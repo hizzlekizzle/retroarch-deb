@@ -31,6 +31,7 @@ Build-Depends: debhelper (>= 9),
                nvidia-cg-dev [!armhf !arm64],
                pkg-config,
                python3-dev,
+               qtbase5-dev,
                x11proto-xext-dev,
                zlib1g-dev
 Standards-Version: 3.9.8
