@@ -1,9 +1,9 @@
 Description: There is a package for assets, let's avoid confusion in the Online Updater
 Index: RetroArch-git2/menu/menu_displaylist.c
 ===================================================================
---- RetroArch-git2.orig/menu/menu_displaylist.c
-+++ RetroArch-git2/menu/menu_displaylist.c
-@@ -3082,12 +3082,14 @@ static unsigned menu_displaylist_parse_o
+--- RetroArch-git2.orig/menu/menu_displaylist.c	2018-10-02 02:18:05.221976360 -0300
++++ RetroArch-git2/menu/menu_displaylist.c	2018-10-02 02:18:05.217976309 -0300
+@@ -3132,12 +3132,14 @@
     }
  
  #ifdef HAVE_UPDATE_ASSETS
