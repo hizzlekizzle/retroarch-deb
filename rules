@@ -29,11 +29,13 @@ export QT_SELECT := qt5
 ARCH=$(shell dpkg-architecture -qDEB_HOST_ARCH)
 
 ifeq ($(ARCH), $(filter $(ARCH), amd64 i386))
-	CONFIG_EXTRA_FLAGS=--enable-sse
+	CONFIG_EXTRA_FLAGS=--enable-sse --enable-cg
 else ifeq ($(ARCH),armhf)
-	CONFIG_EXTRA_FLAGS=--disable-cg --enable-opengles --enable-neon --enable-floathard
+	CONFIG_EXTRA_FLAGS=--disable-cg --enable-opengles --enable-floathard
 else ifeq ($(ARCH),arm64)
 	CONFIG_EXTRA_FLAGS=--disable-cg --enable-opengles
+else
+	CONFIG_EXTRA_FLAGS=--disable-cg
 endif
 
 GIT_HASH := $(shell dpkg-parsechangelog | sed -rne 's,^Version: (.*),\1, p' | sed s/-/\\n\ /g | tail -n 2 | head -n 1)

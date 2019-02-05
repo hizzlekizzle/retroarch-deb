@@ -621,7 +621,7 @@ menu_driver = "xmb"
 # menu_show_online_updater = true
 
 # If disabled, will hide the ability to update cores (and core info files) inside the menu.
-menu_show_core_updater = "false"
+#menu_show_core_updater = "false"
 
 # If disabled, the libretro core will keep running in the background when we
 # are in the menu.
@@ -884,13 +884,13 @@ cache_directory = "/tmp"
 
 
 # Seems ribbon is slow in some hardwares, let's use "Ribbon (simplified)"
-menu_shader_pipeline = "1"
+#menu_shader_pipeline = "1"
 
 # Hide some stuff users normally doesn't use (Settings tab --> User Interface --> Menu, to enable them again)
-xmb_show_images = "false"
-xmb_show_music = "false"
-xmb_show_video = "false"
+#xmb_show_images = "false"
+#xmb_show_music = "false"
+#xmb_show_video = "false"
 
-content_show_images = "false"
-content_show_music = "false"
-content_show_video = "false"
+#content_show_images = "false"
+#content_show_music = "false"
+#content_show_video = "false"

@@ -28,9 +28,10 @@ Build-Depends: debhelper (>= 9),
                libxml2-dev,
                libxv-dev,
                libxxf86vm-dev,
-               nvidia-cg-dev [!armhf !arm64],
+               nvidia-cg-dev [amd64 i386],
                pkg-config,
                python3-dev,
+               qt5-default,
                qtbase5-dev,
                x11proto-xext-dev,
                zlib1g-dev
@@ -43,6 +44,8 @@ Depends: fonts-dejavu-core,
          libretro-core-info,
          retroarch-assets,
          libvulkan1,
+         libqt5waylandclient5,
+         wayland-protocols,
          ${misc:Depends},
          ${shlibs:Depends}
 Description: Simple frontend for the libretro library
@@ -51,7 +54,7 @@ Description: Simple frontend for the libretro library
  and 3D technical demonstration. These features are available through
  libretro cores.
  .
- It provides three built-in GUI: RGUI, XMB and GLUI.
+ It provides four built-in GUI flavors: RGUI, XMB, Ozone and GLUI.
 
 Package: retroarch-dbg
 Section: debug
