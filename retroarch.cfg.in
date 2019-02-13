@@ -66,7 +66,7 @@
 # content_directory =
 
 # Sets start directory for menu config browser.
-rgui_config_directory = "~/.config/retroarch/config/"
+# rgui_config_directory = "~/.config/retroarch/config/"
 
 # Show startup screen in menu.
 # Is automatically set to false when seen for the first time.
@@ -750,7 +750,7 @@ menu_driver = "xmb"
 
 # Assets directory. This location is queried by default when menu interfaces try to look for
 # loadable assets, etc.
-assets_directory = "/usr/share/libretro/assets/"
+#assets_directory = "/usr/share/libretro/assets/"
 
 # Dynamic wallpapers directory. The place to store the wallpapers dynamically
 # loaded by the menu depending on context.
@@ -763,10 +763,10 @@ assets_directory = "/usr/share/libretro/assets/"
 rgui_browser_directory = "~/"
 
 # Core directory for libretro core implementations.
-libretro_directory = "/usr/lib/@DEB_HOST_MULTIARCH@/libretro/"
+#libretro_directory = "/usr/lib/@DEB_HOST_MULTIARCH@/libretro/"
 
 # Core info directory for libretro core information.
-libretro_info_path = "/usr/share/libretro/info/"
+#libretro_info_path = "/usr/share/libretro/info/"
 
 # Path to content database directory.
 # content_database_path =
