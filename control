@@ -42,8 +42,6 @@ Homepage: http://www.libretro.com/
 Package: retroarch
 Architecture: any
 Depends: fonts-dejavu-core,
-         libretro-core-info,
-         retroarch-assets,
          libvulkan1,
          libqt5waylandclient5,
          ${misc:Depends},
