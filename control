@@ -43,6 +43,7 @@ Package: retroarch
 Architecture: any
 Depends: fonts-dejavu-core,
          libvulkan1,
+         libvulkan-dev,
          libqt5waylandclient5,
          ${misc:Depends},
          ${shlibs:Depends}
