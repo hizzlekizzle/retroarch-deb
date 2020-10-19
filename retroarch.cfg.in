@@ -110,7 +110,7 @@
 # location_driver =
 
 # Menu driver to use. ("rgui", "xmb", "glui")
-menu_driver = "xmb"
+# menu_driver = "xmb"
 
 # Record driver. Used when recording video.
 # record_driver =
