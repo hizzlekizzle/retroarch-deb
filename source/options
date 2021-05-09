@@ -1,0 +1,1 @@
+extend-diff-ignore = 'gfx/common/wayland/(idle-inhibit|xdg-decoration|xdg-shell)(-unstable-v[16])?\.[ch]'

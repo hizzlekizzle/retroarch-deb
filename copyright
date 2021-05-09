@@ -90,7 +90,6 @@ License: public-domain-Barrett
 Files:
  gfx/drivers/dispmanx_gfx.c
  gfx/drivers/sunxi_gfx.c
- gfx/drivers/dispmanx_gfx.c
 Copyright: 2015, 2016 Manuel Alfayate "vanfanel"
 License: GPL-3+
 

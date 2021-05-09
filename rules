@@ -88,14 +88,25 @@ override_dh_auto_configure:
 	$(CURDIR)/configure --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
 		--sysconfdir=/etc --bindir=/usr/bin --datarootdir=/usr/share \
 		--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
-		--enable-caca --enable-dbus --enable-flac --disable-oss --disable-vg \
+		--disable-nvda --disable-winrawinput --enable-blissbox --disable-gdi \
+		--enable-caca --enable-sixel --enable-systemmbedtls \
+		--disable-builtinmbedtls --enable-dbus --enable-miniupnpc \
+		--disable-builtinminiupnpc --disable-builtinzlib --enable-zlib \
+		--enable-flac --disable-oss --disable-vg --disable-spirv_cross \
 		$(CONFIG_EXTRA_FLAGS)
 
 override_dh_auto_build:
-	dh_auto_build -- GIT_VERSION="'$(GIT_HASH)'"
+	dh_auto_build -O-v -- GIT_VERSION="'$(GIT_HASH)'"
 	# SoftFilters
-	dh_auto_build -- -C gfx/video_filters/
+	dh_auto_build -O-v -- -C gfx/video_filters/
 	# Audio DSP plugins
-	dh_auto_build -- -C libretro-common/audio/dsp_filters/
+	dh_auto_build -O-v -- -C libretro-common/audio/dsp_filters/
 
 override_dh_auto_install:
+
+override_dh_install:
+	dh_install -O-v
+	chrpath -d $(CURDIR)/debian/retroarch/usr/games/retroarch
+
+override_dh_shlibdeps:
+	dh_shlibdeps -O-v -l/lib/$(DEB_HOST_MULTIARCH)
