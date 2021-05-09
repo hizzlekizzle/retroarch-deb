@@ -5,11 +5,13 @@ Maintainer: Libretro Team <libretro@gmail.com>
 Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
            Sérgio Benjamim <sergio_br2@yahoo.com.br>,
            Peter J. Mello <admin@petermello.net>
-Build-Depends: debhelper-compat (= 12), python3-all-dev, libavdevice-dev,
- libdrm-dev, libfreetype-dev | libfreetype6-dev, libgbm-dev, libglm-dev,
- libjack-jackd2-dev, libopenal-dev, libsdl2-dev, libusb-1.0-0-dev, libv4l-dev,
- libx11-xcb-dev, libxml2-dev, nvidia-cg-dev [amd64 i386], qtbase5-dev,
- wayland-protocols, x11proto-xext-dev, zlib1g-dev
+Build-Depends: debhelper-compat (= 12), python3-all-dev, yasm, glslang-dev,
+ libavdevice-dev, libcaca-dev, libdrm-dev, libflac-dev,
+ libfreetype-dev | libfreetype6-dev, libgbm-dev, libglm-dev, libglvnd-dev,
+ libjack-jackd2-dev, libopenal-dev, libsdl-image1.2-dev, libsdl2-dev,
+ libusb-1.0-0-dev, libv4l-dev, libx11-xcb-dev, libxml2-dev,
+ nvidia-cg-toolkit [amd64 i386], qtbase5-dev, wayland-protocols,
+ x11proto-xext-dev, zlib1g-dev
 Standards-Version: 4.5.1
 Homepage: https://www.libretro.com/
 Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian.git
