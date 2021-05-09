@@ -1,60 +1,92 @@
 #!/usr/bin/make -f
-
-# Copyright (C) 2012-2015 Hunter Kaller
-# Copyright (C) 2014-2017 Sergio Benjamim
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# -*- mode: makefile-gmake; coding: utf-8 -*-
+# SPDX-FileCopyrightText: © 2012-2019 Hunter Kaller <hunter_kaller@yahoo.com>
+# SPDX-FileCopyrightText: © 2014-2018 Sergio Benjamim <sergio_br2@yahoo.com.br>
+# SPDX-FileCopyrightText: 🄯 2021 Peter J. Mello <admin@petermello.net>
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# SPDX-License-Identifier: GPL-3.0-or-later OR MPL-2.0
 
-# Fix hardening-no-bindnow and hardening-no-pie
-export DEB_BUILD_MAINT_OPTIONS = hardening=+bindnow,+pie
+BASH_PATH ::= $(shell which bash)
+SHELL     ::= $(shell realpath -Leq $(BASH_PATH) || echo '/bin/sh')
 
-export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
-
-export DEB_CXXFLAGS_MAINT_STRIP=-O2
-export DEB_CFLAGS_MAINT_STRIP=-O2
-
-export QT_SELECT := qt5
-
-ARCH=$(shell dpkg-architecture -qDEB_HOST_ARCH)
-
-ifeq ($(ARCH), $(filter $(ARCH), amd64 i386))
-	CONFIG_EXTRA_FLAGS=--enable-sse --enable-cg
-else ifeq ($(ARCH),armhf)
-	CONFIG_EXTRA_FLAGS=--disable-cg --enable-opengles --enable-floathard
-else ifeq ($(ARCH),arm64)
-	CONFIG_EXTRA_FLAGS=--disable-cg --enable-opengles
-else
-	CONFIG_EXTRA_FLAGS=--disable-cg
+ifeq (,$(filter terse,$(DEB_BUILD_OPTIONS)))
+DH_INTERNAL_OPTIONS = --verbose
+export DH_VERBOSE=1
 endif
 
-GIT_HASH := $(shell dpkg-parsechangelog | sed -rne 's,^Version: (.*),\1, p' | sed s/-/\\n\ /g | tail -n 2 | head -n 1)
+# Fix hardening-no-bindnow and hardening-no-pie
+DEB_BUILD_MAINT_OPTIONS  = hardening=+bindnow,+pie
+DEB_CFLAGS_MAINT_STRIP   = -O2
+DEB_CXXFLAGS_MAINT_STRIP = -O2
+DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+DPKG_EXPORT_BUILDFLAGS   = 1
+QT_SELECT                = 5
+
+DISTRO_VENDOR ::= $(shell dpkg-vendor --query Vendor)
+UBUNTUVER     ::= $(shell lsb_release -rs | cut -c-5)
+
+ifeq (Ubuntu,$(DISTRO_VENDOR))
+ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n17.10\n" | sort -g | head -1))
+DEB_BUILD_MAINT_OPTIONS += future=+lfs
+DPKG_EXPORT_BUILDTOOLS   = 1
+include /usr/share/dpkg/buildtools.mk
+endif
+endif
+
+ifeq (Ubuntu,$(DISTRO_VENDOR))
+ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n19.04\n" | sort -g | head -1))
+DEB_BUILD_MAINT_OPTIONS += reproducible=+fixfilepath
+endif
+endif
+
+ifeq (Ubuntu,$(DISTRO_VENDOR))
+ifneq ($(UBUNTUVER),$(shell printf "$(UBUNTUVER)\n21.04\n" | sort -g | head -1))
+DEB_BUILD_MAINT_OPTIONS += optimize=+lto
+endif
+endif
+
+include /usr/share/dpkg/default.mk
+
+export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_STRIP DEB_CXXFLAGS_MAINT_STRIP \
+	DEB_LDFLAGS_MAINT_APPEND QT_SELECT
+
+ifeq ($(DEB_HOST_ARCH_CPU), $(filter $(DEB_HOST_ARCH_CPU), amd64 i386))
+	CONFIG_EXTRA_FLAGS = --enable-sse --enable-cg
+else ifeq ($(DEB_HOST_ARCH_CPU),armhf)
+	CONFIG_EXTRA_FLAGS = --disable-cg --enable-opengles --enable-floathard
+else ifeq ($(DEB_HOST_ARCH_CPU),arm64)
+	CONFIG_EXTRA_FLAGS = --disable-cg --enable-opengles
+else
+	CONFIG_EXTRA_FLAGS = --disable-cg
+endif
+
+GIT_HASH ::= $(shell echo $(DEB_VERSION_UPSTREAM) | sed -Ene 's/^.*\+(.*)/\1/p')
+
 
 %:
-	dh $@ --parallel
+	dh $@ -v
+
+
+override_dh_auto_clean:
+	touch config.mk
+	dh_auto_clean
+	dh_auto_clean -- -C gfx/video_filters clean
+	dh_auto_clean -- -C libretro-common/audio/dsp_filters clean
 
 override_dh_auto_configure:
 	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
-		debian/retroarch.cfg.in > debian/retroarch.cfg
+		debian/retroarch.cfg.in >debian/retroarch.cfg
 	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
-		debian/retroarch.dirs.in > debian/retroarch.dirs
+		debian/retroarch.dirs.in >debian/retroarch.dirs
 	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
-		debian/retroarch.install.in > debian/retroarch.install
+		debian/retroarch.install.in >debian/retroarch.install
 	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
-		debian/retroarch.links.in > debian/retroarch.links
-	# See ./configure --help for valid flags
-	# disable flags (i.e. --disable-ffmpeg for example) if there is no package relative to the feature in Build-Depends
-	./configure --prefix=/usr --enable-dbus --disable-oss --disable-vg $(CONFIG_EXTRA_FLAGS)
+		debian/retroarch.links.in >debian/retroarch.links
+	# See ./configure --help for valid flags, use disable flags (i.e.
+	# --disable-ffmpeg for example) if there is no package on which to build the
+	# feature in Build-Depends
+	dh_auto_configure -- --enable-dbus --disable-oss --disable-vg \
+		$(CONFIG_EXTRA_FLAGS)
 
 override_dh_auto_build:
 	dh_auto_build -- GIT_VERSION="'$(GIT_HASH)'"
@@ -64,12 +96,3 @@ override_dh_auto_build:
 	dh_auto_build -- -C libretro-common/audio/dsp_filters/
 
 override_dh_auto_install:
-
-override_dh_strip:
-	dh_strip -pretroarch --dbg-package=retroarch-dbg
-
-override_dh_auto_clean:
-	touch config.mk
-	dh_auto_clean
-	dh_auto_clean -- -C gfx/video_filters/ clean
-	dh_auto_clean -- -C libretro-common/audio/dsp_filters/ clean

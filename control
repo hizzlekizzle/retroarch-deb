@@ -1,72 +1,30 @@
 Source: retroarch
-Section: otherosfs
+Section: games
 Priority: optional
-Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
-Uploaders: Sérgio Benjamim <sergio_br2@yahoo.com.br>
-Build-Depends: debhelper (>= 9),
-               libasound2-dev,
-               libavcodec-dev,
-               libavdevice-dev,
-               libavformat-dev,
-               libavutil-dev,
-               libc6-dev (>= 2.13),
-               libdbus-1-dev,
-               libdrm-dev,
-               libegl1-mesa-dev,
-               libfreetype6-dev,
-               libgbm-dev (>= 9.0),
-               libglm-dev,
-               libjack-jackd2-dev,
-               libopenal-dev,
-               libpulse-dev,
-               libsdl2-dev,
-               libswscale-dev,
-               libudev-dev,
-               libusb-1.0-0-dev (>= 1.0.16),
-               libv4l-dev,
-               libvulkan-dev,
-               libx11-xcb-dev,
-               libxinerama-dev,
-               libxml2-dev,
-               libxv-dev,
-               libxxf86vm-dev,
-               nvidia-cg-dev [amd64 i386],
-               pkg-config,
-               python3-dev,
-               qt5-default,
-               qtbase5-dev,
-               wayland-protocols,
-               x11proto-xext-dev,
-               zlib1g-dev
-Standards-Version: 3.9.8
-Homepage: http://www.libretro.com/
+Maintainer: Libretro Team <libretro@gmail.com>
+Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
+           Sérgio Benjamim <sergio_br2@yahoo.com.br>,
+           Peter J. Mello <admin@petermello.net>
+Build-Depends: debhelper-compat (= 12), python3-all-dev, libavdevice-dev,
+ libdrm-dev, libfreetype-dev | libfreetype6-dev, libgbm-dev, libglm-dev,
+ libjack-jackd2-dev, libopenal-dev, libsdl2-dev, libusb-1.0-0-dev, libv4l-dev,
+ libx11-xcb-dev, libxml2-dev, nvidia-cg-dev [amd64 i386], qtbase5-dev,
+ wayland-protocols, x11proto-xext-dev, zlib1g-dev
+Standards-Version: 4.5.1
+Homepage: https://www.libretro.com/
+Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian.git
+Vcs-Browser: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
+Rules-Requires-Root: no
 
 Package: retroarch
 Architecture: any
-Depends: fonts-dejavu-core,
-         libvulkan1,
-         libqt5waylandclient5,
-         ${misc:Depends},
-         ${shlibs:Depends}
+Depends: fonts-dejavu-core, libqt5waylandclient5, libvulkan1, ${shlibs:Depends},
+ ${misc:Depends}
 Description: Simple frontend for the libretro library
- RetroArch is an open source, multi-platform frontend for the libretro API.
- It can be used as a modular multi emulator system, game engine, media player
- and 3D technical demonstration. These features are available through
- libretro cores.
+ RetroArch is an open source, multi-platform frontend for the libretro API. It
+ can be used as a modular multi-emulator system, game engine, media player and
+ 3-D technical demonstration. These features are available through libretro
+ cores.
  .
- It provides four built-in GUI flavors: RGUI, XMB, Ozone and GLUI.
-
-Package: retroarch-dbg
-Section: debug
-Priority: extra
-Architecture: any
-Depends: retroarch (= ${binary:Version})
-         ${misc:Depends},
-         ${shlibs:Depends}
-Description: Simple frontend for the libretro library - debug symbols
- RetroArch is an open source, multi-platform frontend for the libretro API.
- It can be used as a modular multi emulator system, game engine, media player
- and 3D technical demonstration. These features are available through
- libretro cores.
- .
- This package provides the debug symbols for RetroArch.
+ It provides four built-in graphical user interface flavors: RGUI, XMB, Ozone
+ and GLUI.

@@ -1,39 +1,12 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: RetroArch
 Upstream-Contact: Daniel De Matteis (Squarepusher aka twinaphex) <libretro@gmail.com>
-                  http://www.libretro.com/forums/
-Source: https://github.com/libretro/RetroArch
-Files-Excluded:
- ctr/tools/bannertool.exe
- ctr/tools/bannertool-linux
- ctr/tools/bannertool-mac
- ctr/tools/makerom.exe
- ctr/tools/makerom-linux
- ctr/tools/makerom-mac
- deps/glm
- deps/glslang/glslang
- deps/SPIRV-Cross
- deps/zlib
- emscripten/library_rwebaudio.js
- emscripten/library_rwebcam.js
- emscripten/library_rwebinput.js
- gfx/drivers/gx_gfx_vi_encoder.c
- gfx/include/Cg
- gfx/include/d3d9
- gfx/include/d3d9.h
- gfx/include/d3d9caps.h
- gfx/include/d3d9types.h
- libretro-common/include/compat/zconf.h
- libretro-common/include/compat/zconf.h.in
- libretro-common/include/compat/zlib.h
- libretro-common/include/compat/zutil.h
- pkg/ps3/SSNE10000/PARAM.SFO
- pkg/ps3_iso/PS3_GAME/PARAM.SFO
- pkg/ps3_iso/PS3_DISC.SFB
- pkg/android/phoenix/libs/googleplay/libs/google-play-services.jar
- .gitignore
- .project
-
+Source: https://github.com/libretro/RetroArch/releases
+Files-Excluded: deps/glslang/glslang deps/SPIRV-Cross emscripten/library_rweb*
+ gfx/drivers/gx_gfx_vi_encoder.c gfx/include/Cg gfx/include/d3d9
+ gfx/include/d3d9* libretro-common/include/compat/zlib
+ pkg/ps3/SSNE10000/PARAM.SFO pkg/ps3_iso/PS3_GAME/PARAM.SFO
+ pkg/ps3_iso/PS3_DISC.SFB .gitignore .project
 
 Files: *
 Copyright: 2010-2017 The RetroArch Team
@@ -366,8 +339,9 @@ Copyright: 2015-2016 Andre Leiradella "leiradel"
 License: GPL-3+
 
 Files: debian/*
-Copyright: 2012-2015 Hunter Kaller "hizzlekizzle" <hunter_kaller@yahoo.com>
-           2014-2017 Sergio Benjamim "sergio-br2" <sergio_br2@yahoo.com.br>
+Copyright: 2012-2021, Hunter Kaller <hunter_kaller@yahoo.com>
+           2014-2018, Sergio Benjamim <sergio_br2@yahoo.com.br>
+                2021, Peter J. Mello <admin@petermello.net>
 License: GPL-3+
 
 
