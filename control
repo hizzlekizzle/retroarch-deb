@@ -5,13 +5,17 @@ Maintainer: Libretro Team <libretro@gmail.com>
 Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
            Sérgio Benjamim <sergio_br2@yahoo.com.br>,
            Peter J. Mello <admin@petermello.net>
-Build-Depends: debhelper-compat (= 12), python3-all-dev, check (>= 0.15),
- chrpath, yasm, glslang-dev, libavdevice-dev, libcaca-dev, libdrm-dev,
- libflac-dev, libfreetype-dev | libfreetype6-dev, libgbm-dev, libglm-dev,
- libglvnd-dev, libjack-jackd2-dev, libmbedtls-dev, libminiupnpc-dev,
- libopenal-dev, libsdl2-dev, libsixel-dev (>= 1.6.0), libusb-1.0-0-dev,
- libv4l-dev, libx11-xcb-dev, libxml2-dev, nvidia-cg-toolkit [amd64 i386],
- qtbase5-dev, wayland-protocols, x11proto-xext-dev, zlib1g-dev
+Build-Depends: debhelper-compat (= 12), python3-all-dev, alsa-utils,
+ check (>= 0.15), chrpath, emscripten, sunxi-tools [armhf], yasm, glslang-dev,
+ libass-dev, libavdevice-dev, libcaca-dev, libdrm-dev, libflac-dev,
+ libfreetype-dev | libfreetype6-dev, libfribidi-dev, libgbm-dev, libglm-dev,
+ libglvnd-dev, libjack-jackd2-dev | libjack-dev, liblua5.3-dev, libmbedtls-dev,
+ libminiupnpc-dev, libmpv-dev, libopenal-dev, libroar-dev (>= 1.0~beta12),
+ libsdl2-dev, libsixel-dev (>= 1.6.0), libslang2-dev, libssl-dev, libstb-dev,
+ libsystemd-dev, libusb-1.0-0-dev, libv4l-dev, libwayland-dev (>= 1.12),
+ libwayland-egl-backend-dev, libx11-xcb-dev, libxcb-shm0-dev, libxkbcommon-dev,
+ libxml2-dev, nvidia-cg-toolkit [amd64 i386], qtbase5-dev,
+ wayland-protocols (>= 1.15), x11proto-xext-dev, zlib1g-dev
 Standards-Version: 4.5.1
 Homepage: https://www.libretro.com/
 Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian.git
