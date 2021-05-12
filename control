@@ -6,7 +6,7 @@ Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
            Sérgio Benjamim <sergio_br2@yahoo.com.br>,
            Peter J. Mello <admin@petermello.net>
 Build-Depends: debhelper-compat (= 12), python3-all-dev, alsa-utils,
- check (>= 0.15), chrpath, emscripten, sunxi-tools [armhf], yasm, glslang-dev,
+ check (>= 0.15), chrpath, lsb-release, sunxi-tools [armhf], yasm, glslang-dev,
  libass-dev, libavdevice-dev, libcaca-dev, libdrm-dev, libflac-dev,
  libfreetype-dev | libfreetype6-dev, libfribidi-dev, libgbm-dev, libglm-dev,
  libglvnd-dev, libjack-jackd2-dev | libjack-dev, liblua5.3-dev, libmbedtls-dev,
