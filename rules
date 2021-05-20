@@ -70,7 +70,7 @@ QB_CUSTOM_FLAGS = --disable-nvda --disable-winrawinput --enable-blissbox \
 	--enable-mmap --enable-qt --enable-xshm --enable-lua --enable-vulkan \
 	--enable-osmesa --enable-videoprocessor --enable-cdrom --enable-slang \
 	--enable-glslang --disable-builtinglslang --enable-spirv_cross \
-	--enable-network_video
+	--disable-network_video
 
 GIT_HASH ::= $(shell echo $(DEB_VERSION_UPSTREAM) | sed -Ene 's/^.*\+(.*)/\1/p')
 
