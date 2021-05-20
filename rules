@@ -56,7 +56,7 @@ QB_CUSTOM_FLAGS = --disable-nvda --disable-winrawinput --enable-blissbox \
 	--enable-materialui --enable-xmb --enable-ozone --disable-stripes \
 	--enable-ssl --enable-systemmbedtls --disable-builtinmbedtls --enable-sdl2 \
 	--enable-libusb --enable-dbus --enable-systemd --enable-udev \
-	--enable-threads --enable-ffmpeg --enable-mpv --enable-ssa \
+	--enable-threads --enable-ffmpeg --disable-mpv --enable-ssa \
 	--enable-networking --enable-networkgamepad --enable-command \
 	--enable-miniupnpc --disable-builtinminiupnpc --enable-opengl \
 	--enable-opengles --enable-opengles3 --enable-opengles3_1 \
@@ -69,8 +69,7 @@ QB_CUSTOM_FLAGS = --disable-nvda --disable-winrawinput --enable-blissbox \
 	--enable-v4l2 --enable-flac --disable-builtinflac --enable-parport \
 	--enable-mmap --enable-qt --enable-xshm --enable-lua --enable-vulkan \
 	--enable-osmesa --enable-videoprocessor --enable-cdrom --enable-slang \
-	--enable-glslang --disable-builtinglslang --enable-spirv_cross \
-	--disable-network_video
+	--enable-glslang --disable-builtinglslang --disable-network_video
 
 GIT_HASH ::= $(shell echo $(DEB_VERSION_UPSTREAM) | sed -Ene 's/^.*\+(.*)/\1/p')
 
