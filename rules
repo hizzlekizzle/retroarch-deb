@@ -64,12 +64,12 @@ QB_CUSTOM_FLAGS = --disable-nvda --disable-winrawinput --enable-blissbox \
 	--enable-kms --enable-plain_drm --enable-wayland --enable-dynamic_egl \
 	--enable-egl --disable-vg --disable-builtinzlib --enable-zlib \
 	--enable-alsa --disable-tinyalsa --disable-audioio --disable-oss \
-	--disable-rsound --enable-roar --enable-al --enable-jack \
+	--disable-rsound --enable-al --enable-jack --disable-network_video \
 	--disable-coreaudio --enable-pulse --enable-freetype --enable-xvideo \
 	--enable-v4l2 --enable-flac --disable-builtinflac --enable-parport \
 	--enable-mmap --enable-qt --enable-xshm --enable-lua --enable-vulkan \
 	--enable-osmesa --enable-videoprocessor --enable-cdrom --enable-slang \
-	--enable-glslang --disable-builtinglslang --disable-network_video
+	--enable-glslang
 
 GIT_HASH ::= $(shell echo $(DEB_VERSION_UPSTREAM) | sed -Ene 's/^.*\+(.*)/\1/p')
 
