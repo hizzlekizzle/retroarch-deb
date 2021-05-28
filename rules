@@ -72,13 +72,13 @@ QB_CUSTOM_FLAGS = --disable-nvda --disable-winrawinput --enable-blissbox \
 
 GIT_HASH ::= $(shell echo $(DEB_VERSION_UPSTREAM) | sed -Ene 's/^.*\+(.*)/\1/p')
 
-ifeq ($(DEB_HOST_ARCH_CPU), $(filter $(DEB_HOST_ARCH_CPU), amd64 i386))
+ifeq ($(DEB_HOST_ARCH), $(filter $(DEB_HOST_ARCH), amd64 i386))
 	QB_EXTRA_FLAGS = --disable-rpiled --enable-sse --disable-cg
-else ifeq ($(DEB_HOST_ARCH_CPU),armhf)
+else ifeq ($(DEB_HOST_ARCH),armhf)
 	QB_EXTRA_FLAGS = --disable-cg --enable-sunxi --enable-floathard
-else ifeq ($(DEB_HOST_ARCH_CPU),arm64)
+else ifeq ($(DEB_HOST_ARCH),arm64)
 	QB_EXTRA_FLAGS = --disable-cg
-else ifeq ($(DEB_HOST_ARCH_CPU),armel)
+else ifeq ($(DEB_HOST_ARCH),armel)
 	QB_EXTRA_FLAGS = --disable-cg --enable-floatsoftfp
 else
 	QB_EXTRA_FLAGS = --disable-cg
