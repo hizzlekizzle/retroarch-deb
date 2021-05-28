@@ -18,7 +18,7 @@ endif
 DEB_BUILD_MAINT_OPTIONS  = hardening=+bindnow,+pie
 DEB_CFLAGS_MAINT_STRIP   = -O2
 DEB_CXXFLAGS_MAINT_STRIP = -O2
-DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed,-lGL
 DPKG_EXPORT_BUILDFLAGS   = 1
 QT_SELECT                = 5
 
@@ -73,7 +73,7 @@ QB_CUSTOM_FLAGS = --disable-nvda --disable-winrawinput --enable-blissbox \
 GIT_HASH ::= $(shell echo $(DEB_VERSION_UPSTREAM) | sed -Ene 's/^.*\+(.*)/\1/p')
 
 ifeq ($(DEB_HOST_ARCH_CPU), $(filter $(DEB_HOST_ARCH_CPU), amd64 i386))
-	QB_EXTRA_FLAGS = --disable-rpiled --enable-sse --enable-cg
+	QB_EXTRA_FLAGS = --disable-rpiled --enable-sse --disable-cg
 else ifeq ($(DEB_HOST_ARCH_CPU),armhf)
 	QB_EXTRA_FLAGS = --disable-cg --enable-sunxi --enable-floathard
 else ifeq ($(DEB_HOST_ARCH_CPU),arm64)
@@ -110,7 +110,7 @@ override_dh_auto_configure:
 		$(QB_CUSTOM_FLAGS) $(QB_EXTRA_FLAGS)
 
 override_dh_auto_build:
-	dh_auto_build -O-v -- LDFLAGS=-lGL GIT_VERSION="'$(GIT_HASH)'"
+	dh_auto_build -O-v -- GIT_VERSION="'$(GIT_HASH)'"
 	# SoftFilters
 	dh_auto_build -O-v -- -C gfx/video_filters/
 	# Audio DSP plugins
