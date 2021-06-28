@@ -1,3 +1,9 @@
+retroarch (1.9.6-1) hirsute; urgency=medium
+
+  * New upstream release.
+
+ -- Paul Preuss <paul@dokomi.de>  Mon, 28 Jun 2021 10:16:00 +0200
+
 retroarch (1.9.5-1) hirsute; urgency=medium
 
   * New upstream release.
