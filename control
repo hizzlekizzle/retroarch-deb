@@ -24,6 +24,7 @@ Rules-Requires-Root: no
 
 Package: retroarch
 Architecture: any
+Replaces: retroarch-dbg
 Depends: fonts-dejavu-core, libqt5waylandclient5, libvulkan1, ${shlibs:Depends},
  ${misc:Depends}
 Description: Simple frontend for the libretro library
