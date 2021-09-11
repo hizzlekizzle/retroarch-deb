@@ -25,8 +25,8 @@ Rules-Requires-Root: no
 Package: retroarch
 Architecture: any
 Provides: retroarch-dbg
-Depends: fonts-dejavu-core, libqt5waylandclient5, libvulkan1, ${shlibs:Depends},
- ${misc:Depends}
+Depends: libx11-dev, libxrandr-dev, fonts-dejavu-core, libqt5waylandclient5,
+ libvulkan1, ${shlibs:Depends}, ${misc:Depends}
 Description: Simple frontend for the libretro library
  RetroArch is an open source, multi-platform frontend for the libretro API. It
  can be used as a modular multi-emulator system, game engine, media player and
