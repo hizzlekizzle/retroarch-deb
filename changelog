@@ -1,3 +1,9 @@
+retroarch (1.9.14-1) hirsute; urgency=medium
+
+  * New upstream release.
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Sun, 5 Dec 2021 19:44:00 -0300
+
 retroarch (1.9.13.2-1) hirsute; urgency=medium
 
   * Hotfix release.
