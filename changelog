@@ -1,3 +1,9 @@
+retroarch (1.12.0-1) hirsute; urgency=medium
+
+  * New upstream release.
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 17 Oct 2022 19:44:00 -0300
+
 retroarch (1.11.1-1) hirsute; urgency=medium
 
   * New upstream release.
