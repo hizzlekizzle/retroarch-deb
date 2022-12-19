@@ -54,7 +54,7 @@ export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_STRIP DEB_CXXFLAGS_MAINT_STRIP \
 QB_CUSTOM_FLAGS = --disable-nvda --disable-winrawinput --enable-blissbox \
 	--disable-gdi --enable-caca --enable-sixel --enable-rgui \
 	--enable-materialui --enable-xmb --enable-ozone \
-	--enable-ssl --enable-systemmbedtls --disable-builtinmbedtls --enable-sdl2 \
+	--enable-ssl --disable-systemmbedtls --enable-builtinmbedtls --enable-sdl2 \
 	--enable-libusb --enable-dbus --enable-systemd --enable-udev \
 	--enable-threads --enable-ffmpeg --disable-mpv --enable-ssa \
 	--enable-networking --enable-networkgamepad --enable-command \
