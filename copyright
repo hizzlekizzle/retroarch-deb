@@ -9,17 +9,17 @@ Files-Excluded: deps/glslang/glslang emscripten/library_rweb*
  pkg/ps3_iso/PS3_DISC.SFB .gitignore .project
 
 Files: *
-Copyright: 2005-2021, The RetroArch Team
-           2006-2021, Daniel De Matteis <libretro@gmail.com>
+Copyright: 2005-2023, The RetroArch Team
+           2006-2022, Daniel De Matteis <libretro@gmail.com>
            2010-2021, Michael Lelli <toadking@toadking.com>
-           2010-2020, Hans-Kristian Arntzen <maister@archlinux.us>
+           2010-2023, Hans-Kristian Arntzen <maister@archlinux.us>
            2010-2014, OV2 <ov2@ov2.eu>
            2012-2014, Jason Fetters <jasonfetters@gmail.com>
            2013-2021, Alfred Agrell <floating@muncher.se>
-           2014-2021, Jean-André Santoni <jean.andre.santoni@gmail.com>
-           2014-2020, Ali Bouhlel <aliaspider@gmail.com>
+           2014-2022, Jean-André Santoni <jean.andre.santoni@gmail.com>
+           2014-2023, Ali Bouhlel <aliaspider@gmail.com>
            2014-2020, Higor Eurípedes <heuripedes@gmail.com>
-           2014-2016, Andrés Suárez <andres.430@gmail.com>
+           2014-2022, Andrés Suárez <andres.430@gmail.com>
            2015-2018, Andre Leiradella <andre@leiradella.com>
            2016-2019, Brad Parker <bparker06@bparker.net>
            2016-2019, Gregor Richards <hg-yff@gregor.im>
@@ -30,7 +30,7 @@ Copyright: 2016, Jared McNeill <jmcneill@invisible.ca>
 License: BSD-2-Clause
 
 Files: deps/7zip/*
-Copyright: 1999-2021, Igor Pavlov <ipavlov@users.sourceforge.net>
+Copyright: 1999-2023, Igor Pavlov <ipavlov@users.sourceforge.net>
 License: LicenseRef-PublicDomain
 
 Files: deps/civetweb/* network/httpserver/handle_form.inl
@@ -224,9 +224,9 @@ Copyright: 2015-2016, Andre Leiradella <andre@leiradella.com>
 License: GPL-3.0-or-later
 
 Files: debian/*
-Copyright: 2012-2021, Hunter Kaller <hunter_kaller@yahoo.com>
+Copyright: 2012-2023, Hunter Kaller <hunter_kaller@yahoo.com>
            2014-2018, Sergio Benjamim <sergio_br2@yahoo.com.br>
-                2021, Peter J. Mello <admin@petermello.net>
+           2021-2023, Peter J. Mello <admin@petermello.net>
 License: GPL-3.0-or-later
 
 License: GPL-3.0-or-later

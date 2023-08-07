@@ -5,20 +5,19 @@ Maintainer: Libretro Team <libretro@gmail.com>
 Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
            Sérgio Benjamim <sergio_br2@yahoo.com.br>,
            Peter J. Mello <admin@petermello.net>
-Build-Depends: debhelper-compat (= 11), python3-all-dev, alsa-utils,
- chrpath, lsb-release, sunxi-tools [armhf], yasm, libass-dev,
- libavdevice-dev, libcaca-dev, libdrm-dev, libflac-dev,
- libfreetype-dev | libfreetype6-dev, libfribidi-dev, libgbm-dev, libglm-dev,
- libglvnd-dev, libjack-jackd2-dev | libjack-dev, liblua5.3-dev,
- libminiupnpc-dev, libmpv-dev, libopenal-dev, libosmesa6-dev, 
- libroar-dev (>= 1.0~beta11), libsdl2-dev, libsixel-dev (>= 1.6.0),
+Build-Depends: debhelper-compat (= 13), python3-all-dev, alsa-utils, chrpath,
+ lsb-release, sunxi-tools [armhf], yasm, libass-dev, libavdevice-dev,
+ libcaca-dev, libdrm-dev, libflac-dev, libfreetype-dev | libfreetype6-dev,
+ libfribidi-dev, libgbm-dev, libglm-dev, libglvnd-dev,
+ libjack-jackd2-dev | libjack-dev, liblua5.3-dev, libminiupnpc-dev, libmpv-dev,
+ libopenal-dev, libosmesa6-dev, libsdl2-dev, libsixel-dev (>= 1.6.0),
  libslang2-dev, libssl-dev, libsystemd-dev, libusb-1.0-0-dev, libv4l-dev,
  libvulkan-dev, libwayland-dev (>= 1.12), libwayland-egl-backend-dev,
- libx11-xcb-dev, libxcb-shm0-dev, libxkbcommon-dev, libxml2-dev,
- qtbase5-dev, wayland-protocols (>= 1.13), x11proto-xext-dev, zlib1g-dev
-Standards-Version: 4.5.1
+ libx11-xcb-dev, libxcb-shm0-dev, libxkbcommon-dev, libxml2-dev, qtbase5-dev,
+ wayland-protocols (>= 1.13), x11proto-xext-dev, zlib1g-dev
+Standards-Version: 4.6.2
 Homepage: https://www.libretro.com/
-Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian.git
+Vcs-Git: ssh://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
 Vcs-Browser: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
 Rules-Requires-Root: no
 

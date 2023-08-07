@@ -1,88 +1,99 @@
-retroarch (1.15.0-1) hirsute; urgency=medium
+retroarch (1.15.0-2) lunar; urgency=medium
+
+  * Stop linking builds to RoarAudio and drop libroar-dev from Build-Depends;
+    upstream project is dead and package has been dropped from Debian/Ubuntu.
+  * Bump debhelper compatibility level to 13 following backport to Focal.
+  * Bump Standards-Version to 4.6.2; no changes needed.
+  * Refresh copyright dates.
+  * Add complete set of DEP-12 information to d/upstream/metadata.
+
+ -- Peter J. Mello <admin@petermello.net>  Sun, 6 Aug 2023 21:32:36 -0700
+
+retroarch (1.15.0-1) kinetic; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 10 Mar 2023 19:44:00 -0300
 
-retroarch (1.14.0-1) hirsute; urgency=medium
+retroarch (1.14.0-1) kinetic; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Tue, 13 Dec 2022 19:44:00 -0300
 
-retroarch (1.13.0-1) hirsute; urgency=medium
+retroarch (1.13.0-1) kinetic; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Sun, 20 Nov 2022 19:44:00 -0300
 
-retroarch (1.12.0-1) hirsute; urgency=medium
+retroarch (1.12.0-1) jammy; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 17 Oct 2022 19:44:00 -0300
 
-retroarch (1.11.1-1) hirsute; urgency=medium
+retroarch (1.11.1-1) jammy; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Tue, 4 Oct 2022 19:44:00 -0300
 
-retroarch (1.11.0-1) hirsute; urgency=medium
+retroarch (1.11.0-1) jammy; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 30 Sept 2022 19:44:00 -0300
 
-retroarch (1.10.3-1) hirsute; urgency=medium
+retroarch (1.10.3-1) impish; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 11 Apr 2022 19:44:00 -0300
 
-retroarch (1.10.2-1) hirsute; urgency=medium
+retroarch (1.10.2-1) impish; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Tue, 22 Mar 2022 19:44:00 -0300
 
-retroarch (1.10.1-1) hirsute; urgency=medium
+retroarch (1.10.1-1) impish; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 4 Mar 2022 19:44:00 -0300
 
-retroarch (1.10-1) hirsute; urgency=medium
+retroarch (1.10-1) impish; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Wed, 19 Jan 2022 19:44:00 -0300
 
-retroarch (1.9.14-1) hirsute; urgency=medium
+retroarch (1.9.14-1) impish; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Sun, 5 Dec 2021 19:44:00 -0300
 
-retroarch (1.9.13.2-1) hirsute; urgency=medium
+retroarch (1.9.13.2-1) impish; urgency=medium
 
   * Hotfix release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 12 Nov 2021 19:44:00 -0300
 
-retroarch (1.9.13.1-1) hirsute; urgency=medium
+retroarch (1.9.13.1-1) impish; urgency=medium
 
   * Hotfix release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Wed, 10 Nov 2021 19:44:00 -0300
 
-retroarch (1.9.13-1) hirsute; urgency=medium
+retroarch (1.9.13-1) impish; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 6 Nov 2021 19:44:00 -0300
 
-retroarch (1.9.12-1) hirsute; urgency=medium
+retroarch (1.9.12-1) impish; urgency=medium
 
   * New upstream release.
 
@@ -148,205 +159,205 @@ retroarch (1.9.2-1) hirsute; urgency=medium
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 30 Apr 2021 19:44:00 -0300
 
-retroarch (1.9.0-1) unstable; urgency=low
+retroarch (1.9.0-1) focal; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Fri, 7 Aug 2020 19:44:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 7 Aug 2020 19:44:00 -0300
 
-retroarch (1.8.9-1) unstable; urgency=low
+retroarch (1.8.9-1) focal; urgency=low
 
   * New upstream release.
 
  -- Paul Preuss <paul@dokomi.de>  Sun, 21 Jun 2020 19:00:00 +0200
 
-retroarch (1.8.8-1) unstable; urgency=low
+retroarch (1.8.8-1) focal; urgency=low
 
   * New upstream release.
 
  -- Paul Preuss <paul@dokomi.de>  Mon, 01 Jun 2020 23:00:00 +0200
 
-retroarch (1.8.7-1) unstable; urgency=low
+retroarch (1.8.7-1) focal; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Sun, 17 May 2020 22:27:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Sun, 17 May 2020 22:27:00 -0300
 
-retroarch (1.8.6-1) unstable; urgency=low
+retroarch (1.8.6-1) focal; urgency=low
 
   * New upstream release.
   * Drop libvulkan-dev from binary package dependencies.
 
  -- Paul Preuss <paul@dokomi.de>  Mon, 11 May 2020 14:00:00 +0200
 
-retroarch (1.8.5-1) unstable; urgency=low
+retroarch (1.8.5-1) eoan; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Sat, 21 Mar 2020 12:02:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 21 Mar 2020 12:02:00 -0300
 
 
-retroarch (1.8.4-1) unstable; urgency=low
-
-  * New upstream release.
-
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Fri, 17 Jan 2020 12:02:00 -0300
-
-
-retroarch (1.8.3-1) unstable; urgency=low
+retroarch (1.8.4-1) eoan; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Thu, 9 Jan 2020 12:02:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 17 Jan 2020 12:02:00 -0300
 
 
-retroarch (1.8.2-1) unstable; urgency=low
-
-  * New upstream release.
-
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Wed, 25 Dec 2019 12:02:00 -0300
-
-
-retroarch (1.8.1-1) unstable; urgency=low
+retroarch (1.8.3-1) eoan; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Mon, 4 Nov 2019 12:02:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Thu, 9 Jan 2020 12:02:00 -0300
 
 
-retroarch (1.8.0-1) unstable; urgency=low
-
-  * New upstream release.
-
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Mon, 28 Oct 2019 12:02:00 -0300
-
-
-retroarch (1.7.9.2-1) unstable; urgency=low
+retroarch (1.8.2-1) eoan; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Thu, 10 Oct 2019 12:02:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Wed, 25 Dec 2019 12:02:00 -0300
 
 
-retroarch (1.7.9-1) unstable; urgency=low
-
-  * New upstream release.
-
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Fri, 4 Oct 2019 12:02:00 -0300
-
-
-retroarch (1.7.8.4-1) unstable; urgency=low
+retroarch (1.8.1-1) eoan; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Mon, 16 Sept 2019 12:02:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 4 Nov 2019 12:02:00 -0300
 
 
-retroarch (1.7.8.3-1) unstable; urgency=low
-
-  * New upstream release.
-
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Mon, 9 Sept 2019 12:02:00 -0300
-
-retroarch (1.7.7-1) unstable; urgency=low
+retroarch (1.8.0-1) eoan; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Wed, 12 Jun 2019 09:10:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 28 Oct 2019 12:02:00 -0300
 
-retroarch (1.7.6-1) unstable; urgency=low
+
+retroarch (1.7.9.2-1) disco; urgency=low
+
+  * New upstream release.
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Thu, 10 Oct 2019 12:02:00 -0300
+
+
+retroarch (1.7.9-1) disco; urgency=low
+
+  * New upstream release.
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 4 Oct 2019 12:02:00 -0300
+
+
+retroarch (1.7.8.4-1) disco; urgency=low
+
+  * New upstream release.
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 16 Sept 2019 12:02:00 -0300
+
+
+retroarch (1.7.8.3-1) disco; urgency=low
+
+  * New upstream release.
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 9 Sept 2019 12:02:00 -0300
+
+retroarch (1.7.7-1) disco; urgency=low
+
+  * New upstream release.
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Wed, 12 Jun 2019 09:10:00 -0300
+
+retroarch (1.7.6-1) cosmic; urgency=low
 
   * New upstream release.
   * Stop patching out the online updater.
 
- -- Hunter Kaller (hizzlekizzle) <hunter_kaller@yahoo.com>  Tue, 05 Feb 2019 14:17:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Tue, 5 Feb 2019 14:17:00 -0300
 
-retroarch (1.7.5-1) unstable; urgency=low
+retroarch (1.7.5-1) bionic; urgency=low
 
   * New upstream release.
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 02 Oct 2018 02:16:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 2 Oct 2018 02:16:00 -0300
 
-retroarch (1.7.4-1) unstable; urgency=low
+retroarch (1.7.4-1) bionic; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Fri, 31 Aug 2018 22:03:00 -0300
 
-retroarch (1.7.3-1) unstable; urgency=low
+retroarch (1.7.3-1) bionic; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Mon, 14 May 2018 21:53:00 -0300
 
-retroarch (1.7.1-1) unstable; urgency=low
+retroarch (1.7.1-1) artful; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Mon, 19 Feb 2018 22:50:00 -0300
 
-retroarch (1.7.0-1) unstable; urgency=low
+retroarch (1.7.0-1) artful; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 26 Dec 2017 01:56:00 -0300
 
-retroarch (1.6.9-1) unstable; urgency=low
+retroarch (1.6.9-1) artful; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 21 Nov 2017 19:33:00 -0300
 
-retroarch (1.6.8-1) unstable; urgency=low
+retroarch (1.6.8-1) artful; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Mon, 20 Nov 2017 22:53:00 -0300
 
-retroarch (1.6.7-1) unstable; urgency=low
+retroarch (1.6.7-1) zesty; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Fri, 18 Aug 2017 03:33:00 -0300
 
-retroarch (1.6.4-1) unstable; urgency=low
+retroarch (1.6.4-1) zesty; urgency=low
 
   * New upstream release.
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Mon, 07 Aug 2017 17:18:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Mon, 7 Aug 2017 17:18:00 -0300
 
-retroarch (1.6.3-1) unstable; urgency=low
+retroarch (1.6.3-1) zesty; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Fri, 28 Jul 2017 13:52:00 -0300
 
-retroarch (1.6.1-1) unstable; urgency=low
+retroarch (1.6.1-1) zesty; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Fri, 30 Jun 2017 20:12:00 -0300
 
-retroarch (1.6.0-1) unstable; urgency=low
+retroarch (1.6.0-1) zesty; urgency=low
 
   * New upstream release.
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Thu, 01 Jun 2017 14:09:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Thu, 1 Jun 2017 14:09:00 -0300
 
-retroarch (1.5.0-1) unstable; urgency=low
+retroarch (1.5.0-1) yakkety; urgency=low
 
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Fri, 10 Mar 2017 13:01:00 -0300
 
-retroarch (1.4.1+dfsg1-1) experimental; urgency=low
+retroarch (1.4.1+dfsg1-1) yakkety; urgency=low
 
   * New upstream release.
   * Add symlinks to filters and app icon.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Sun, 26 Feb 2017 19:53:00 -0300
 
-retroarch (1.3.6+dfsg1-1) unstable; urgency=low
+retroarch (1.3.6+dfsg1-1) xenial; urgency=low
 
   * New upstream release.
   * Changed package maintainer to Debian Games Team.
@@ -355,19 +366,19 @@ retroarch (1.3.6+dfsg1-1) unstable; urgency=low
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 23 Aug 2016 22:44:00 -0300
 
-retroarch (1.3.0+dfsg1-1) unstable; urgency=low
+retroarch (1.3.0+dfsg1-1) xenial; urgency=low
 
   * Removed Sony copyrighted files.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 17 May 2016 22:21:00 -0300
 
-retroarch (1.3.0-2) unstable; urgency=low
+retroarch (1.3.0-2) wily; urgency=low
 
   * Removed debug packages from control (automatic -dbgsym packages).
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Sun, 10 Apr 2016 22:36:00 -0300
 
-retroarch (1.3.0-1) unstable; urgency=low
+retroarch (1.3.0-1) wily; urgency=low
 
   * Initial release (Closes: #792608).
 
