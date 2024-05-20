@@ -1,7 +1,4 @@
 debian/retroarch.cfg
-debian/retroarch.dirs
-debian/retroarch.install
-debian/retroarch.links
 .CONFIG_DEFINES
 .MAKEFILE_DEFINES
 .tmp

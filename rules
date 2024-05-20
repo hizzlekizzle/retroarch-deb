@@ -2,47 +2,55 @@
 # -*- mode: makefile-gmake; coding: utf-8 -*-
 # SPDX-FileCopyrightText: © 2012-2019 Hunter Kaller <hunter_kaller@yahoo.com>
 # SPDX-FileCopyrightText: © 2014-2018 Sergio Benjamim <sergio_br2@yahoo.com.br>
-# SPDX-FileCopyrightText: © 2021-2023 Peter J. Mello <admin@petermello.net>
+# SPDX-FileCopyrightText: © 2021-2024 Peter J. Mello <admin@petermello.net>
 #
 # SPDX-License-Identifier: GPL-3.0-or-later OR MPL-2.0
 
-BASH_PATH ::= $(shell which bash)
-SHELL     ::= $(shell realpath -Leq $(BASH_PATH) || echo '/bin/sh')
+include /usr/share/dpkg/architecture.mk
+include /usr/share/dpkg/vendor.mk
+
+SHELL                      ::= $(realpath /bin/bash)
 
 # Fix hardening-no-bindnow and hardening-no-pie
 DEB_BUILD_MAINT_OPTIONS    ::= hardening=+bindnow,+pie
 DEB_CFLAGS_MAINT_STRIP     ::= -O2
 DEB_CXXFLAGS_MAINT_STRIP   ::= -O2
 DEB_LDFLAGS_MAINT_APPEND   ::= -Wl,--as-needed,-lGL
-DISTRO_VENDOR              ::= $(shell dpkg-vendor --query Vendor)
 DPKG_EXPORT_BUILDFLAGS     ::= 1
 QT_SELECT                  ::= 5
-UBU_VER                    ::= $(shell lsb_release -rs | cut -c-5)
 
 ifeq (,$(findstring terse,$(DEB_BUILD_OPTIONS)))
   DH_INTERNAL_OPTIONS      ::= -v
   DH_VERBOSE               ::= 1
 endif
 
-# Use Bash's built-in printf to pass the version the flag set was introduced as
-# well as the version of the host (build) system on separate lines to 'sort'
-# with 'greatest first' ordering, then 'head' to isolate the top value. If it's
-# the build system (as in it's >= the introduction version), use the flags.
-ifeq (Ubuntu,$(DISTRO_VENDOR))
-  ifeq ($(UBU_VER),$(shell printf "$(UBU_VER)\n17.10\n" | sort -gr | head -1))
-    DEB_BUILD_MAINT_OPTIONS += future=+lfs
+# Use Bash's built-in printf to pass the Ubuntu version when the dpkg flag set
+# was introduced, and compare it to the version of the build system (host) by
+# supplying them on separate lines to 'sort' with greatest first ordering, then
+# pipe to 'head' to isolate the larger value. If the output matches the build
+# system (i.e. it's ≥the version of introduction), then set the flags.
+uver ::= $(shell lsb_release -rs | cut -c-5)
+ifeq (Ubuntu,$(DEB_VENDOR))
+  ifeq ($(uver),$(shell printf "$(uver)\n19.04\n" | sort -gr | head -1))
+    DEB_BUILD_MAINT_OPTIONS   += reproducible=+fixfilepath
+  else ifeq ($(uver),$(shell printf "$(uver)\n16.10\n" | sort -gr | head -1))
+    DEB_BUILD_MAINT_OPTIONS   += reproducible=+fixdebugpath
+  endif
+
+  ifeq ($(uver),$(shell printf "$(uver)\n21.04\n" | sort -gr | head -1))
+    DEB_BUILD_MAINT_OPTIONS   += optimize=+lto
+    LTO                      ::= 1
+  endif
+
+  # If building for a 32-bit platform, add definitions for Large File Support
+  ifeq (32,$(DEB_BUILD_ARCH_BITS))
     DPKG_EXPORT_BUILDTOOLS ::= 1
     include /usr/share/dpkg/buildtools.mk
-  endif
-
-  ifeq ($(UBU_VER),$(shell printf "$(UBU_VER)\n19.04\n" | sort -gr | head -1))
-    DEB_BUILD_MAINT_OPTIONS += reproducible=+fixfilepath
-  else
-    DEB_BUILD_MAINT_OPTIONS += reproducible=+fixdebugpath
-  endif
-
-  ifeq ($(UBU_VER),$(shell printf "$(UBU_VER)\n21.04\n" | sort -gr | head -1))
-    DEB_BUILD_MAINT_OPTIONS += optimize=+lto
+    ifeq ($(uver),$(shell printf "$(uver)\n23.10\n" | sort -gr | head -1))
+      DEB_BUILD_MAINT_OPTIONS += abi=+all
+    else ifeq ($(uver),$(shell printf "$(uver)\n17.10\n" | sort -gr | head -1))
+      DEB_BUILD_MAINT_OPTIONS += future=+lfs
+    endif
   endif
 endif
 
@@ -57,23 +65,23 @@ export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_STRIP DEB_CXXFLAGS_MAINT_STRIP \
 QB_CUSTOM_FLAGS ::= --disable-nvda --disable-winrawinput --enable-blissbox \
 	--disable-gdi --enable-caca --enable-sixel --enable-rgui \
 	--enable-materialui --enable-xmb --enable-ozone --enable-ssl \
-	--disable-systemmbedtls --enable-builtinmbedtls --enable-sdl2 \
-	--enable-libusb --enable-dbus --enable-systemd --enable-udev \
+	--enable-systemmbedtls --disable-builtinmbedtls --disable-builtinbearssl \
+	--enable-sdl2 --enable-libusb --enable-dbus --enable-systemd --enable-udev \
 	--enable-threads --enable-ffmpeg --disable-mpv --enable-ssa \
 	--enable-networking --enable-networkgamepad --enable-command \
 	--enable-opengl --disable-hid --disable-libusb --disable-core_info_cache\
 	--enable-x11 --enable-xrandr --enable-xinerama --enable-kms \
-	--enable-plain_drm --enable-wayland --disable-dynamic_egl \
-	--enable-egl --disable-vg --disable-builtinzlib --enable-zlib \
-	--enable-alsa --disable-tinyalsa --disable-audioio --disable-oss \
-	--disable-rsound --disable-roar --enable-al --enable-jack \
-	--disable-network_video --disable-coreaudio --enable-pulse \
-	--enable-freetype --enable-xvideo --enable-v4l2 --enable-flac \
-	--disable-builtinflac --enable-parport --enable-mmap --enable-qt \
-	--enable-xshm --enable-builtinglslang --enable-videoprocessor \
-	--enable-cdrom --enable-slang
+	--enable-plain_drm --enable-wayland --disable-dynamic_egl --enable-egl \
+	--disable-vg --disable-builtinzlib --enable-zlib --enable-alsa \
+	--disable-tinyalsa --disable-audioio --disable-oss --disable-rsound \
+	--disable-roar --enable-al --enable-jack --disable-network_video \
+	--disable-coreaudio --enable-pulse --enable-freetype --enable-xvideo \
+	--enable-v4l2 --enable-flac --disable-builtinflac --enable-parport \
+	--enable-mmap --enable-qt --enable-xshm --disable-builtinglslang \
+	--enable-videoprocessor --enable-cdrom --enable-slang --enable-spirv_cross \
+	--enable-vulkan
 
-ifeq ($(DEB_HOST_ARCH), $(filter $(DEB_HOST_ARCH), amd64 i386))
+ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH), amd64 i386))
   QB_EXTRA_FLAGS = --disable-rpiled --enable-sse --disable-cg --disable-opengles
 else ifeq ($(DEB_HOST_ARCH),armhf)
   QB_EXTRA_FLAGS = --disable-cg --enable-opengles --enable-opengles3 \
@@ -90,43 +98,35 @@ endif
 
 
 %:
-	dh $@ -v
+	dh $@ -v -Smakefile
 
 
-override_dh_auto_clean:
+execute_before_dh_auto_clean:
 	touch "$(CURDIR)/config.mk"
-	dh_auto_clean -O-v
-	dh_auto_clean -O-v -- -C "$(CURDIR)/gfx/video_filters" clean
-	dh_auto_clean -O-v -- -C "$(CURDIR)/libretro-common/audio/dsp_filters" clean
+
+execute_after_dh_auto_clean:
+	dh_auto_clean -O-v -O-Smakefile -O-Dgfx/video_filters
+	dh_auto_clean -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters
 
 override_dh_auto_configure:
 	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/debian/retroarch.cfg.in" >"$(CURDIR)/debian/retroarch.cfg"
-	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
-		"$(CURDIR)/debian/retroarch.dirs.in" >"$(CURDIR)/debian/retroarch.dirs"
-	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
-		"$(CURDIR)/debian/retroarch.install.in" \
-		>"$(CURDIR)/debian/retroarch.install"
-	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
-		"$(CURDIR)/debian/retroarch.links.in" \
-		>"$(CURDIR)/debian/retroarch.links"
 	$(CURDIR)/configure --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
 		--sysconfdir=/etc --bindir=/usr/games --datarootdir=/usr/share \
 		--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
 		$(QB_CUSTOM_FLAGS) $(QB_EXTRA_FLAGS)
 
 override_dh_auto_build:
-	dh_auto_build -O-v -- GIT_VERSION="'$(GIT_HASH)'"
+	dh_auto_build -O-v -O-Smakefile -- GIT_VERSION="'$(GIT_HASH)'" V=1
 	# SoftFilters
-	dh_auto_build -O-v -- -C "$(CURDIR)/gfx/video_filters"
+	dh_auto_build -O-v -O-Smakefile -O-Dgfx/video_filters -- V=1
 	# Audio DSP plugins
-	dh_auto_build -O-v -- -C "$(CURDIR)/libretro-common/audio/dsp_filters"
+	dh_auto_build -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters -- V=1
 
 override_dh_auto_install:
 
-override_dh_install:
-	dh_install -O-v
+execute_after_dh_install:
 	chrpath -d "$(CURDIR)/debian/retroarch/usr/games/retroarch"
 
 override_dh_shlibdeps:
-	dh_shlibdeps -O-v -l/lib/$(DEB_HOST_MULTIARCH)
+	dh_shlibdeps -O-v -O-Smakefile -l/lib/$(DEB_HOST_MULTIARCH)

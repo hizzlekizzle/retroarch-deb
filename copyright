@@ -9,7 +9,7 @@ Files-Excluded: deps/glslang/glslang emscripten/library_rweb*
  pkg/ps3_iso/PS3_DISC.SFB .gitignore .project
 
 Files: *
-Copyright: 2005-2023, The RetroArch Team
+Copyright: 2005-2024, The RetroArch Team
            2006-2022, Daniel De Matteis <libretro@gmail.com>
            2010-2021, Michael Lelli <toadking@toadking.com>
            2010-2023, Hans-Kristian Arntzen <maister@archlinux.us>
@@ -224,9 +224,9 @@ Copyright: 2015-2016, Andre Leiradella <andre@leiradella.com>
 License: GPL-3.0-or-later
 
 Files: debian/*
-Copyright: 2012-2023, Hunter Kaller <hunter_kaller@yahoo.com>
+Copyright: 2012-2024, Hunter Kaller <hunter_kaller@yahoo.com>
            2014-2018, Sergio Benjamim <sergio_br2@yahoo.com.br>
-           2021-2023, Peter J. Mello <admin@petermello.net>
+           2021-2024, Peter J. Mello <admin@petermello.net>
 License: GPL-3.0-or-later
 
 License: GPL-3.0-or-later
@@ -244,7 +244,7 @@ License: GPL-3.0-or-later
  .
  On Debian(-based) GNU/Linux systems, the complete text of the GNU General
  Public License, version 3, can be found in the file
- `/usr/share/common-licenses/GPL-3'.
+ '/usr/share/common-licenses/GPL-3'.
 
 License: BSD-2-Clause
  Redistribution and use in source and binary forms, with or without
@@ -313,7 +313,7 @@ License: Apache-2.0
  specific language governing permissions and limitations under the License.
  .
  On Debian(-based) GNU/Linux systems, the complete text of the Apache License,
- Version 2.0, can be found in the file `/usr/share/common-licenses/Apache-2.0'.
+ Version 2.0, can be found in the file '/usr/share/common-licenses/Apache-2.0'.
 
 License: LGPL-2.1-or-later
  This library is free software; you can redistribute it and/or modify it under
@@ -331,7 +331,7 @@ License: LGPL-2.1-or-later
  .
  On Debian(-based) GNU/Linux systems, the complete text of the GNU Lesser
  General Public License, version 2.1, can be found in the file
- `/usr/share/common-licenses/LGPL-2.1'.
+ '/usr/share/common-licenses/LGPL-2.1'.
 
 License: BSD-3-Clause
  Redistribution and use in source and binary forms, with or without
@@ -391,7 +391,7 @@ License: GPL-2.0-or-later
  .
  On Debian(-based) GNU/Linux systems, the complete text of the GNU General
  Public License, version 2, can be found in the file
- `/usr/share/common-licenses/GPL-2'.
+ '/usr/share/common-licenses/GPL-2'.
 
 License: LicenseRef-PeslyakPD
  This software was written by Alexander Peslyak in 2001. No copyright is

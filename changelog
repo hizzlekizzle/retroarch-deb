@@ -1,8 +1,14 @@
-retroarch (1.17.0-1) lunar; urgency=medium
+retroarch (1.18.0-1) mantic; urgency=medium
+
+  * New upstream release: v1.18.0
+
+ -- Peter J. Mello <admin@petermello.net>  Thu, 21 Mar 2024 08:10:35 -0700
+
+retroarch (1.17.0-1) mantic; urgency=medium
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 3 Feb 2024 19:44:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 03 Feb 2024 19:44:00 -0300
 
 retroarch (1.16.0.3-1) lunar; urgency=medium
 
@@ -31,7 +37,7 @@ retroarch (1.15.0-2) lunar; urgency=medium
   * Refresh copyright dates.
   * Add complete set of DEP-12 information to d/upstream/metadata.
 
- -- Peter J. Mello <admin@petermello.net>  Sun, 6 Aug 2023 21:32:36 -0700
+ -- Peter J. Mello <admin@petermello.net>  Sun, 06 Aug 2023 21:32:36 -0700
 
 retroarch (1.15.0-1) kinetic; urgency=medium
 
@@ -61,7 +67,7 @@ retroarch (1.11.1-1) jammy; urgency=medium
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Tue, 4 Oct 2022 19:44:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Tue, 04 Oct 2022 19:44:00 -0300
 
 retroarch (1.11.0-1) jammy; urgency=medium
 
@@ -85,7 +91,7 @@ retroarch (1.10.1-1) impish; urgency=medium
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 4 Mar 2022 19:44:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 04 Mar 2022 19:44:00 -0300
 
 retroarch (1.10-1) impish; urgency=medium
 
@@ -97,7 +103,7 @@ retroarch (1.9.14-1) impish; urgency=medium
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Sun, 5 Dec 2021 19:44:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Sun, 05 Dec 2021 19:44:00 -0300
 
 retroarch (1.9.13.2-1) impish; urgency=medium
 
@@ -115,7 +121,7 @@ retroarch (1.9.13-1) impish; urgency=medium
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 6 Nov 2021 19:44:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 06 Nov 2021 19:44:00 -0300
 
 retroarch (1.9.12-1) impish; urgency=medium
 
@@ -127,7 +133,7 @@ retroarch (1.9.11-1) hirsute; urgency=medium
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 9 Oct 2021 19:44:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 09 Oct 2021 19:44:00 -0300
 
 retroarch (1.9.10-1) hirsute; urgency=medium
 
@@ -139,7 +145,7 @@ retroarch (1.9.9-1) hirsute; urgency=medium
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Sun, 5 Sept 2021 19:44:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Sun, 05 Sept 2021 19:44:00 -0300
 
 retroarch (1.9.8-1) hirsute; urgency=medium
 
@@ -187,7 +193,7 @@ retroarch (1.9.0-1) focal; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 7 Aug 2020 19:44:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 07 Aug 2020 19:44:00 -0300
 
 retroarch (1.8.9-1) focal; urgency=low
 
@@ -220,20 +226,17 @@ retroarch (1.8.5-1) eoan; urgency=low
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 21 Mar 2020 12:02:00 -0300
 
-
 retroarch (1.8.4-1) eoan; urgency=low
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 17 Jan 2020 12:02:00 -0300
 
-
 retroarch (1.8.3-1) eoan; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Thu, 9 Jan 2020 12:02:00 -0300
-
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Thu, 09 Jan 2020 12:02:00 -0300
 
 retroarch (1.8.2-1) eoan; urgency=low
 
@@ -241,13 +244,11 @@ retroarch (1.8.2-1) eoan; urgency=low
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Wed, 25 Dec 2019 12:02:00 -0300
 
-
 retroarch (1.8.1-1) eoan; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 4 Nov 2019 12:02:00 -0300
-
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 04 Nov 2019 12:02:00 -0300
 
 retroarch (1.8.0-1) eoan; urgency=low
 
@@ -255,20 +256,17 @@ retroarch (1.8.0-1) eoan; urgency=low
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 28 Oct 2019 12:02:00 -0300
 
-
 retroarch (1.7.9.2-1) disco; urgency=low
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Thu, 10 Oct 2019 12:02:00 -0300
 
-
 retroarch (1.7.9-1) disco; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 4 Oct 2019 12:02:00 -0300
-
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 04 Oct 2019 12:02:00 -0300
 
 retroarch (1.7.8.4-1) disco; urgency=low
 
@@ -276,12 +274,11 @@ retroarch (1.7.8.4-1) disco; urgency=low
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 16 Sept 2019 12:02:00 -0300
 
-
 retroarch (1.7.8.3-1) disco; urgency=low
 
   * New upstream release.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 9 Sept 2019 12:02:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 09 Sept 2019 12:02:00 -0300
 
 retroarch (1.7.7-1) disco; urgency=low
 
@@ -294,13 +291,13 @@ retroarch (1.7.6-1) cosmic; urgency=low
   * New upstream release.
   * Stop patching out the online updater.
 
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Tue, 5 Feb 2019 14:17:00 -0300
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Tue, 05 Feb 2019 14:17:00 -0300
 
 retroarch (1.7.5-1) bionic; urgency=low
 
   * New upstream release.
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 2 Oct 2018 02:16:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Tue, 02 Oct 2018 02:16:00 -0300
 
 retroarch (1.7.4-1) bionic; urgency=low
 
@@ -348,7 +345,7 @@ retroarch (1.6.4-1) zesty; urgency=low
 
   * New upstream release.
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Mon, 7 Aug 2017 17:18:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Mon, 07 Aug 2017 17:18:00 -0300
 
 retroarch (1.6.3-1) zesty; urgency=low
 
@@ -366,7 +363,7 @@ retroarch (1.6.0-1) zesty; urgency=low
 
   * New upstream release.
 
- -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Thu, 1 Jun 2017 14:09:00 -0300
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Thu, 01 Jun 2017 14:09:00 -0300
 
 retroarch (1.5.0-1) yakkety; urgency=low
 

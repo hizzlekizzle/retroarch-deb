@@ -3,29 +3,36 @@ Section: games
 Priority: optional
 Maintainer: Libretro Team <libretro@gmail.com>
 Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
-           Sérgio Benjamim <sergio_br2@yahoo.com.br>,
-           Peter J. Mello <admin@petermello.net>
-Build-Depends: debhelper-compat (= 13), python3-all-dev, alsa-utils, chrpath,
- lsb-release, sunxi-tools [armhf], yasm, libass-dev, libavdevice-dev,
- libcaca-dev, libdrm-dev, libflac-dev, libfreetype-dev | libfreetype6-dev,
- libfribidi-dev, libgbm-dev, libglm-dev, libglvnd-dev,
- libjack-jackd2-dev | libjack-dev, liblua5.3-dev, libminiupnpc-dev, libmpv-dev,
- libopenal-dev, libosmesa6-dev, libsdl2-dev, libsixel-dev (>= 1.6.0),
- libslang2-dev, libssl-dev, libsystemd-dev, libusb-1.0-0-dev, libv4l-dev,
- libvulkan-dev, libwayland-dev (>= 1.12), libwayland-egl-backend-dev,
- libx11-xcb-dev, libxcb-shm0-dev, libxkbcommon-dev, libxml2-dev, qtbase5-dev,
- wayland-protocols (>= 1.13), x11proto-xext-dev, zlib1g-dev
-Standards-Version: 4.6.2
+ Sérgio Benjamim <sergio_br2@yahoo.com.br>,
+ Peter J. Mello <admin@petermello.net>
+Build-Depends: debhelper-compat (= 13), alsa-utils, chrpath, glslang-dev,
+ lsb-release, pkgconf, python3-dev, sunxi-tools [armhf], yasm, libasound2-dev,
+ libass-dev, libavcodec-dev, libavdevice-dev, libavformat-dev, libavutil-dev,
+ libcaca-dev, libdbus-1-dev, libdrm-dev, libegl-dev, libflac-dev,
+ libfreetype-dev, libfribidi-dev, libgbm-dev (>= 9.0), libglm-dev, libglvnd-dev,
+ libjack-jackd2-dev, liblua5.3-dev, libmbedtls-dev, libminiupnpc-dev,
+ libmpv-dev, libopenal-dev, libosmesa6-dev, libpulse-dev, libsdl2-dev,
+ libsixel-dev (>= 1.6.0), libslang2-dev, libspirv-cross-c-shared-dev,
+ libssl-dev, libstb-dev, libswscale-dev, libsystemd-dev, libudev-dev,
+ libusb-1.0-0-dev (>= 1.0.16), libv4l-dev, libvulkan-dev,
+ libwayland-dev (>= 1.12), libwayland-egl-backend-dev, libx11-xcb-dev,
+ libxcb-shm0-dev, libxinerama-dev, libxkbcommon-dev, libxml2-dev, libxv-dev,
+ libxxf86vm-dev, qtbase5-dev, spirv-tools, wayland-protocols (>= 1.13),
+ x11proto-xext-dev, zlib1g-dev
+Standards-Version: 4.7.0
 Homepage: https://www.libretro.com/
-Vcs-Git: ssh://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
+Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
 Vcs-Browser: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
 Rules-Requires-Root: no
 
 Package: retroarch
 Architecture: any
+Depends: libretro-core-info, retroarch-assets (>= 1.7.6~), fonts-dejavu-core,
+ libqt5waylandclient5, libvulkan1, libx11-dev, libxrandr-dev, ${shlibs:Depends},
+ ${misc:Depends}
+Recommends: libgamemode0
+Suggests: xdg-utils
 Provides: retroarch-dbg
-Depends: libx11-dev, libxrandr-dev, fonts-dejavu-core, libqt5waylandclient5,
- libvulkan1, ${shlibs:Depends}, ${misc:Depends}
 Description: Simple frontend for the libretro library
  RetroArch is an open source, multi-platform frontend for the libretro API. It
  can be used as a modular multi-emulator system, game engine, media player and
@@ -34,3 +41,17 @@ Description: Simple frontend for the libretro library
  .
  It provides four built-in graphical user interface flavors: RGUI, XMB, Ozone
  and GLUI.
+
+Package: retroarch-dev
+Architecture: all
+Multi-Arch: foreign
+Section: devel
+Depends: ${misc:Depends}
+Description: Development files for the libretro library
+ RetroArch is an open source, multi-platform frontend for the libretro API. It
+ can be used as a modular multi-emulator system, game engine, media player and
+ 3-D technical demonstration. These features are available through libretro
+ cores.
+ .
+ This package contains headers and other files of use to projects that are
+ integrating with the libretro ecosystem.
