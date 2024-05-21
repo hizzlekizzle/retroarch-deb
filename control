@@ -5,20 +5,23 @@ Maintainer: Libretro Team <libretro@gmail.com>
 Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
  Sérgio Benjamim <sergio_br2@yahoo.com.br>,
  Peter J. Mello <admin@petermello.net>
-Build-Depends: debhelper-compat (= 13), alsa-utils, chrpath, glslang-dev,
- lsb-release, pkgconf, python3-dev, sunxi-tools [armhf], yasm, libasound2-dev,
+Build-Depends: debhelper-compat (= 13), dpkg-build-api (= 1) | dpkg-dev, 7zip,
+ alsa-utils, check (>= 0.15) <!nocheck>, chrpath, glslang-dev, libasound2-dev,
  libass-dev, libavcodec-dev, libavdevice-dev, libavformat-dev, libavutil-dev,
- libcaca-dev, libdbus-1-dev, libdrm-dev, libegl-dev, libflac-dev,
- libfreetype-dev, libfribidi-dev, libgbm-dev (>= 9.0), libglm-dev, libglvnd-dev,
- libjack-jackd2-dev, liblua5.3-dev, libmbedtls-dev, libminiupnpc-dev,
- libmpv-dev, libopenal-dev, libosmesa6-dev, libpulse-dev, libsdl2-dev,
- libsixel-dev (>= 1.6.0), libslang2-dev, libspirv-cross-c-shared-dev,
- libssl-dev, libstb-dev, libswscale-dev, libsystemd-dev, libudev-dev,
- libusb-1.0-0-dev (>= 1.0.16), libv4l-dev, libvulkan-dev,
- libwayland-dev (>= 1.12), libwayland-egl-backend-dev, libx11-xcb-dev,
- libxcb-shm0-dev, libxinerama-dev, libxkbcommon-dev, libxml2-dev, libxv-dev,
- libxxf86vm-dev, qtbase5-dev, spirv-tools, wayland-protocols (>= 1.13),
- x11proto-xext-dev, zlib1g-dev
+ libcaca-dev, libdbus-1-dev, libdecor-0-dev, libdrm-dev, libegl-dev,
+ libflac-dev, libfontconfig-dev, libfreetype-dev, libfribidi-dev,
+ libgbm-dev (>= 9.0), libglm-dev, libglvnd-dev, libhidapi-dev,
+ libjack-jackd2-dev (>= 0.120.1), liblua5.3-dev, liblzma-dev, libmbedtls-dev,
+ libminiupnpc-dev, libmpv-dev, libopenal-dev, libosmesa6-dev, libpulse-dev,
+ libsdl2-dev (>= 2.0.0), libsixel-dev (>= 1.6.0), libslang2-dev,
+ libspirv-cross-c-shared-dev, libssl-dev (>= 1.0.0), libstb-dev, libswscale-dev,
+ libsystemd-dev, libudev-dev, libusb-1.0-0-dev (>= 1.0.16), libv4l-dev,
+ libvulkan-dev, libwayland-dev (>= 1.12),
+ libwayland-egl-backend-dev (>= 1.10.0), libx11-xcb-dev, libxcb-shm0-dev,
+ libxinerama-dev, libxkbcommon-dev, libxml2-dev, libxrandr-dev, libxv-dev,
+ libxxf86vm-dev, lsb-release, nvidia-cg-dev [amd64 i386], pkgconf, python3-dev,
+ qtbase5-dev (>= 5.2), spirv-tools, sunxi-tools [armhf],
+ wayland-protocols (>= 1.31), x11proto-xext-dev, yasm, zlib1g-dev
 Standards-Version: 4.7.0
 Homepage: https://www.libretro.com/
 Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
