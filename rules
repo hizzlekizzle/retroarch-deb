@@ -9,19 +9,19 @@
 include /usr/share/dpkg/architecture.mk
 include /usr/share/dpkg/vendor.mk
 
-SHELL                      ::= $(realpath /bin/bash)
+SHELL                        ::= $(realpath /bin/bash)
 
 # Fix hardening-no-bindnow and hardening-no-pie
-DEB_BUILD_MAINT_OPTIONS    ::= hardening=+bindnow,+pie
-DEB_CFLAGS_MAINT_STRIP     ::= -O2
-DEB_CXXFLAGS_MAINT_STRIP   ::= -O2
-DEB_LDFLAGS_MAINT_APPEND   ::= -Wl,--as-needed,-lGL
-DPKG_EXPORT_BUILDFLAGS     ::= 1
-QT_SELECT                  ::= 5
+DEB_BUILD_MAINT_OPTIONS      ::= hardening=+bindnow,+pie
+DEB_CFLAGS_MAINT_STRIP       ::= -O2
+DEB_CXXFLAGS_MAINT_STRIP     ::= -O2
+DEB_LDFLAGS_MAINT_APPEND     ::= -Wl,--as-needed,-lGL
+DPKG_EXPORT_BUILDFLAGS       ::= 1
+QT_SELECT                    ::= 5
 
 ifeq (,$(findstring terse,$(DEB_BUILD_OPTIONS)))
-  DH_INTERNAL_OPTIONS      ::= -v
-  DH_VERBOSE               ::= 1
+  DH_INTERNAL_OPTIONS        ::= -v
+  DH_VERBOSE                 ::= 1
 endif
 
 # Use Bash's built-in printf to pass the Ubuntu version when the dpkg flag set
@@ -44,7 +44,7 @@ ifeq (Ubuntu,$(DEB_VENDOR))
 
   # If building for a 32-bit platform, add definitions for Large File Support
   ifeq (32,$(DEB_BUILD_ARCH_BITS))
-    DPKG_EXPORT_BUILDTOOLS ::= 1
+    DPKG_EXPORT_BUILDTOOLS   ::= 1
     include /usr/share/dpkg/buildtools.mk
     ifeq ($(uver),$(shell printf "$(uver)\n23.10\n" | sort -gr | head -1))
       DEB_BUILD_MAINT_OPTIONS += abi=+all
@@ -64,7 +64,10 @@ export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_STRIP DEB_CXXFLAGS_MAINT_STRIP \
 	DEB_LDFLAGS_MAINT_APPEND DH_VERBOSE GIT_HASH QT_SELECT SHELL
 
 # See ./configure --help for valid flags for the QuickBuild framework
-QB_CUSTOM_FLAGS ::= --enable-al --enable-alsa --disable-audioio \
+QB_BUILD_FLAGS ::= --prefix=/usr --bindir=/usr/games --datarootdir=/usr/share \
+	--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
+	--sysconfdir=/etc --build=$(DEB_BUILD_GNU_TYPE)
+QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-blissbox --disable-builtinbearssl --disable-builtinflac \
 	--disable-builtinglslang --disable-builtinmbedtls --disable-builtinzlib \
 	--enable-caca --enable-cdrom --enable-check --enable-command \
@@ -87,20 +90,20 @@ QB_CUSTOM_FLAGS ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-xinerama --enable-xmb --enable-xrandr --enable-xshm \
 	--enable-xvideo --enable-zlib
 
-ifeq ($(DEB_HOST_ARCH),$(filter $(DEB_HOST_ARCH), amd64 i386))
-  QB_EXTRA_FLAGS ::= --enable-cg --disable-opengles --disable-rpiled \
-    --enable-sse
-else ifeq ($(DEB_HOST_ARCH),arm64)
-  QB_EXTRA_FLAGS ::= --disable-cg --enable-opengles --enable-opengles3 \
-    --enable-opengles3_1 --enable-opengles3_2
+ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
+  QB_LIBS_FLAGS += --enable-cg --disable-opengles --disable-rpiled --enable-sse
+else ifeq ($(DEB_HOST_GNU_CPU),aarch64)
+  QB_LIBS_FLAGS += --disable-cg --enable-opengles --enable-opengles3 \
+					--enable-opengles3_1 --enable-opengles3_2
 else ifeq ($(DEB_HOST_ARCH),armhf)
-  QB_EXTRA_FLAGS ::= --disable-cg --enable-floathard --enable-opengles \
-    --enable-opengles3 --enable-opengles3_1 --enable-opengles3_2 --enable-sunxi
+  QB_LIBS_FLAGS += --disable-cg --enable-floathard --enable-opengles \
+					--enable-opengles3 --enable-opengles3_1 \
+					--enable-opengles3_2 --enable-sunxi
 else ifeq ($(DEB_HOST_ARCH),armel)
-  QB_EXTRA_FLAGS ::= --disable-cg --enable-floatsoftfp --enable-opengles \
-    --enable-opengles3 --enable-opengles3_1 --enable-opengles3_2
+  QB_LIBS_FLAGS += --disable-cg --enable-floatsoftfp --enable-opengles \
+					--enable-opengles3 --enable-opengles3_1 --enable-opengles3_2
 else
-  QB_EXTRA_FLAGS ::= --disable-cg --disable-opengles
+  QB_LIBS_FLAGS += --disable-cg --disable-opengles
 endif
 
 
@@ -115,13 +118,12 @@ execute_after_dh_auto_clean:
 	dh_auto_clean -O-v -O-Smakefile -O-Dgfx/video_filters
 	dh_auto_clean -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters
 
-override_dh_auto_configure:
+execute_before_dh_auto_configure:
 	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/debian/retroarch.cfg.in" >"$(CURDIR)/debian/retroarch.cfg"
-	$(CURDIR)/configure --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
-		--sysconfdir=/etc --bindir=/usr/games --datarootdir=/usr/share \
-		--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
-		$(QB_CUSTOM_FLAGS) $(QB_EXTRA_FLAGS)
+
+override_dh_auto_configure:
+	$(CURDIR)/configure $(QB_BUILD_FLAGS) $(QB_LIBS_FLAGS)
 
 override_dh_auto_build:
 	dh_auto_build -O-v -O-Smakefile -- GIT_VERSION="'$(GIT_HASH)'" V=1
