@@ -1,0 +1,70 @@
+Description: Remove compiled-in datestamps making builds non-reproducible
+Author: Peter J. Mello <admin@petermello.net>
+Origin: other
+Forwarded: no
+Last-Update: 2024-05-23
+
+--- a/retroarch.c
++++ b/retroarch.c
+@@ -6159,6 +6159,8 @@
+ {
+    char str[255];
+    str[0] = '\0';
++   time_t now;
++   char *source_date_epoch;
+ 
+    frontend_driver_attach_console();
+ 
+@@ -6170,7 +6172,12 @@
+ #ifdef HAVE_GIT_VERSION
+    fprintf(stdout, " (Git %s)", retroarch_git_version);
+ #endif
+-   fprintf(stdout, " " __DATE__ "\n");
++   /* This assumes that the SOURCE_DATE_EPOCH environment variable will contain
++      a correct, positive integer in the time_t range */
++   if ((source_date_epoch = getenv("SOURCE_DATE_EPOCH")) == NULL ||
++       (now = (time_t)strtoll(source_date_epoch, NULL, 10)) <= 0)
++           time(&now);
++   fprintf(stdout, " %lu\n", now);
+ 
+    retroarch_get_capabilities(RARCH_CAPABILITIES_COMPILER, str, sizeof(str));
+    fprintf(stdout, "%s\n", str);
+@@ -7533,6 +7540,11 @@
+       {
+          char str_output[256];
+          char str[128];
++         time_t now;
++         char *source_date_epoch;
++         if ((source_date_epoch = getenv("SOURCE_DATE_EPOCH")) == NULL ||
++             (now = (time_t)strtoll(source_date_epoch, NULL, 10)) <= 0)
++                 time(&now);
+          retroarch_get_capabilities(RARCH_CAPABILITIES_CPU, str, sizeof(str));
+ 
+ #ifdef HAVE_GIT_VERSION
+@@ -7540,20 +7552,22 @@
+                "%s: %s" "\n"
+                FILE_PATH_LOG_INFO " Version: " PACKAGE_VERSION "\n"
+                FILE_PATH_LOG_INFO " Git: %s" "\n"
+-               FILE_PATH_LOG_INFO " Built: " __DATE__ "\n"
++               FILE_PATH_LOG_INFO " Built: %lu" "\n"
+                FILE_PATH_LOG_INFO " =================================================\n",
+                msg_hash_to_str(MSG_CAPABILITIES),
+                str,
+-               retroarch_git_version
++               retroarch_git_version,
++               now
+                );
+ #else
+          snprintf(str_output, sizeof(str_output),
+                "%s: %s" "\n"
+                FILE_PATH_LOG_INFO " Version: " PACKAGE_VERSION "\n"
+-               FILE_PATH_LOG_INFO " Built: " __DATE__ "\n"
++               FILE_PATH_LOG_INFO " Built: %lu" "\n"
+                FILE_PATH_LOG_INFO " =================================================\n",
+                msg_hash_to_str(MSG_CAPABILITIES),
+-               str);
++               str,
++               now);
+ #endif
+          RARCH_LOG_OUTPUT("%s", str_output);
+       }

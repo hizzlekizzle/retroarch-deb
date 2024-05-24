@@ -1,12 +1,13 @@
 Description: Remove explicit checks for stub libraries no longer in GLSL
 Author: Peter J. Mello <admin@petermello.net>
 Origin: other
+Bug-Debian: https://bugs.debian.org/1064681
 Forwarded: yes, https://github.com/libretro/RetroArch/issues/16571
 Last-Update: 2024-05-21
 
 --- a/qb/config.libs.sh
 +++ b/qb/config.libs.sh
-@@ -629,10 +629,8 @@
+@@ -629,16 +629,13 @@ if [ "$HAVE_GLSLANG" != no ]; then
  
     check_lib cxx GLSLANG -lglslang '' '-lSPIRV'
     check_lib cxx GLSLANG_OSDEPENDENT -lOSDependent
@@ -17,3 +18,9 @@ Last-Update: 2024-05-21
     check_lib cxx GLSLANG_SPIRV -lSPIRV
     check_lib cxx GLSLANG_SPIRV_TOOLS_OPT -lSPIRV-Tools-opt
     check_lib cxx GLSLANG_SPIRV_TOOLS -lSPIRV-Tools
+ 
+    if [ "$HAVE_GLSLANG" = no ] ||
+-      [ "$HAVE_GLSLANG_HLSL" = no ] ||
+       [ "$HAVE_GLSLANG_SPIRV" = no ] ||
+       [ "$HAVE_GLSLANG_SPIRV_TOOLS_OPT" = no ] ||
+       [ "$HAVE_GLSLANG_SPIRV_TOOLS" = no ]; then

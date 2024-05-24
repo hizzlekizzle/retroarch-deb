@@ -1,4 +1,4 @@
-## Skeleton config file for RetroArch
+## Configuration file for RetroArch
 
 # If set to a directory, the content history playlist will be saved to this
 # directory.
@@ -10,14 +10,11 @@
 #savestate_auto_save = false
 #savestate_auto_load = true
 
-# Path to a libretro implementation.
-#libretro_path = "/path/to/libretro.so"
-
 # Set logging level for libretro cores (GET_LOG_INTERFACE). If a log level
 # issued by a libretro core is below libretro_log_level, it is ignored. DEBUG
 # logs are always ignored unless verbose mode is activated (--verbose).
 # DEBUG = 0, INFO = 1, WARN = 2, ERROR = 3.
-#libretro_log_level = 0
+#libretro_log_level = 1
 
 # Enable or disable verbosity level of frontend.
 #log_verbosity = false
@@ -63,7 +60,7 @@
 #content_directory =
 
 # Set the start directory for the menu configuration browser.
-#rgui_config_directory = "${XDG_CONFIG_HOME:-$HOME/.config}/retroarch/config"
+rgui_config_directory = "${XDG_CONFIG_HOME:-$HOME/.config}/retroarch/config"
 
 # Show startup screen in menu; automatically set to false after being seen for
 # the first time. This is only updated in the configuration file if
@@ -85,21 +82,21 @@
 #input_driver = "sdl"
 
 # Joypad driver: ("udev", "linuxraw", "paraport", "sdl2", "hid", "dinput").
-#input_joypad_driver = "udev"
+input_joypad_driver = "udev"
 
 # Video driver: ("gl", "xvideo", "sdl", "d3d").
 #video_driver = "gl"
 
 # Context implementation to use: ("glx", "x-egl", "kms-egl", "sdl-gl", "wgl").
 # By default, uses the first suitable driver tested from order above.
-#video_context_driver = "glx"
+video_context_driver = "glx"
 
 # Audio driver backend; depending on the configuration, possible candidates are:
 # ("alsa", "pulse", "oss", "jack", "rsound", "roar", "openal", "sdl", "xaudio").
-#audio_driver = "pulse"
+audio_driver = "pulse"
 
 # Audio resampler driver backend; defaults to "sinc".
-#audio_resampler = "sinc"
+audio_resampler = "sinc"
 
 # Camera driver.
 #camera_driver =
@@ -108,7 +105,7 @@
 #location_driver =
 
 # Menu driver to use: ("rgui", "xmb", "glui").
-#menu_driver = "xmb"
+menu_driver = "xmb"
 
 # Record driver, used when recording video.
 #record_driver =
@@ -835,7 +832,7 @@
 
 # Assets directory; this location is queried by default when menu interfaces try
 # to look for loadable assets, etc.
-#assets_directory = "/usr/share/libretro/assets/"
+assets_directory = "/usr/share/libretro/assets/"
 
 # Dynamic wallpapers directory, the place to store the wallpapers dynamically
 # loaded by the menu, depending on context.
@@ -845,13 +842,13 @@
 #thumbnails_directory =
 
 # File browser directory, sets initial directory for in-app file browser.
-#rgui_browser_directory = "${HOME}"
+rgui_browser_directory = "${HOME}"
 
 # Core directory for libretro core implementations.
-#libretro_directory = "/usr/lib/@DEB_HOST_MULTIARCH@/libretro/"
+libretro_directory = "/usr/lib/@DEB_HOST_MULTIARCH@/libretro/"
 
 # Core info directory for libretro core information.
-#libretro_info_path = "/usr/share/libretro/info/"
+libretro_info_path = "/usr/share/libretro/info/"
 
 # Path to content database directory.
 #content_database_path =
@@ -860,10 +857,10 @@
 #cheat_database_path =
 
 # Define directory where CPU-based video filters are kept.
-#video_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/video/"
+video_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/video/"
 
 # Directory where DSP plugins are kept.
-#audio_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/audio/"
+audio_filter_dir = "/usr/lib/@DEB_HOST_MULTIARCH@/retroarch/filters/audio/"
 
 # Define a directory where shaders (Cg, CGP, GLSL) are kept for easy access.
 #video_shader_dir =
@@ -903,7 +900,7 @@
 
 # If set to a directory, content which is temporarily extracted will be placed
 # here.
-#cache_directory = "/tmp"
+cache_directory = "/tmp"
 
 #### RetroAchievements
 

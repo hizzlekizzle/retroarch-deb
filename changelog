@@ -1,6 +1,21 @@
+retroarch (1.18.0-2) noble; urgency=medium
+
+  * Enforce C++17 coding standards during compilation (Closes: #1058367)
+  * Add patch for builds using system GLSLang ≥ 14.0.0 (Closes: #1064681)
+
+ -- Peter J. Mello <admin@petermello.net>  Thu, 23 May 2024 21:23:43 -0700
+
 retroarch (1.18.0-1) mantic; urgency=medium
 
   * New upstream release: v1.18.0
+  * Add retroarch-dev package for libretro-common headers and designate as
+    Multi-Arch: foreign (Closes: #1027741)
+  * Drop manual DEB_HOST_MULTIARCH substitutions for functionality available in
+    debhelper compat level 13
+  * Install upstream Appstream metainfo file with .metainfo.xml file extension,
+    instead of deprecated .appdata.xml convention
+  * Clean ephemeral Wayland files generated at build-time (Closes: #1045150)
+  * Enable building against system spirv-cross (Closes: #1053190)
 
  -- Peter J. Mello <admin@petermello.net>  Thu, 21 Mar 2024 08:10:35 -0700
 

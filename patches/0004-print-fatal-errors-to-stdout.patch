@@ -1,0 +1,20 @@
+Description: Print fatal errors to stdout as well as application log
+Author: Jonathan McDowell <noodles@earth.li>
+Origin: vendor, https://salsa.debian.org/games-team/libretro/retroarch/-/commit/fa128e8d0d1387c153da1c06d9721adb79eb7dc7
+Bug-Debian: https://bugs.debian.org/956849
+Forwarded: no
+Reviewed-By: Peter J. Mello <admin@petermello.net>
+Last-Update: 2024-05-24
+
+--- a/retroarch.c
++++ b/retroarch.c
+@@ -7473,6 +7473,9 @@
+ 
+    if (setjmp(global->error_sjlj_context) > 0)
+    {
++      fprintf(stderr, "%s: \"%s\"\n",
++            msg_hash_to_str(MSG_FATAL_ERROR_RECEIVED_IN),
++            global_get_ptr()->error_string);
+       RARCH_ERR("%s: \"%s\"\n",
+             msg_hash_to_str(MSG_FATAL_ERROR_RECEIVED_IN),
+             global_get_ptr()->error_string);

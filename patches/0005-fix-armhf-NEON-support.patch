@@ -1,0 +1,17 @@
+Description: Add Makefile-defined NEON support flags to CFLAGS
+Author: Jonathan McDowell <noodles@earth.li>
+Origin: vendor, https://salsa.debian.org/games-team/libretro/retroarch/-/commit/f0b45a4951805c89bde3c91eac5d948053caa779
+Forwarded: no
+Reviewed-By: Peter J. Mello <admin@petermello.net>
+Last-Update: 2024-05-24
+
+--- a/qb/config.libs.sh
++++ b/qb/config.libs.sh
+@@ -99,6 +99,7 @@
+ if [ "$HAVE_NEON" = "yes" ]; then
+    add_define MAKEFILE NEON_CFLAGS '-mfpu=neon -marm'
+    add_define MAKEFILE NEON_ASFLAGS -mfpu=neon
++   CFLAGS="${CFLAGS} -mfpu=neon -marm"
+ fi
+ 
+ if [ "$HAVE_FLOATHARD" = "yes" ]; then

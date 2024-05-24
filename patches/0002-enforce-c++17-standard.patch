@@ -1,0 +1,76 @@
+Description: Enforce C++17 code standard during compilation
+Author: Peter J. Mello <admin@petermello.net>
+Origin: other
+Bug-Debian: https://bugs.debian.org/1058367
+Forwarded: no
+Last-Update: 2024-05-24
+
+--- a/Makefile.common
++++ b/Makefile.common
+@@ -15,8 +15,8 @@
+    DEF_FLAGS += $(NOUNUSED_VARIABLE_CFLAGS)
+ endif
+ 
+-ifeq ($(HAVE_CXX11), 1)
+-   CXXFLAGS += $(CXX11_CFLAGS)
++ifeq ($(HAVE_CXX17), 1)
++   CXXFLAGS += $(CXX17_CFLAGS)
+ endif
+ 
+ ifeq ($(HAVE_SAPI), 1)
+--- a/qb/config.libs.sh
++++ b/qb/config.libs.sh
+@@ -11,7 +11,7 @@
+    check_switch '' C99 -std=c99 'Cannot find a C99 compatible compiler.'
+ fi
+ 
+-check_switch cxx CXX11 -std=c++11 ''
++check_switch cxx CXX17 -std=c++17 ''
+ check_switch '' NOUNUSED -Wno-unused-result ''
+ check_switch '' NOUNUSED_VARIABLE -Wno-unused-variable ''
+ 
+@@ -276,7 +276,7 @@
+    HAVE_SDL=no
+ fi
+ 
+-check_enabled CXX11 CXX C++ 'C++11 support is' false
++check_enabled CXX17 CXX C++ 'C++17 support is' false
+ 
+ check_platform Haiku DISCORD 'Discord is' false
+ check_enabled CXX DISCORD discord 'The C++ compiler is' false
+@@ -654,7 +654,7 @@
+ fi
+ 
+ if [ "$HAVE_CRTSWITCHRES" != no ]; then
+-   if [ "$HAVE_CXX11" = 'no' ]; then
++   if [ "$HAVE_CXX17" = 'no' ]; then
+       HAVE_CRTSWITCHRES=no
+    else
+       HAVE_CRTSWITCHRES=yes
+@@ -707,7 +707,7 @@
+ check_enabled 'ZLIB BUILTINZLIB' RPNG RPNG 'zlib is' false
+ check_enabled V4L2 VIDEOPROCESSOR 'video processor' 'Video4linux2 is' true
+ 
+-if [ "$HAVE_CXX11" = 'yes' ]; then
++if [ "$HAVE_CXX17" = 'yes' ]; then
+    if [ "$OS" = 'Linux' ]; then
+       check_enabled 'VIDEOCORE X11' SR2 'CRT modeswitching' 'CRT is' true
+    else
+--- a/qb/config.moc.sh
++++ b/qb/config.moc.sh
+@@ -1,4 +1,4 @@
+ QT_VERSION=qt5
+-QT_FLAGS="$CXX11_CFLAGS $QT5CORE_CFLAGS $QT5CORE_LIBS"
++QT_FLAGS="${CXX17_CFLAGS} ${QT5CORE_CFLAGS} ${QT5CORE_LIBS}"
+ 
+ add_define MAKEFILE QT_VERSION "$QT_VERSION"
+--- a/qb/config.params.sh
++++ b/qb/config.params.sh
+@@ -132,6 +132,7 @@
+ HAVE_IBXM=yes        	   # IBXM support
+ HAVE_XVIDEO=no             # XVideo support
+ HAVE_V4L2=auto             # Video4linux2 support
++HAVE_CXX17=no              # C++17 coding standard enforcement
+ HAVE_NEON=no               # ARM NEON optimizations
+ HAVE_SSE=no                # x86 SSE optimizations (SSE, SSE2)
+ HAVE_FLOATHARD=no          # Force hard float ABI (for ARM)
