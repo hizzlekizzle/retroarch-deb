@@ -31,7 +31,7 @@ Rules-Requires-Root: no
 
 Package: retroarch
 Architecture: any
-Depends: libretro-core-info, retroarch-assets (>= 1.7.6~), fonts-dejavu-core,
+Depends: libretro-core-info, fonts-dejavu-core,
  libqt5waylandclient5, libvulkan1, libx11-dev, libxrandr-dev, ${shlibs:Depends},
  ${misc:Depends}
 Recommends: libgamemode0
