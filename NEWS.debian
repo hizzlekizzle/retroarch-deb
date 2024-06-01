@@ -1,0 +1,14 @@
+retroarch (1.7.3-1) bionic; urgency=low
+
+  * This version includes an upstream change to the default value for
+    'input_driver' (exposed in Settings 🢡 Driver 🢡 Input Driver in the GUI)
+    from 'udev' to 'x'. If you are updating RetroArch from a previous
+    installation, this may cause your keyboard to be suddenly unresponsive.
+    Resolving the issue typically entails either adding your user account to the
+    'input' group, a la…
+        $ usermod -a -G input <username>
+    …or manually changing the value for the 'input_driver' key in retroarch.cfg
+    (located in "${XDG_CONFIG_HOME:-$HOME/.config}/retroarch", by default) from
+    'udev' to 'x'.
+
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Mon, 14 May 2018 21:53:00 -0300
