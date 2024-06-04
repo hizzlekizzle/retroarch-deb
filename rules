@@ -10,13 +10,14 @@ SHELL                        ::= $(realpath /bin/bash)
 
 # Fix hardening-no-bindnow and hardening-no-pie
 DEB_BUILD_MAINT_OPTIONS      ::= hardening=+bindnow,+pie
-DEB_CFLAGS_MAINT_APPEND      ::= -D_GNU_SOURCE -DLUA_USE_POSIX
+DEB_CFLAGS_MAINT_APPEND      ::= -DLUA_USE_POSIX
 DEB_CFLAGS_MAINT_STRIP       ::= -O2
-DEB_CXXFLAGS_MAINT_APPEND    ::= -D_GNU_SOURCE -DLUA_USE_POSIX
+DEB_CXXFLAGS_MAINT_APPEND    ::= -DLUA_USE_POSIX
 DEB_CXXFLAGS_MAINT_STRIP     ::= -O2
-DEB_LDFLAGS_MAINT_APPEND     ::= -Wl,--as-needed,-lGL
+DEB_LDFLAGS_MAINT_APPEND     ::= -Wl,--as-needed -lGL -lpthread
 DPKG_EXPORT_BUILDFLAGS       ::= 1
 DPKG_EXPORT_BUILDTOOLS       ::= 1
+MAKE_ARGS                    ::= V=1
 QT_SELECT                    ::= 5
 
 ifeq (,$(findstring terse,$(DEB_BUILD_OPTIONS)))
@@ -58,12 +59,13 @@ dv       ::= $(DEB_VERSION)
 glsl_v   ::= $(shell dpkg-query -f '$${Version}' -W glslang-dev)
 glsltest ::= $(shell dpkg --compare-versions $(glsl_v) ge 14.0.0 && echo "true")
 new_glsl ::= $(if $(glsltest),yes,no)
+usrgames ::= $(CURDIR)/debian/retroarch/usr/games
 usrshare ::= $(CURDIR)/debian/retroarch/usr/share
 GIT_HASH ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
 
 export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND DEB_CFLAGS_MAINT_STRIP \
 	DEB_CXXFLAGS_MAINT_APPEND DEB_CXXFLAGS_MAINT_STRIP \
-	DEB_LDFLAGS_MAINT_APPEND DH_VERBOSE GIT_HASH LTO QT_SELECT SHELL
+	DEB_LDFLAGS_MAINT_APPEND DH_VERBOSE LTO QT_SELECT SHELL
 
 # See ./configure --help for valid flags for the QuickBuild framework
 QB_BUILD_FLAGS ::= --prefix=/usr --bindir=/usr/games --datarootdir=/usr/share \
@@ -108,9 +110,13 @@ else
   QB_LIBS_FLAGS += --disable-cg --disable-opengles
 endif
 
+ifneq ($(GIT_HASH),)
+  MAKE_ARGS     += GIT_VERSION="'$(GIT_HASH)'"
+endif
+
 
 %:
-	dh $@ -v -Smakefile
+	dh $@ -v -Smakefile --without autoreconf
 
 
 execute_before_dh_auto_clean:
@@ -120,9 +126,18 @@ execute_after_dh_auto_clean:
 	dh_auto_clean -O-v -O-Smakefile -O-Dgfx/video_filters
 	dh_auto_clean -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters
 
+override_dh_autoreconf_clean:
+	$(info Project doesn't use Autoconf.)
+
+override_dh_autoreconf:
+	$(info Project doesn't use Autoconf.)
+
 execute_before_dh_auto_configure:
-	sed 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
+	LC_ALL=C.UTF-8 sed -e 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/retroarch.cfg" >"$(CURDIR)/debian/retroarch.cfg"
+	LC_ALL=C.UTF-8 sed -i \
+		-e 's/org\.libretro\.RetroArch/com\.libretro\.RetroArch/g' \
+		"$(CURDIR)/gfx/common/wayland_common.h"
 
 override_dh_auto_configure:
 	$(CURDIR)/configure $(QB_BUILD_FLAGS) $(QB_LIBS_FLAGS)
@@ -134,10 +149,10 @@ override_dh_auto_configure:
 # are no longer needed for Ubuntu 23.10 "Mantic Minotaur" and its predecessors.
 override_dh_auto_build:
 ifeq ($(new_glsl),yes)
-	dh_auto_build -O-v -O-Smakefile -- GIT_VERSION="'$(GIT_HASH)'" V=1
+	dh_auto_build -O-v -O-Smakefile -- $(MAKE_ARGS)
 else
-	dh_auto_build -O-v -O-Smakefile -- GIT_VERSION="'$(GIT_HASH)'" V=1 \
-		GLSLANG_LIBS+="-lOGLCompiler -lHLSL"
+	dh_auto_build -O-v -O-Smakefile -- \
+		GLSLANG_LIBS+="-lglslang -lOGLCompiler -lHLSL" $(MAKE_ARGS)
 endif
 	# SoftFilters
 	dh_auto_build -O-v -O-Smakefile -O-Dgfx/video_filters -- V=1
@@ -148,9 +163,17 @@ override_dh_auto_install:
 
 execute_after_dh_install:
 	chrpath -d "$(CURDIR)/debian/retroarch/usr/games/retroarch"
-	@install -dv "$(usrshare)/applications" "$(usrshare)/metainfo"
-	@cp -fv "$(CURDIR)/com.libretro.RetroArch.appdata.xml" \
-		"$(usrshare)/metainfo/com.libretro.RetroArch.metainfo.xml"
+	@cp -fv "$(CURDIR)/tools/cg2glsl.py" "$(usrgames)/retroarch-cg2glsl"
+	@chmod -v 0755 "$(usrgames)/retroarch-cg2glsl"
+	@cp -fv "$(CURDIR)/org.libretro.RetroArch.desktop" \
+		"$(usrshare)/applications/com.libretro.RetroArch.desktop"
+	LC_ALL=C.UTF-8 sed -e \
+		's/org.libretro.RetroArch.desktop/com.libretro.RetroArch.desktop/g' \
+		"$(CURDIR)/com.libretro.RetroArch.appdata.xml" \
+		>"$(usrshare)/metainfo/com.libretro.RetroArch.metainfo.xml"
+	LC_ALL=C.UTF-8 sed -i \
+		-e 's/com\.libretro\.RetroArch/org\.libretro\.RetroArch/g' \
+		"$(CURDIR)/gfx/common/wayland_common.h"
 
 override_dh_shlibdeps:
 	dh_shlibdeps -O-v -O-Smakefile -l/lib/$(DEB_HOST_MULTIARCH)
