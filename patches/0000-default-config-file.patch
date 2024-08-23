@@ -135,7 +135,7 @@ Last-Update: 2024-05-23
 +#content_directory =
 +
 +# Set the start directory for the menu configuration browser.
-+rgui_config_directory = "${XDG_CONFIG_HOME:-$HOME/.config}/retroarch/config"
++rgui_config_directory = 
 +
 +# Show startup screen in menu; automatically set to false after being seen for
 +# the first time. This is only updated in the configuration file if
