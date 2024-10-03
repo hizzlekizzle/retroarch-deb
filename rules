@@ -165,8 +165,8 @@ execute_after_dh_install:
 	chrpath -d "$(CURDIR)/debian/retroarch/usr/games/retroarch"
 	@cp -fv "$(CURDIR)/tools/cg2glsl.py" "$(usrgames)/retroarch-cg2glsl"
 	@chmod -v 0755 "$(usrgames)/retroarch-cg2glsl"
-	@cp -fv "$(CURDIR)/org.libretro.RetroArch.desktop" \
-		"$(usrshare)/applications/com.libretro.RetroArch.desktop"
+#	@cp -fv "$(CURDIR)/org.libretro.RetroArch.desktop" \
+#		"$(usrshare)/applications/com.libretro.RetroArch.desktop"
 	LC_ALL=C.UTF-8 sed -e \
 		's/org.libretro.RetroArch.desktop/com.libretro.RetroArch.desktop/g' \
 		"$(CURDIR)/com.libretro.RetroArch.appdata.xml" \
