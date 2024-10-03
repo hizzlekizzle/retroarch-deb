@@ -169,7 +169,7 @@ execute_after_dh_install:
 #		"$(usrshare)/applications/com.libretro.RetroArch.desktop"
 	LC_ALL=C.UTF-8 sed -e \
 		's/org.libretro.RetroArch.desktop/com.libretro.RetroArch.desktop/g' \
-		"$(CURDIR)/com.libretro.RetroArch.appdata.xml" \
+#		"$(CURDIR)/com.libretro.RetroArch.appdata.xml" \
 		>"$(usrshare)/metainfo/com.libretro.RetroArch.metainfo.xml"
 	LC_ALL=C.UTF-8 sed -i \
 		-e 's/com\.libretro\.RetroArch/org\.libretro\.RetroArch/g' \
