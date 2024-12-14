@@ -1,8 +1,7 @@
 0000-default-config-file.patch
 0001-make-builds-reproducible.patch
-0002-enforce-c++17-standard.patch
-0003-use-system-libstb.patch
-0004-print-fatal-errors-to-stdout.patch
-0005-fix-armhf-NEON-support.patch
-0006-use-system-spirv-cross.patch
-0007-remove-GLSL-library-checks.patch
+0002-use-system-libstb.patch
+0003-print-fatal-errors-to-stdout.patch
+0004-fix-armhf-NEON-support.patch
+0005-use-system-spirv-cross.patch
+0006-remove-GLSL-library-checks.patch
