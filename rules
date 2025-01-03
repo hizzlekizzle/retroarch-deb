@@ -18,7 +18,7 @@ DEB_LDFLAGS_MAINT_APPEND     ::= -Wl,--as-needed -lGL -lpthread
 DPKG_EXPORT_BUILDFLAGS       ::= 1
 DPKG_EXPORT_BUILDTOOLS       ::= 1
 MAKE_ARGS                    ::= V=1
-QT_SELECT                    ::= 5
+QT_SELECT                    ::= 6
 
 ifeq (,$(findstring terse,$(DEB_BUILD_OPTIONS)))
   DH_VERBOSE                 ::= 1
@@ -70,7 +70,7 @@ export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND DEB_CFLAGS_MAINT_STRIP \
 # See ./configure --help for valid flags for the QuickBuild framework
 QB_BUILD_FLAGS ::= --prefix=/usr --bindir=/usr/games --datarootdir=/usr/share \
 	--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
-	--sysconfdir=/etc --build=$(DEB_BUILD_GNU_TYPE) --enable-cxx17
+	--sysconfdir=/etc --build=$(DEB_BUILD_GNU_TYPE)
 QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-blissbox --disable-builtinbearssl --disable-builtinflac \
 	--disable-builtinglslang --disable-builtinmbedtls --disable-builtinzlib \
@@ -84,7 +84,7 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-mmap --disable-mpv --enable-networkgamepad --enable-networking \
 	--disable-nvda --enable-opengl --disable-osmesa --disable-oss \
 	--enable-ozone --enable-parport --enable-plain_drm --enable-pulse \
-	--disable-qt --enable-rgui --disable-roar --disable-rsound --disable-sdl \
+	--enable-qt --enable-rgui --disable-roar --disable-rsound --disable-sdl \
 	--enable-sdl2 --enable-sixel --enable-slang --enable-spirv_cross \
 	--enable-ssa --enable-ssl --enable-systemd --enable-systemmbedtls \
 	--enable-threads --enable-thread_storage --disable-tinyalsa --enable-udev \
