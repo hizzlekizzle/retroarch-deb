@@ -13,7 +13,7 @@ Build-Depends: debhelper-compat (= 13), dpkg-build-api (= 1) | dpkg-dev, 7zip,
  libgbm-dev (>= 9.0), libglm-dev, libglvnd-dev (>= 1.0.0), libhidapi-dev,
  libjack-jackd2-dev (>= 0.120.1), liblua5.3-dev, liblzma-dev, libmbedtls-dev,
  libminiupnpc-dev, libmpv-dev, libopenal-dev, libosmesa6-dev, libpulse-dev,
- libqt5waylandclient5-dev (>= 5.12.4), libsdl2-dev (>= 2.0.0),
+ libqt6waylandclient6, libsdl2-dev (>= 2.0.0),
  libsixel-dev (>= 1.6.0), libslang2-dev, libspirv-cross-c-shared-dev,
  libssl-dev (>= 1.0.0), libstb-dev, libswscale-dev, libsystemd-dev, libudev-dev,
  libusb-1.0-0-dev (>= 1.0.16), libv4l-dev, libvulkan-dev (>= 1.2.135.0),
@@ -21,7 +21,7 @@ Build-Depends: debhelper-compat (= 13), dpkg-build-api (= 1) | dpkg-dev, 7zip,
  libx11-xcb-dev, libxcb-shm0-dev, libxinerama-dev, libxkbcommon-dev,
  libxml2-dev, libxrandr-dev, libxv-dev (>= 2:1.0.11),
  libxxf86vm-dev (>= 1:1.1.4), libxxhash-dev, lsb-release,
- nvidia-cg-dev [amd64 i386], pkgconf, python3-dev, qt6-base-dev, quilt,
+ nvidia-cg-dev [amd64 i386], pkgconf, python3-dev, qtbase5-dev (>= 5.2), quilt,
  spirv-tools, sunxi-tools [armhf], wayland-protocols (>= 1.31),
  x11proto-xext-dev, xdelta3, xxhash, yasm, zlib1g-dev
 Standards-Version: 4.7.0
@@ -35,7 +35,7 @@ Package: retroarch
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
 Depends: fonts-dejavu-core, libretro-core-info, libegl1 (>= 1.0.0),
- libgl1 (>= 1.0.0), libqt6waylandclient6, libvulkan1 (>= 1.2.135.0),
+ libgl1 (>= 1.0.0), libqt5waylandclient5 (>= 5.12.4), libvulkan1 (>= 1.2.135.0),
  libx11-6 (>= 2:1.7.1), libxext6 (>= 2:1.3.0), libxv1 (>= 2:1.0.11),
  libxxf86vm1 (>= 1:1.1.4), ${shlibs:Depends}, ${misc:Depends}
 Recommends: libgamemode0, retroarch-assets (>= 1.7.6~)
@@ -55,7 +55,7 @@ Architecture: all
 Multi-Arch: foreign
 Section: devel
 Pre-Depends: ${misc:Pre-Depends}
-Depends: libglvnd-dev (>= 1.0.0), qt6wayland-dev,
+Depends: libglvnd-dev (>= 1.0.0), libqt5waylandclient5-dev (>= 5.12.4),
  libvulkan-dev (>= 1.2.135.0), libx11-dev (>= 2:1.7.1),
  libxext-dev (>= 2:1.3.0), libxv-dev (>= 2:1.0.11), libxxf86vm-dev (>= 1:1.1.4),
  ${misc:Depends}
