@@ -84,7 +84,7 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-mmap --disable-mpv --enable-networkgamepad --enable-networking \
 	--disable-nvda --enable-opengl --disable-osmesa --disable-oss \
 	--enable-ozone --enable-parport --enable-plain_drm --enable-pulse \
-	--enable-qt --enable-rgui --disable-roar --disable-rsound --disable-sdl \
+	--disable-qt --enable-rgui --disable-roar --disable-rsound --disable-sdl \
 	--enable-sdl2 --enable-sixel --enable-slang --enable-spirv_cross \
 	--enable-ssa --enable-ssl --enable-systemd --enable-systemmbedtls \
 	--enable-threads --enable-thread_storage --disable-tinyalsa --enable-udev \
