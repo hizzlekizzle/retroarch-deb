@@ -1,6 +1,5 @@
-0000-make-builds-reproducible.patch
-0001-use-system-libstb.patch
-0002-print-fatal-errors-to-stdout.patch
-0003-fix-armhf-NEON-support.patch
-0004-use-system-spirv-cross.patch
-0005-remove-GLSL-library-checks.patch
+0000-use-system-libstb.patch
+0001-print-fatal-errors-to-stdout.patch
+0002-fix-armhf-NEON-support.patch
+0003-use-system-spirv-cross.patch
+0004-remove-GLSL-library-checks.patch
