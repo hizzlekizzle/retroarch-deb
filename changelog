@@ -1,3 +1,9 @@
+retroarch (1.21.0-1) noble; urgency=medium
+
+  * New upstream release: v1.21.0
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 28 Apr 2025 21:23:42 -0300
+
 retroarch (1.20.0-1) noble; urgency=medium
 
   * New upstream release: v1.20.0
