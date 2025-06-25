@@ -8,7 +8,7 @@ Last-Update: 2024-05-24
 
 --- a/Makefile.common
 +++ b/Makefile.common
-@@ -1866,14 +1866,9 @@
+@@ -1921,14 +1921,9 @@ endif
  
  ifeq ($(HAVE_SPIRV_CROSS), 1)
     DEFINES += -DHAVE_SPIRV_CROSS

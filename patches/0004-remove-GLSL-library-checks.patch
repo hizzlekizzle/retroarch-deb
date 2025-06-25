@@ -7,7 +7,7 @@ Last-Update: 2024-05-21
 
 --- a/qb/config.libs.sh
 +++ b/qb/config.libs.sh
-@@ -629,16 +629,13 @@ if [ "$HAVE_GLSLANG" != no ]; then
+@@ -671,16 +671,13 @@ if [ "$HAVE_GLSLANG" != no ]; then
  
     check_lib cxx GLSLANG -lglslang '' '-lSPIRV'
     check_lib cxx GLSLANG_OSDEPENDENT -lOSDependent

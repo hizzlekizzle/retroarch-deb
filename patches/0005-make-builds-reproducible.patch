@@ -2,19 +2,19 @@ Description: Remove compiled-in datestamps making builds non-reproducible
 Author: Peter J. Mello <admin@petermello.net>
 Origin: other
 Forwarded: no
-Last-Update: 2024-06-04
+Last-Update: 2025-06-24
 
 --- a/menu/menu_displaylist.c
 +++ b/menu/menu_displaylist.c
 @@ -16,6 +16,7 @@
   *  If not, see <http://www.gnu.org/licenses/>.
   */
-
+ 
 +#include <stdlib.h>
  #include <stddef.h>
  
  #include <compat/strl.h>
-@@ -1833,13 +1834,21 @@ static unsigned menu_displaylist_parse_s
+@@ -1863,11 +1864,19 @@ static unsigned menu_displaylist_parse_s
  #endif
  
     /* Build Date */
@@ -26,73 +26,27 @@ Last-Update: 2024-06-04
 +           build_time = gmtime(&source_date_epoch);
 +   char date_str[12];
 +   strftime(date_str, sizeof(date_str), "%Y-%m-%d", build_time);
-    _len            = strlcpy(entry,
+    _len        = strlcpy(entry,
           msg_hash_to_str(MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_BUILD_DATE),
           sizeof(entry));
-    entry[  _len]   = ':';
-    entry[++_len]   = ' ';
-    entry[++_len]   = '\0';
--   strlcpy(entry + _len, __DATE__, sizeof(entry) - _len);
-+   strlcpy(entry + _len, date_str, sizeof(entry) - _len);
-    if (menu_entries_append(list, entry, "",
-          MENU_ENUM_LABEL_SYSTEM_INFO_ENTRY, MENU_SETTINGS_CORE_INFO_NONE,
-          0, 0, NULL))
---- a/ui/drivers/ui_qt.cpp
-+++ b/ui/drivers/ui_qt.cpp
-@@ -45,6 +45,11 @@
- #include <QDropEvent>
- #include <QtConcurrentRun>
- 
-+#include <sstream>
-+#include <iostream>
-+#include <cstdlib>
-+#include <ctime>
-+
- #include "ui_qt.h"
- #include "qt/gridview.h"
- #include "qt/ui_qt_load_core_window.h"
-@@ -3914,15 +3919,28 @@ void MainWindow::onContributorsClicked()
- 
- void MainWindow::showAbout()
- {
-+   time_t now;
-+   char *source_date_epoch = std::getenv("SOURCE_DATE_EPOCH");
-+   if (source_date_epoch) {
-+       std::istringstream iss(source_date_epoch);
-+       iss >> now;
-+       if (iss.fail() || !iss.eof()) {
-+           std::cerr << "Error: Cannot parse SOURCE_DATE_EPOCH as integer\n";
-+           exit(27);
-+       }
-+   } else {
-+       now = std::time(NULL);
-+   }
-+
-    QScopedPointer<QDialog> dialog(new QDialog());
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
-    QString text = QString("RetroArch ") + PACKAGE_VERSION +
-          "<br><br>" + "<a href=\"https://www.libretro.com/\">www.libretro.com</a>"
-          "<br><br>" + "<a href=\"https://www.retroarch.com/\">www.retroarch.com</a>"
- #ifdef HAVE_GIT_VERSION
-          "<br><br>" + msg_hash_to_str(MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_GIT_VERSION) + ": " + retroarch_git_version +
+    _len       += strlcpy(entry + _len, ": ", sizeof(entry) - _len);
+-   _len       += strlcpy(entry + _len, __DATE__, sizeof(entry) - _len);
++   _len       += strlcpy(entry + _len, date_str, sizeof(entry) - _len);
+ #ifdef DEBUG
+    _len       += strlcpy(entry + _len, " (DEBUG)", sizeof(entry) - _len);
  #endif
--         "<br>" + msg_hash_to_str(MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_BUILD_DATE) + ": " + __DATE__;
-+         "<br>" + msg_hash_to_str(MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_BUILD_DATE) + ": " + now;
-    QLabel *label = new QLabel(text, dialog.data());
-    QPixmap pix = getInvader();
-    QLabel *pixLabel = new QLabel(dialog.data());
 --- a/retroarch.c
 +++ b/retroarch.c
-@@ -6159,6 +6159,8 @@ static void retroarch_print_version(void
+@@ -6423,6 +6423,8 @@ static void retroarch_print_version(void
  {
-    char str[255];
+    char str[256];
     str[0] = '\0';
 +   time_t now;
 +   char *source_date_epoch;
  
     frontend_driver_attach_console();
  
-@@ -6170,7 +6172,10 @@ static void retroarch_print_version(void
+@@ -6434,7 +6436,10 @@ static void retroarch_print_version(void
  #ifdef HAVE_GIT_VERSION
     fprintf(stdout, " (Git %s)", retroarch_git_version);
  #endif
@@ -104,7 +58,7 @@ Last-Update: 2024-06-04
  
     retroarch_get_capabilities(RARCH_CAPABILITIES_COMPILER, str, sizeof(str));
     fprintf(stdout, "%s\n", str);
-@@ -7533,6 +7538,11 @@ bool retroarch_main_init(int argc, char
+@@ -7845,6 +7850,11 @@ bool retroarch_main_init(int argc, char
        {
           char str_output[256];
           char str[128];
@@ -116,7 +70,7 @@ Last-Update: 2024-06-04
           retroarch_get_capabilities(RARCH_CAPABILITIES_CPU, str, sizeof(str));
  
  #ifdef HAVE_GIT_VERSION
-@@ -7540,20 +7550,22 @@ bool retroarch_main_init(int argc, char
+@@ -7852,20 +7862,22 @@ bool retroarch_main_init(int argc, char
                 "%s: %s" "\n"
                 FILE_PATH_LOG_INFO " Version: " PACKAGE_VERSION "\n"
                 FILE_PATH_LOG_INFO " Git: %s" "\n"
@@ -143,3 +97,46 @@ Last-Update: 2024-06-04
  #endif
           RARCH_LOG_OUTPUT("%s", str_output);
        }
+--- a/ui/drivers/ui_qt.cpp
++++ b/ui/drivers/ui_qt.cpp
+@@ -45,6 +45,11 @@
+ #include <QDropEvent>
+ #include <QtConcurrentRun>
+ 
++#include <sstream>
++#include <iostream>
++#include <cstdlib>
++#include <ctime>
++
+ #include "ui_qt.h"
+ #include "qt/gridview.h"
+ #include "qt/ui_qt_load_core_window.h"
+@@ -4084,6 +4089,19 @@ void MainWindow::onContributorsClicked()
+ 
+ void MainWindow::showAbout()
+ {
++   time_t now;
++   char *source_date_epoch = std::getenv("SOURCE_DATE_EPOCH");
++   if (source_date_epoch) {
++       std::istringstream iss(source_date_epoch);
++       iss >> now;
++       if (iss.fail() || !iss.eof()) {
++           std::cerr << "Error: Cannot parse SOURCE_DATE_EPOCH as integer\n";
++           exit(27);
++       }
++   } else {
++       now = std::time(NULL);
++   }
++
+    QScopedPointer<QDialog> dialog(new QDialog());
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    QString text = QStringLiteral("RetroArch ")
+@@ -4101,7 +4119,7 @@ void MainWindow::showAbout()
+       + QStringLiteral("<br>")
+       + msg_hash_to_str(MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_BUILD_DATE)
+       + QStringLiteral(": ")
+-      + __DATE__;
++      + QStringLiteral(now);
+    QLabel *label = new QLabel(text, dialog.data());
+    QPixmap pix = getInvader();
+    QLabel *pixLabel = new QLabel(dialog.data());

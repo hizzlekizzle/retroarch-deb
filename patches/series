@@ -3,3 +3,6 @@
 0002-fix-armhf-NEON-support.patch
 0003-use-system-spirv-cross.patch
 0004-remove-GLSL-library-checks.patch
+#0005-make-builds-reproducible.patch
+#enforce-c++17-standard.patch
+#default-config-file.patch
