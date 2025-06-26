@@ -19,6 +19,7 @@ DEB_CXXFLAGS_MAINT_STRIP     ::= -O2
 DEB_LDFLAGS_MAINT_APPEND     ::= -Wl,--as-needed -lGL -lpthread
 DPKG_EXPORT_BUILDFLAGS       ::= 1
 DPKG_EXPORT_BUILDTOOLS       ::= 1
+INSTALL_D                    ::= $(realpath /bin/install) -vd
 LTO                          ::= 1
 MAKE_ARGS                    ::= "QT_VERSION=qt6"
 MOC                          ::= /usr/lib/qt6/libexec/moc
@@ -55,6 +56,7 @@ endif
 include /usr/share/dpkg/default.mk
 
 dv       ::= $(DEB_VERSION)
+pcfilesd ::= $(CURDIR)/debian/pkgconf
 usrgames ::= $(CURDIR)/debian/retroarch/usr/games
 usrshare ::= $(CURDIR)/debian/retroarch/usr/share
 GIT_HASH ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
@@ -138,16 +140,30 @@ execute_after_dh_auto_clean:
 execute_before_dh_auto_configure:
 	LC_ALL=C.UTF-8 sed -e 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/retroarch.cfg" >"$(CURDIR)/debian/retroarch.cfg"
+ifeq ($(uver),22.04)
+	# The qt6-base-dev package in the Ubuntu 22.04 package repositories fails
+	# to install the pkgconf files for the Qt6 libraries, and since Quickbuild
+	# lacks the versatility to fallback to the CMake config files it /does/
+	# install, they must be instantiated at build time for a successful outcome.
+	@$(INSTALL_D) "$(pcfilesd)"
+	set -e; for pcfile in Concurrent Core Gui Network Platform Widgets; do \
+		test -e /usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/Qt6$${pcfile}.pc || \
+		LC_ALL=C.UTF-8 sed -e 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
+			"$(pcfilesd).in/Qt6$${pcfile}.pc.in" \
+				>"$(pcfilesd)/Qt6$${pcfile}.pc"; done
+endif
 
 override_dh_auto_configure:
-	QT_VERSION="$(QT_SELECT)" MOC="$(MOC)" $(CURDIR)/configure \
-		$(QB_BUILD_FLAGS) $(QB_LIBS_FLAGS)
+	PKG_CONFIG_PATH="$(pcfilesd)$${PKG_CONFIG_PATH:+:$$PKG_CONFIG_PATH}" \
+		QT_VERSION="$(QT_SELECT)" MOC="$(MOC)" $(CURDIR)/configure \
+			$(QB_BUILD_FLAGS) $(QB_LIBS_FLAGS)
 
 override_dh_auto_build:
+	$(info Building Retroarch…)
 	dh_auto_build -O-v -O-Smakefile -- $(MAKE_ARGS)
-	# SoftFilters
+	$(info Building Video SoftFilters…)
 	dh_auto_build -O-v -O-Smakefile -O-Dgfx/video_filters -- $(MAKE_ARGS)
-	# Audio DSP plugins
+	$(info Building Audio DSP plugins…)
 	dh_auto_build -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters -- \
 		$(MAKE_ARGS)
 

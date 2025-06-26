@@ -1,3 +1,4 @@
+debian/pkgconf/
 debian/retroarch.cfg
 .CONFIG_DEFINES
 .MAKEFILE_DEFINES
