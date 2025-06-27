@@ -6,7 +6,7 @@ Files-Excluded: deps/glslang/glslang emscripten/library_rweb*
  gfx/drivers/gx_gfx_vi_encoder.c gfx/include/Cg gfx/include/d3d9
  gfx/include/d3d9* libretro-common/include/compat/zlib
  pkg/ps3/SSNE10000/PARAM.SFO pkg/ps3_iso/PS3_GAME/PARAM.SFO
- pkg/ps3_iso/PS3_DISC.SFB .gitignore .project
+ pkg/ps3_iso/PS3_DISC.SFB
 
 Files: *
 Copyright: 2005–2025, The RetroArch Team

@@ -1,0 +1,16 @@
+Description: Add missing include needed for building with Qt 6 on Jammy
+Author: Peter J. Mello <admin@petermello.net>
+Origin: other
+Forwarded: no
+Last-Update: 2025-06-26
+
+--- a/ui/drivers/qt/qt_dialogs.h
++++ b/ui/drivers/qt/qt_dialogs.h
+@@ -3,6 +3,7 @@
+ 
+ #include <QDialog>
+ #include <QPointer>
++#include <QHash>
+ 
+ #include <retro_common_api.h>
+ 

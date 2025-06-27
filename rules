@@ -8,18 +8,20 @@
 # SPDX-License-Identifier: GPL-3.0-or-later OR MPL-2.0
 
 SHELL                        ::= $(realpath /bin/bash)
+MAKEFLAGS                     += --output-sync=target
 
 # Fix hardening-no-bindnow and hardening-no-pie
-DEB_BUILD_MAINT_OPTIONS      ::= future=+lfs hardening=+all optimize=+lto \
-									reproducible=+fixfilepath
-DEB_CFLAGS_MAINT_APPEND      ::= -DLUA_USE_POSIX
+DEB_BUILD_MAINT_OPTIONS      ::= future=+lfs hardening=+all,-fortify \
+									optimize=+lto reproducible=+fixfilepath
+DEB_CFLAGS_MAINT_APPEND      ::= -DLUA_USE_POSIX -O3
 DEB_CFLAGS_MAINT_STRIP       ::= -O2
-DEB_CXXFLAGS_MAINT_APPEND    ::= -DLUA_USE_POSIX
+DEB_CXXFLAGS_MAINT_APPEND    ::= -DLUA_USE_POSIX -O3
 DEB_CXXFLAGS_MAINT_STRIP     ::= -O2
 DEB_LDFLAGS_MAINT_APPEND     ::= -Wl,--as-needed -lGL -lpthread
+DOXYGEN                      ::= $(realpath /bin/doxygen)
 DPKG_EXPORT_BUILDFLAGS       ::= 1
 DPKG_EXPORT_BUILDTOOLS       ::= 1
-INSTALL_D                    ::= $(realpath /bin/install) -vd
+INSTALL_d                    ::= $(realpath /bin/install) -vd
 LTO                          ::= 1
 MAKE_ARGS                    ::= "QT_VERSION=qt6"
 MOC                          ::= /usr/lib/qt6/libexec/moc
@@ -123,11 +125,11 @@ endif
 
 export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND DEB_CFLAGS_MAINT_STRIP \
 		DEB_CXXFLAGS_MAINT_APPEND DEB_CXXFLAGS_MAINT_STRIP \
-		DEB_LDFLAGS_MAINT_APPEND DH_VERBOSE LTO MOC QT_SELECT SHELL
+		DEB_LDFLAGS_MAINT_APPEND DH_VERBOSE DOXYGEN LTO MOC QT_SELECT SHELL
 
 
 %:
-	dh $@ -v -Smakefile --without autoreconf
+	dh $@ -v -Smakefile --without autoreconf,autotools-dev
 
 
 execute_before_dh_auto_clean:
@@ -137,7 +139,7 @@ execute_after_dh_auto_clean:
 	dh_auto_clean -O-v -O-Smakefile -O-Dgfx/video_filters
 	dh_auto_clean -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters
 
-execute_before_dh_auto_configure:
+execute_before_dh_auto_configure-arch:
 	LC_ALL=C.UTF-8 sed -e 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/retroarch.cfg" >"$(CURDIR)/debian/retroarch.cfg"
 ifeq ($(uver),22.04)
@@ -145,7 +147,7 @@ ifeq ($(uver),22.04)
 	# to install the pkgconf files for the Qt6 libraries, and since Quickbuild
 	# lacks the versatility to fallback to the CMake config files it /does/
 	# install, they must be instantiated at build time for a successful outcome.
-	@$(INSTALL_D) "$(pcfilesd)"
+	@$(INSTALL_d) "$(pcfilesd)"
 	set -e; for pcfile in Concurrent Core Gui Network Platform Widgets; do \
 		test -e /usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/Qt6$${pcfile}.pc || \
 		LC_ALL=C.UTF-8 sed -e 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
@@ -153,30 +155,73 @@ ifeq ($(uver),22.04)
 				>"$(pcfilesd)/Qt6$${pcfile}.pc"; done
 endif
 
-override_dh_auto_configure:
+override_dh_auto_configure-arch:
 	PKG_CONFIG_PATH="$(pcfilesd)$${PKG_CONFIG_PATH:+:$$PKG_CONFIG_PATH}" \
 		QT_VERSION="$(QT_SELECT)" MOC="$(MOC)" $(CURDIR)/configure \
 			$(QB_BUILD_FLAGS) $(QB_LIBS_FLAGS)
 
-override_dh_auto_build:
+# Nothing to do here, we handle the Doxygen configuration with a quilt patch.
+override_dh_auto_configure-indep:
+
+execute_before_dh_auto_build-arch:
+	set -e; cd "$(CURDIR)/libretro-common/glsym" && \
+		for header in glsym_es2.c glsym_es2.h  glsym_gl.c glsym_gl.h; do \
+			cp -vfa "./$${header}" "./$${header}.bak"; done
+	cd "$(CURDIR)/libretro-common/glsym" && python3 ./glgen.py \
+		/usr/include/GL/glext.h glsym_gl.h glsym_gl.c
+	cd "$(CURDIR)/libretro-common/glsym" && python3 ./glgen.py \
+		/usr/include/GLES2/gl2ext.h glsym_es2.h glsym_es2.c
+
+override_dh_auto_build-arch: | BUILDretroarch BUILDsoft_filters BUILDdsp_plugins
+
+BUILDretroarch:
 	$(info Building Retroarch…)
 	dh_auto_build -O-v -O-Smakefile -- $(MAKE_ARGS)
+
+BUILDsoft_filters:
 	$(info Building Video SoftFilters…)
 	dh_auto_build -O-v -O-Smakefile -O-Dgfx/video_filters -- $(MAKE_ARGS)
+
+BUILDdsp_plugins:
 	$(info Building Audio DSP plugins…)
 	dh_auto_build -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters -- \
 		$(MAKE_ARGS)
 
-override_dh_auto_install:
+override_dh_auto_build-indep:
+ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
+	$(info Building Doxygen developer documentation…)
+	$(DOXYGEN) "$(CURDIR)/Doxyfile"
+endif
 
-execute_after_dh_install:
+# Noop the entire upstream installation routine, only use debhelper routines.
+override_dh_auto_install-arch:
+
+override_dh_auto_install-indep:
+	@$(INSTALL_d) "$(CURDIR)/debian/tmp/usr/share/doc/libretro-api"
+	@cp -Rvfa "$(CURDIR)/doxygen/html" \
+		"$(CURDIR)/debian/tmp/usr/share/doc/libretro-api"
+
+execute_after_dh_install-arch:
 	chrpath -d "$(CURDIR)/debian/retroarch/usr/games/retroarch"
-	@cp -fv "$(CURDIR)/tools/cg2glsl.py" "$(usrgames)/retroarch-cg2glsl"
+	@cp -vfa "$(CURDIR)/tools/cg2glsl.py" "$(usrgames)/retroarch-cg2glsl"
 	@chmod -v 0755 "$(usrgames)/retroarch-cg2glsl"
+
+override_dh_installdocs-indep:
+	dh_installdocs -O-v -plibretro-dev-doc --doc-main-package=retroarch-dev
+	dh_installdocs -O-v --indep --remaining-packages
+
+override_dh_doxygen:
+ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
+	-dh_doxygen -plibretro-dev-doc
+endif
 
 override_dh_shlibdeps:
 	dh_shlibdeps -O-v -O-Smakefile -l/lib/$(DEB_HOST_MULTIARCH)
 
-.PHONY: execute_before_dh_auto_clean execute_after_dh_auto_clean \
-		execute_before_dh_auto_configure override_dh_auto_configure \
-		override_dh_auto_build execute_after_dh_install override_dh_shlibdeps
+.NOTPARALLEL: override_dh_auto_build-arch
+.PHONY: execute_before_dh_auto_build-arch execute_after_dh_auto_clean \
+		execute_after_dh_install-arch execute_before_dh_auto_clean \
+		execute_before_dh_auto_configure-arch override_dh_auto_build-arch \
+		override_dh_auto_build-indep override_dh_auto_configure-arch \
+		override_dh_auto_install-arch override_dh_auto_install-indep \
+		override_dh_doxygen override_dh_installdocs-indep override_dh_shlibdeps

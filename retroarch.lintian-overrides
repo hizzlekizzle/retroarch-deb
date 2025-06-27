@@ -1,2 +1,2 @@
-# lintian complains about *.dsp files, but they aren't Windows files
+# False positive: *.dsp files aren't Windows files but audio filter sources.
 windows-devel-file-in-package *

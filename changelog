@@ -1,10 +1,37 @@
-retroarch (1.21.1-1) noble; urgency=medium
+retroarch (1.21.1-1) plucky; urgency=medium
+
+  * New upstream release: v1.21.1
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Thu, 01 May 2025 18:51:28 -0300
+
+retroarch (1.21.0-1) plucky; urgency=medium
 
   * New upstream release: v1.21.0
+  * Add option to mute audio during gameplay rewinds.
+  * Fix failure to launch when Pipewire systemd user service is stopped.
+  * Fix PipeWire latency setting and microphone handling interactions.
+  * Add PipeWire and FFmpeg camera drivers.
+  * Include achievement state in netplay save states.
+  * Allow –entryslot CLI option flag to fall back to normal states.
+  * Fix save state auto-incrementing behavior.
+  * Fix softpatching failures when target has full stops (.) in filename.
+  * Allow component directory redefinitions via environment variables.
+  * Fix failure to restore performance counter option state between sessions.
+  * Switch from using refresh rate to core FPS for calculating dropped frames.
+  * Fix application crash when initializing illuminance sensor.
+  * Extend X11 input driver with XInput2 extensions for multi-mouse use.
+  * Apply color to the notification icon corresponding to message category.
+  * Add visibility toggle for playlist tabs.
+  * Guard nanosleep prototype behind _POSIX_TIMERS.
+  * Enable display of non-PNG thumbnails in Qt interface.
+  * Fix issue when replaying old format input recordings in newer versions.
+  * Enable adaptive Vsync in Vulkan video driver.
+  * Rewrite logic for finding ALSA audio devices in enumerate_audio_devices().
+  * Debian package: Switch dependencies from linking Qt 5 libraries to Qt 6.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 28 Apr 2025 21:23:42 -0300
 
-retroarch (1.20.0-1) noble; urgency=medium
+retroarch (1.20.0-1) oracular; urgency=medium
 
   * New upstream release: v1.20.0
 

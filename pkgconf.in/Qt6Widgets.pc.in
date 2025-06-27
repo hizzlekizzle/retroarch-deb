@@ -3,7 +3,7 @@ exec_prefix=${prefix}
 bindir=${prefix}/lib/qt6/bin
 libexecdir=${prefix}/lib/qt6/libexec
 libdir=${prefix}/lib/@DEB_HOST_MULTIARCH@
-includedir=${prefix}/include/x86_64-linux-gnu/qt6
+includedir=${prefix}/include/@DEB_HOST_MULTIARCH@/qt6
 
 Name: Qt6 Widgets
 Description: Qt Widgets module

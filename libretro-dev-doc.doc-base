@@ -1,0 +1,11 @@
+Document: libretro-api
+Title: Libretro API Developer Documentation
+Author: Team Libretro <libretro@gmail.com>
+Abstract: A comprehensive catalogue of all of the functions, variables,
+ typedefs, enumerations, enumerators, macros, data structures and data fields
+ present in the highly versatile and performant Libretro API.
+Section: Games/Tools
+
+Format: HTML
+Index: /usr/share/doc/libretro-dev-doc/html/index.html
+Files: /usr/share/doc/libretro-dev-doc/html/*.html
