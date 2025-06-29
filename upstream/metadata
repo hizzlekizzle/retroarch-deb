@@ -1,13 +1,13 @@
 ---
 Bug-Database: https://github.com/libretro/RetroArch/issues
 Bug-Submit: https://github.com/libretro/RetroArch/issues/new
-Changelog: https://github.com/libretro/RetroArch/blob/master/CHANGES.md
-Documentation: https://docs.libretro.com
+Changelog: https://git.libretro.com/libretro/RetroArch/-/blob/master/CHANGES.md
+Documentation: https://docs.libretro.com/
 Donation: https://retroarch.com/index.php?page=donate
 FAQ: https://www.retroarch.com/?page=faq
 Registration: https://github.com/join
-Repository: https://github.com/libretro/RetroArch.git
-Repository-Browse: https://github.com/libretro/RetroArch
+Repository: https://git.libretro.com/libretro/RetroArch.git
+Repository-Browse: https://git.libretro.com/libretro/RetroArch
 Security-Contact: Hans-Kristian Arntzen <maister@archlinux.us>
 Webservice: https://web.libretro.com/
 ...

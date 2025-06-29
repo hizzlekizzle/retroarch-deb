@@ -2,11 +2,18 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: RetroArch
 Upstream-Contact: Daniel De Matteis <libretro@gmail.com>
 Source: https://github.com/libretro/RetroArch/releases
-Files-Excluded: deps/glslang/glslang emscripten/library_rweb*
+Files-Excluded: deps/bearssl-0.6/T0Comp.exe deps/glslang/glslang
+ deps/libShake/examples deps/switchres/examples emscripten/library_rweb*
  gfx/drivers/gx_gfx_vi_encoder.c gfx/include/Cg gfx/include/d3d9
- gfx/include/d3d9* libretro-common/include/compat/zlib
- pkg/ps3/SSNE10000/PARAM.SFO pkg/ps3_iso/PS3_GAME/PARAM.SFO
- pkg/ps3_iso/PS3_DISC.SFB
+ gfx/include/d3d9* gfx/include/userland/interface/mmal/test/examples
+ libretro-common/include/compat/zlib pkg/android/phoenix/gradle/wrapper/*.jar
+ pkg/apple/WebServer/GCDWebUploader/GCDWebUploader.bundle/Contents/Resources/js
+ pkg/ctr/tools/*.exe pkg/ctr/tools/*-linux pkg/emscripten
+ pkg/msvc-uwp/RetroArch-msvcUWP/ANGLE/x64/*.dll
+ pkg/msvc-uwp/RetroArch-msvcUWP/MESA/x64/*.dll pkg/ps3/SSNE10000/PARAM.SFO
+ pkg/ps3_iso/PS3_DISC.SFB pkg/ps3_iso/PS3_GAME/PARAM.SFO
+ pkg/windows/x86_64/*.dll vita/launcher/builder/vita-*.exe
+ nvdaControllerClient64.dll
 
 Files: *
 Copyright: 2005–2025, The RetroArch Team
@@ -27,6 +34,14 @@ Copyright: 2005–2025, The RetroArch Team
            2020–2025, Tony <sonninnos@users.noreply.github.com>
 License: GPL-3.0-or-later
 
+Files: com.libretro.RetroArch.metainfo.xml
+Copyright: 2020, Guo Yunhe <i@guoyunhe.me>
+           2020, Daniel De Matteis <libretro@gmail.com>
+           2021, Artem Polishchuk <ego.cordatus@gmail.com>
+           2024, Reilly Brogan <reilly@reillybrogan.com>
+           2024, Colin Kinloch <colin.kinloch@collabora.com>
+License: CC0-1.0
+
 Files: cores/libretro-video-processor/video_processor_v4l2.c
 Copyright: 2016, Jared McNeill <jmcneill@invisible.ca>
 License: BSD-2-Clause
@@ -35,11 +50,6 @@ Files: deps/7zip/*
 Copyright: 1999–2023, Igor Pavlov <ipavlov@users.sourceforge.net>
 License: LicenseRef-PublicDomain
 
-Files: deps/civetweb/* network/httpserver/handle_form.inl
-Copyright: 2004–2013, Sergey Lyubka <valenok@gmail.com>
-           2013–2021, Bernhard Lehner <bel2125@gmail.com>
-License: MIT
-
 Files: deps/glslang/*
 Copyright: 2016, Hans-Kristian Arntzen <maister@archlinux.us>
 License: GPL-3.0-or-later
@@ -47,10 +57,6 @@ License: GPL-3.0-or-later
 Files: deps/libvita2d/*
 Copyright: 2015, Sergi Granell <xerpi.g.12@gmail.com>
 License: MIT
-
-Files: deps/nuklear/nuklear.h
-Copyright: 2015–2016, Micha Mettke <polygone@gmx.net>
-License: LicenseRef-MettkePD
 
 Files: deps/stb/*
 Copyright: 2006–2015, Sean Barrett
@@ -87,10 +93,6 @@ Files: gfx/include/vulkan/vk_platform.h gfx/include/vulkan/vulkan.h
 Copyright: 2014–2016, The Khronos Group, Inc. <memberservices@khronos.org>
 License: Apache-2.0
 
-Files: gfx/include/vulkan/vulkan_intel.h
-Copyright: 2015, Intel Corporation <inteldeveloperzonesupport@intel.com>
-License: MIT
-
 Files: gfx/video_filters/snes_ntsc/*
 Copyright: 2006–2007, Shay Green <blargg@hotpop.com>
 License: LGPL-2.1-or-later
@@ -111,14 +113,13 @@ Files: input/drivers_keyboard/keyboard_event_apple.h
 Copyright: 2011–2012, Dietrich Epp <depp@zdome.net>
 License: BSD-2-Clause
 
-Files: input/drivers/qnx_input.c input/drivers_joypad/null_joypad.c
- input/drivers_joypad/qnx_joypad.c
+Files: input/drivers/qnx_input.c input/drivers_joypad/qnx_joypad.c
 Copyright: 2010–2014, Hans-Kristian Arntzen <maister@archlinux.us>
            2011–2017, Daniel De Matteis <libretro@gmail.com>
            2013–2014, CatalystG
 License: GPL-3.0-or-later
 
-Files: input/drivers_joypad/xinput_joypad.c input/common/epoll_common.c
+Files: input/drivers_joypad/xinput_joypad.c
 Copyright: 2011–2017, Daniel De Matteis <libretro@gmail.com>
            2013–2015, pinumbernumber
 License: GPL-3.0-or-later
@@ -169,10 +170,6 @@ Files: libretro-common/net/* libretro-common/include/formats/image.h
 Copyright: 2010–2016, The RetroArch Team
 License: GPL-3.0-or-later
 
-Files: libretro-common/rthreads/rsemaphore.c
-Copyright: 2005, Allen B. Downey
-License: GPL-2.0-or-later
-
 Files: libretro-common/utils/md5.c
 Copyright: 2001, Alexander Peslyak
 License: LicenseRef-PeslyakPD
@@ -186,12 +183,6 @@ Copyright: Siarhei Siamashka <siarhei.siamashka@nokia.com>
            Jim Huang <jserv@0xlab.org>
 License: LGPL-2.1-or-later
 
-Files: menu/drivers/xui.cpp
-Copyright: 2010–2014, Hans-Kristian Arntzen <maister@archlinux.us>
-           2011–2017, Daniel De Matteis <libretro@gmail.com>
-                2015, Swizzy
-License: GPL-3.0-or-later
-
 Files: tools/gas-preprocessor.pl
 Copyright: David Conrad
 License: GPL-2.0-or-later
@@ -199,11 +190,6 @@ License: GPL-2.0-or-later
 Files: tools/cg2glsl.py
 Copyright: Hans-Kristian Arntzen <maister@archlinux.us>
 License: LicenseRef-PublicDomain
-
-Files: ui/drivers/cocoa/cocoatouch_menu.m
-Copyright: 2013–2014, Jason Fetters <jasonfetters@gmail.com>
-           2014–2015, Jay McCarthy
-License: GPL-3.0-or-later
 
 Files: ui/drivers/qt/*
 Copyright: 2011–2015, Andrés Suárez <andres.430@gmail.com>
@@ -221,7 +207,7 @@ Files: wii/app_booter/main.c
 Copyright: 2011, Dimok
 License: GPL-2.0-or-later
 
-Files: cheevos.*
+Files: cheevos/cheevos*
 Copyright: 2015–2016, Andre Leiradella <andre@leiradella.com>
 License: GPL-3.0-or-later
 
@@ -230,7 +216,7 @@ Copyright: 2012–2025, Hunter Kaller <hunter_kaller@yahoo.com>
            2014–2018, Sergio Benjamim <sergio_br2@yahoo.com.br>
            2020–2025, Paul Preuss <paul@dokomi.de>
            2021–2025, Peter J. Mello <admin@petermello.net>
-License: GPL-3.0-or-later
+License: GPL-3.0-or-later or MPL-2.0
 
 License: GPL-3.0-or-later
  This program is free software: you can redistribute it and/or modify it under
@@ -248,6 +234,19 @@ License: GPL-3.0-or-later
  On Debian(-based) GNU/Linux systems, the complete text of the GNU General
  Public License, version 3, can be found in the file
  '/usr/share/common-licenses/GPL-3'.
+
+License: CC0-1.0
+ To the extent possible under law, the author(s) have dedicated all copyright
+ and related and neighboring rights to this software to the public domain
+ worldwide. This software is distributed without any warranty.
+ .
+ You should have received a copy of the Creative Commons Zero Public Domain
+ Dedication, version 1.0, along with this software. If not, see
+ <https://creativecommons.org/publicdomain/zero/1.0/>.
+ .
+ On Debian(-based) GNU/Linux systems, the complete text of the Creative Commons
+ Zero Universal License, version 1.0, can be found in the file
+ '/usr/share/common-licenses/CC0-1.0'.
 
 License: BSD-2-Clause
  Redistribution and use in source and binary forms, with or without
@@ -292,11 +291,6 @@ License: MIT
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
-
-License: LicenseRef-MettkePD
- This software is dual-licensed to the public domain and under the following
- license: you are granted a perpetual, irrevocable license to copy, modify,
- publish and distribute this file as you see fit.
 
 License: LicenseRef-BarrettPD
  This software is in the public domain. Where that dedication is not recognized,
@@ -419,3 +413,11 @@ License: LicenseRef-FPL
  SHALL NOT BE HELD LIABLE FOR ANY DAMAGES RESULTING FROM THE USE OF THIS
  SOFTWARE, EITHER DIRECTLY OR INDIRECTLY, INCLUDING, BUT NOT LIMITED TO, LOSS OF
  DATA OR DATA BEING RENDERED INACCURATE.
+
+License: MPL-2.0
+ This Source Code Form is subject to the terms of the Mozilla Public License, v.
+ 2.0. If a copy of the MPL was not distributed with this file, You can obtain
+ one at <https://mozilla.org/MPL/2.0/>.
+ .
+ On Debian(-based) GNU/Linux systems, the complete text of the Mozilla Public
+ License, v. 2.0, can be found in the file '/usr/share/common-licenses/MPL-2.0'.

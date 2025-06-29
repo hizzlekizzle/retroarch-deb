@@ -1,10 +1,4 @@
-retroarch (1.21.1-1) plucky; urgency=medium
-
-  * New upstream release: v1.21.1
-
- -- Hunter Kaller <hunter_kaller@yahoo.com>  Thu, 01 May 2025 18:51:28 -0300
-
-retroarch (1.21.0-1) plucky; urgency=medium
+retroarch (1.21.0+ds1-1) plucky; urgency=medium
 
   * New upstream release: v1.21.0
   * Add option to mute audio during gameplay rewinds.

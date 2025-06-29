@@ -1,0 +1,2 @@
+# Upstream release tarballs and VCS tags are not cryptographically signed.
+debian-watch-does-not-check-openpgp-signature *

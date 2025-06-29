@@ -17,7 +17,7 @@ DEB_CFLAGS_MAINT_APPEND      ::= -DLUA_USE_POSIX -O3
 DEB_CFLAGS_MAINT_STRIP       ::= -O2
 DEB_CXXFLAGS_MAINT_APPEND    ::= -DLUA_USE_POSIX -O3
 DEB_CXXFLAGS_MAINT_STRIP     ::= -O2
-DEB_LDFLAGS_MAINT_APPEND     ::= -Wl,--as-needed -lGL -lpthread
+DEB_LDFLAGS_MAINT_APPEND     ::= -lGL -lpthread
 DOXYGEN                      ::= $(realpath /bin/doxygen)
 DPKG_EXPORT_BUILDFLAGS       ::= 1
 DPKG_EXPORT_BUILDTOOLS       ::= 1
@@ -30,6 +30,7 @@ QT_SELECT                    ::= qt6
 ifeq (,$(findstring terse,$(DEB_BUILD_OPTIONS)))
   DH_VERBOSE                 ::= 1
   MAKE_ARGS                   += "V=1"
+  export DH_VERBOSE
 endif
 
 # Use Bash's built-in printf to pass the Ubuntu version when the dpkg flag set
@@ -125,7 +126,7 @@ endif
 
 export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND DEB_CFLAGS_MAINT_STRIP \
 		DEB_CXXFLAGS_MAINT_APPEND DEB_CXXFLAGS_MAINT_STRIP \
-		DEB_LDFLAGS_MAINT_APPEND DH_VERBOSE DOXYGEN LTO MOC QT_SELECT SHELL
+		DEB_LDFLAGS_MAINT_APPEND DOXYGEN LTO MOC QT_SELECT SHELL
 
 
 %:
@@ -146,7 +147,7 @@ ifeq ($(uver),22.04)
 	# The qt6-base-dev package in the Ubuntu 22.04 package repositories fails
 	# to install the pkgconf files for the Qt6 libraries, and since Quickbuild
 	# lacks the versatility to fallback to the CMake config files it /does/
-	# install, they must be instantiated at build time for a successful outcome.
+	# install, the .pc files must be instantiated here at build time.
 	@$(INSTALL_d) "$(pcfilesd)"
 	set -e; for pcfile in Concurrent Core Gui Network Platform Widgets; do \
 		test -e /usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/Qt6$${pcfile}.pc || \
@@ -162,15 +163,6 @@ override_dh_auto_configure-arch:
 
 # Nothing to do here, we handle the Doxygen configuration with a quilt patch.
 override_dh_auto_configure-indep:
-
-execute_before_dh_auto_build-arch:
-	set -e; cd "$(CURDIR)/libretro-common/glsym" && \
-		for header in glsym_es2.c glsym_es2.h  glsym_gl.c glsym_gl.h; do \
-			cp -vfa "./$${header}" "./$${header}.bak"; done
-	cd "$(CURDIR)/libretro-common/glsym" && python3 ./glgen.py \
-		/usr/include/GL/glext.h glsym_gl.h glsym_gl.c
-	cd "$(CURDIR)/libretro-common/glsym" && python3 ./glgen.py \
-		/usr/include/GLES2/gl2ext.h glsym_es2.h glsym_es2.c
 
 override_dh_auto_build-arch: | BUILDretroarch BUILDsoft_filters BUILDdsp_plugins
 
@@ -212,16 +204,16 @@ override_dh_installdocs-indep:
 
 override_dh_doxygen:
 ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
-	-dh_doxygen -plibretro-dev-doc
+	dh_doxygen -plibretro-dev-doc
 endif
 
 override_dh_shlibdeps:
 	dh_shlibdeps -O-v -O-Smakefile -l/lib/$(DEB_HOST_MULTIARCH)
 
 .NOTPARALLEL: override_dh_auto_build-arch
-.PHONY: execute_before_dh_auto_build-arch execute_after_dh_auto_clean \
-		execute_after_dh_install-arch execute_before_dh_auto_clean \
-		execute_before_dh_auto_configure-arch override_dh_auto_build-arch \
-		override_dh_auto_build-indep override_dh_auto_configure-arch \
-		override_dh_auto_install-arch override_dh_auto_install-indep \
-		override_dh_doxygen override_dh_installdocs-indep override_dh_shlibdeps
+.PHONY: execute_after_dh_auto_clean execute_after_dh_install-arch \
+		execute_before_dh_auto_clean execute_before_dh_auto_configure-arch \
+		override_dh_auto_build-arch override_dh_auto_build-indep \
+		override_dh_auto_configure-arch override_dh_auto_install-arch \
+		override_dh_auto_install-indep override_dh_doxygen \
+		override_dh_installdocs-indep override_dh_shlibdeps
