@@ -1,2 +1,5 @@
+# These are symlinks only to preserve interactions with other applications.
+package-section-games-but-has-usr-bin *
+
 # False positive: *.dsp files aren't Windows files but audio filter sources.
 windows-devel-file-in-package *

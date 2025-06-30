@@ -2,4 +2,4 @@ version=4
 opts="compression=xz,dversionmangle=auto,pgpmode=none,repack,repacksuffix=+ds1,\
   searchmode=plain" \
     https://git.libretro.com/libretro/RetroArch/-/tags?sort=updated_desc \
-      -/archive/v?\d[\d.]+/@PACKAGE@-@ANY_VERSION@@ARCHIVE_EXT@
+      -/archive/v?\d[\d.]+/RetroArch-@ANY_VERSION@@ARCHIVE_EXT@

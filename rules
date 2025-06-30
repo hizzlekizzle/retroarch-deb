@@ -67,7 +67,10 @@ GIT_HASH ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
 # See ./configure --help for valid flags for the QuickBuild framework
 QB_BUILD_FLAGS ::= --prefix=/usr --bindir=/usr/games --datarootdir=/usr/share \
 	--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
-	--sysconfdir=/etc --build=$(DEB_BUILD_GNU_TYPE)
+	--sysconfdir=/etc --build=$(DEB_BUILD_GNU_TYPE) \
+	--with-assets_dir=/usr/share/libretro \
+	--with-filters_dir=/usr/lib/$(DEB_HOST_MULTIARCH)/retroarch \
+	--with-core_info_dir=/usr/share/libretro
 QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-blissbox --enable-bluetooth --disable-builtinbearssl \
 	--enable-builtinflac --disable-builtinglslang --disable-builtinmbedtls \
@@ -75,22 +78,24 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-command --disable-core_info_cache --disable-coreaudio \
 	--disable-d3d9 --disable-d3dx --enable-dbus --disable-dinput \
 	--enable-dr_mp3 --disable-dsound --enable-dylib --disable-dynamic_egl \
-	--enable-egl --enable-ffmpeg --enable-flac --enable-freetype --disable-gdi \
-	--enable-glslang --enable-hid --enable-jack --enable-kms --enable-libdecor \
-	--enable-libusb --enable-lua --enable-materialui --enable-memfd_create \
-	--enable-mmap --disable-mpv --enable-networkgamepad --enable-networking \
-	--disable-nvda --enable-opengl --disable-osmesa --disable-oss \
-	--enable-ozone --enable-parport --enable-pipewire --enable-plain_drm \
-	--enable-pulse --enable-qt --enable-rgui --disable-roar --disable-rsound \
-	--disable-sdl --enable-sdl2 --enable-sixel --enable-slang \
+	--enable-egl --enable-ffmpeg --enable-flac --enable-freetype \
+	--enable-game_ai --disable-gdi --enable-glslang --enable-hid --enable-jack \
+	--enable-kms --enable-libdecor --enable-libshake --enable-libusb \
+	--enable-lua --enable-materialui --enable-memfd_create --enable-mmap \
+	--disable-mpv --enable-network_video --enable-networkgamepad \
+	--enable-networking --disable-nvda --enable-opengl --disable-osmesa \
+	--disable-oss --enable-ozone --enable-parport --enable-pipewire \
+	--enable-plain_drm --enable-pulse --enable-qt --enable-rgui --disable-roar \
+	--disable-rsound --disable-sdl --enable-sdl2 --enable-sixel --enable-slang \
 	--enable-spirv_cross --enable-ssa --enable-ssl --enable-systemd \
 	--enable-systemmbedtls --enable-threads --enable-thread_storage \
 	--disable-tinyalsa --enable-udev --enable-v4l2 --disable-vg \
 	--disable-videocore --enable-videoprocessor --enable-vulkan \
-	--disable-wasapi --enable-wayland --disable-winmm --disable-winrawinput \
-	--enable-x11 --disable-xaudio --enable-xdelta --enable-xi2 \
-	--enable-xinerama --enable-xmb --enable-xrandr --enable-xscrnsaver \
-	--enable-xshm --enable-xvideo --enable-zlib --enable-zstd
+	--disable-wasapi --enable-wayland --enable-wifi --disable-winmm \
+	--disable-winrawinput --enable-x11 --disable-xaudio --enable-xdelta \
+	--enable-xi2 --enable-xinerama --enable-xmb --enable-xrandr \
+	--enable-xscrnsaver --enable-xshm --enable-xvideo --enable-zlib \
+	--enable-zstd
 
 ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
   QB_LIBS_FLAGS += --enable-cg --disable-opengles --disable-rpiled --enable-sse
@@ -109,7 +114,9 @@ else
 endif
 
 ifneq ($(GIT_HASH),)
+  GIT_VERSION  ::= $(GIT_HASH)
   MAKE_ARGS     += "GIT_VERSION='$(GIT_HASH)'"
+  export GIT_VERSION
 endif
 
 # GLSL v14.0.0 dropped legacy stub libraries libIGLCompiler and libHLSL and a
@@ -119,8 +126,7 @@ endif
 # are no longer needed for Ubuntu 23.10 "Mantic Minotaur" and its predecessors.
 glsl_v   ::= $(shell dpkg-query -f '$${Version}' -W glslang-dev)
 glsltest ::= $(shell dpkg --compare-versions $(glsl_v) ge 14.0.0 && echo "true")
-new_glsl ::= $(if $(glsltest),yes,no)
-ifeq ($(new_glsl),no)
+ifneq ($(glsltest),true)
   MAKE_ARGS     += GLSLANG_LIBS+="-lglslang -lOGLCompiler -lHLSL"
 endif
 
@@ -207,13 +213,16 @@ ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
 	dh_doxygen -plibretro-dev-doc
 endif
 
+execute_after_dh_link-indep:
+	jdupes -rl "$(CURDIR)/debian/libretro-dev-doc/usr"
+
 override_dh_shlibdeps:
-	dh_shlibdeps -O-v -O-Smakefile -l/lib/$(DEB_HOST_MULTIARCH)
+	dh_shlibdeps -O-v -l/lib/$(DEB_HOST_MULTIARCH)
 
 .NOTPARALLEL: override_dh_auto_build-arch
 .PHONY: execute_after_dh_auto_clean execute_after_dh_install-arch \
-		execute_before_dh_auto_clean execute_before_dh_auto_configure-arch \
-		override_dh_auto_build-arch override_dh_auto_build-indep \
-		override_dh_auto_configure-arch override_dh_auto_install-arch \
-		override_dh_auto_install-indep override_dh_doxygen \
-		override_dh_installdocs-indep override_dh_shlibdeps
+		execute_after_dh_link-indep execute_before_dh_auto_clean \
+		execute_before_dh_auto_configure-arch override_dh_auto_build-arch \
+		override_dh_auto_build-indep override_dh_auto_configure-arch \
+		override_dh_auto_install-arch override_dh_auto_install-indep \
+		override_dh_doxygen override_dh_installdocs-indep override_dh_shlibdeps

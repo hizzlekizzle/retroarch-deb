@@ -2,10 +2,9 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: RetroArch
 Upstream-Contact: Daniel De Matteis <libretro@gmail.com>
 Source: https://github.com/libretro/RetroArch/releases
-Files-Excluded: deps/bearssl-0.6/T0Comp.exe deps/glslang/glslang
- deps/libShake/examples deps/switchres/examples emscripten/library_rweb*
- gfx/drivers/gx_gfx_vi_encoder.c gfx/include/Cg gfx/include/d3d9
- gfx/include/d3d9* gfx/include/userland/interface/mmal/test/examples
+Files-Excluded: deps/bearssl-0.6/*.exe deps/glslang deps/libShake/examples
+ deps/switchres/examples emscripten/library_rweb*.js gfx/drivers/gx_gfx_*.c
+ gfx/include/Cg gfx/include/d3d9 gfx/include/userland/interface/mmal/test
  libretro-common/include/compat/zlib pkg/android/phoenix/gradle/wrapper/*.jar
  pkg/apple/WebServer/GCDWebUploader/GCDWebUploader.bundle/Contents/Resources/js
  pkg/ctr/tools/*.exe pkg/ctr/tools/*-linux pkg/emscripten
@@ -49,10 +48,6 @@ License: BSD-2-Clause
 Files: deps/7zip/*
 Copyright: 1999–2023, Igor Pavlov <ipavlov@users.sourceforge.net>
 License: LicenseRef-PublicDomain
-
-Files: deps/glslang/*
-Copyright: 2016, Hans-Kristian Arntzen <maister@archlinux.us>
-License: GPL-3.0-or-later
 
 Files: deps/libvita2d/*
 Copyright: 2015, Sergi Granell <xerpi.g.12@gmail.com>

@@ -1,2 +1,13 @@
+# Field included on advice of DD Jonas Smedegaard; for more information, see:
+# <https://wiki.debian.org/Derivatives/Guidelines>.
+unknown-field Original-Uploaders
+
+# Field's presence is intentional, similar use by ~1,000 packages indicates
+# evolving consensus that places current guidance in abeyance.
+built-using-field-on-arch-all-package *
+
+# Package maintainer cannot control the contents of vendored libraries.
+very-long-line-length-in-source-file *
+
 # Upstream release tarballs and VCS tags are not cryptographically signed.
 debian-watch-does-not-check-openpgp-signature *

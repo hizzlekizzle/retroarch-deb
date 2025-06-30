@@ -5,12 +5,13 @@ Maintainer: Libretro Team <libretro@gmail.com>
 Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
  Sérgio Benjamim <sergio_br2@yahoo.com.br>, Paul Preuss <paul@dokomi.de>,
  Peter J. Mello <admin@petermello.net>
+Original-Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
 Build-Depends: debhelper-compat (= 13), jdupes, lsb-release, pkgconf,
  quilt, dpkg-build-api (= 1) | dpkg-dev (<< 1.22.0), python3-dev:any
 Build-Depends-Arch: alsa-utils, check (>= 0.15) <!nocheck>, chrpath,
  glslang-dev, libasound2-dev (>= 1.0.18), libass-dev (>= 1:0.13.6),
  libavcodec-dev, libavdevice-dev, libavformat-dev, libavutil-dev,
- libbluetooth-dev, libcaca-dev (>= 0.99.beta20), libdbus-1-dev (>= 1.11.20),
+ libcaca-dev (>= 0.99.beta20), libdbus-1-dev (>= 1.11.20),
  libdecor-0-dev (>= 0.2.0), libdiscord-rpc-dev, libdrm-dev (>= 2.4.62),
  libflac-dev (>= 1.3.2), libfontconfig-dev (>= 2.12.6),
  libfreetype-dev (>= 2.2.1), libfribidi-dev, libgbm-dev (>= 9.1.3), libglm-dev,
@@ -40,8 +41,7 @@ Homepage: https://www.libretro.com/
 Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
 Vcs-Browser: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
 Rules-Requires-Root: no
-XSBC-Original-Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
-XSBC-Original-Uploaders: Uploaders: Jonathan McDowell <noodles@earth.li>
+XSC-Original-Uploaders: Jonathan McDowell <noodles@earth.li>
 
 Package: retroarch
 Architecture: any
