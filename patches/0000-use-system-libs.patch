@@ -1,0 +1,190 @@
+Description: Build against system libs instead of vendored libraries
+ This patch changes the QuickBuild toolchain to link to the system versions of:
+   - libstb
+   - libdiscord-rpc
+   - liblua5.3
+   - libzstd
+   - SPIRV-Cross
+ …rather than the vendored versions of those libraries present in the tarball
+ and typically compiled at build time. The resulting retroarch binary produced
+ is roughly 1 MiB smaller, on average.
+Author: Jonathan McDowell <noodles@earth.li>
+Author: Peter J. Mello <admin@petermello.net>
+Origin: vendor, https://salsa.debian.org/games-team/libretro/retroarch/-/commit/f644cb7f0a313aecace8e627f0e8d43e0285dbc1
+Bug-Debian: https://bugs.debian.org/949708 https://bugs.debian.org/1053190
+Forwarded: no
+Last-Update: 2025-07-02
+
+--- a/Makefile.common
++++ b/Makefile.common
+@@ -1158,9 +1158,11 @@ ifeq ($(HAVE_OVERLAY), 1)
+ endif
+ 
+ ifeq ($(HAVE_STB_FONT), 1)
++   INCLUDE_DIRS += -I/usr/include/stb
+    OBJ += gfx/drivers_font_renderer/stb.o
+    OBJ += gfx/drivers_font_renderer/stb_unicode.o
+    DEFINES += -DHAVE_STB_FONT
++   LIBS += -lstb
+ endif
+ 
+ ifeq ($(HAVE_FREETYPE), 1)
+@@ -1921,14 +1923,9 @@ endif
+ 
+ ifeq ($(HAVE_SPIRV_CROSS), 1)
+    DEFINES += -DHAVE_SPIRV_CROSS
+-   INCLUDE_DIRS += -I$(DEPS_DIR)/SPIRV-Cross
+-   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cross.o
+-   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cfg.o
+-   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_glsl.o
+-   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_hlsl.o
+-   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_msl.o
+-   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_parser.o
+-   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cross_parsed_ir.o
++   INCLUDE_DIRS += -I/usr/include/spirv_cross
++   LIBS += -lspirv-cross-cpp -lspirv-cross-msl -lspirv-cross-glsl \
++			-lspirv-cross-c-shared -lspirv-cross-core
+ endif
+ 
+ ifeq ($(WANT_WGL), 1)
+@@ -1972,19 +1969,9 @@ ifeq ($(HAVE_7ZIP),1)
+ endif
+ 
+ ifeq ($(HAVE_ZSTD),1)
+-   INCLUDE_DIRS += -I$(DEPS_DIR)/zstd/lib
+    DEFINES += -DHAVE_ZSTD -DZSTD_DISABLE_ASM
+-   ZSOBJ = $(DEPS_DIR)/zstd/lib/common/entropy_common.o \
+-           $(DEPS_DIR)/zstd/lib/common/error_private.o \
+-           $(DEPS_DIR)/zstd/lib/common/fse_decompress.o \
+-           $(DEPS_DIR)/zstd/lib/common/zstd_common.o \
+-           $(DEPS_DIR)/zstd/lib/common/xxhash.o \
+-           $(DEPS_DIR)/zstd/lib/decompress/huf_decompress.o \
+-           $(DEPS_DIR)/zstd/lib/decompress/zstd_ddict.o \
+-           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress.o \
+-           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress_block.o
+-
+-   OBJ +=  $(ZSOBJ)
++   INCLUDE_DIRS += -I/usr/include
++   LIBS += -lzstd
+ endif
+ 
+ ifeq ($(HAVE_IBXM), 1)
+@@ -2407,40 +2394,8 @@ ifeq ($(HAVE_NETWORKING), 1)
+       ifeq ($(HAVE_LUA), 1)
+          DEFINES += -DHAVE_LUA \
+                     -DLUA_32BITS
+-         INCLUDE_DIRS += -Ideps/lua/src
+-         OBJ += deps/lua/src/lapi.o \
+-                deps/lua/src/lcode.o \
+-                deps/lua/src/lctype.o \
+-                deps/lua/src/ldebug.o \
+-                deps/lua/src/ldo.o \
+-                deps/lua/src/ldump.o \
+-                deps/lua/src/lfunc.o \
+-                deps/lua/src/lgc.o \
+-                deps/lua/src/llex.o \
+-                deps/lua/src/lmem.o \
+-                deps/lua/src/lobject.o \
+-                deps/lua/src/lopcodes.o \
+-                deps/lua/src/lparser.o \
+-                deps/lua/src/lstate.o \
+-                deps/lua/src/lstring.o \
+-                deps/lua/src/ltable.o \
+-                deps/lua/src/ltm.o \
+-                deps/lua/src/lundump.o \
+-                deps/lua/src/lvm.o \
+-                deps/lua/src/lzio.o \
+-                deps/lua/src/lauxlib.o \
+-                deps/lua/src/lbaselib.o \
+-                deps/lua/src/lbitlib.o \
+-                deps/lua/src/lcorolib.o \
+-                deps/lua/src/ldblib.o \
+-                deps/lua/src/liolib.o \
+-                deps/lua/src/lmathlib.o \
+-                deps/lua/src/loslib.o \
+-                deps/lua/src/lstrlib.o \
+-                deps/lua/src/ltablib.o \
+-                deps/lua/src/lutf8lib.o \
+-                deps/lua/src/loadlib.o \
+-                deps/lua/src/linit.o
++         INCLUDE_DIRS += -I/usr/include/lua5.3
++         LIBS += -llua5.3 -lm -ldl
+       else
+          DEFINES += -DRC_DISABLE_LUA
+       endif
+@@ -2451,15 +2406,13 @@ ifeq ($(HAVE_NETWORKING), 1)
+       NEED_CXX_LINKER = 1
+       HAVE_PRESENCE = 1
+       DEFINES += -DHAVE_DISCORD
+-      INCLUDE_DIRS += -Ideps/discord-rpc/include
++      INCLUDE_DIRS += -I/usr/include/DiscordRPC
+ 
+       ifneq ($(HAVE_THREADS), 1)
+          DEFINES += -DDISCORD_DISABLE_IO_THREAD
+       endif
+ 
+-      OBJ     += deps/discord-rpc/src/discord_rpc.o \
+-                 deps/discord-rpc/src/rpc_connection.o \
+-                 deps/discord-rpc/src/serialization.o
++      LIBS += -ldiscord-rpc
+ 
+       OBJ     += network/discord.o
+ 
+@@ -2468,10 +2421,6 @@ ifeq ($(HAVE_NETWORKING), 1)
+                  deps/discord-rpc/src/connection_win.o
+          LIBS += -lpsapi -ladvapi32
+       endif
+-      ifneq ($(findstring Linux,$(OS)),)
+-         OBJ  += deps/discord-rpc/src/discord_register_linux.o \
+-                 deps/discord-rpc/src/connection_unix.o
+-      endif
+       ifneq ($(findstring Darwin,$(OS)),)
+          OBJ  += deps/discord-rpc/src/discord_register_osx.o \
+                  deps/discord-rpc/src/connection_unix.o
+--- a/gfx/drivers_font_renderer/stb.c
++++ b/gfx/drivers_font_renderer/stb.c
+@@ -29,8 +29,8 @@
+ #define STBTT_STATIC
+ #define STBRP_STATIC
+ #define STATIC static INLINE
+-#include "../../deps/stb/stb_rect_pack.h"
+-#include "../../deps/stb/stb_truetype.h"
++#include <stb/stb_rect_pack.h>
++#include <stb/stb_truetype.h>
+ #undef STATIC
+ #endif
+ 
+--- a/gfx/drivers_font_renderer/stb_unicode.c
++++ b/gfx/drivers_font_renderer/stb_unicode.c
+@@ -33,8 +33,8 @@
+ #define STBTT_STATIC
+ #define STBRP_STATIC
+ #define STATIC static INLINE
+-#include "../../deps/stb/stb_rect_pack.h"
+-#include "../../deps/stb/stb_truetype.h"
++#include <stb/stb_rect_pack.h>
++#include <stb/stb_truetype.h>
+ #undef STATIC
+ #endif
+ 
+--- a/libretro-common/audio/audio_mixer.c
++++ b/libretro-common/audio/audio_mixer.c
+@@ -39,8 +39,6 @@
+ 
+ #ifdef HAVE_STB_VORBIS
+ #define STB_VORBIS_NO_PUSHDATA_API
+-#define STB_VORBIS_NO_STDIO
+-#define STB_VORBIS_NO_CRT
+ 
+ #include <stb/stb_vorbis.h>
+ #endif
+--- a/network/discord.h
++++ b/network/discord.h
+@@ -24,7 +24,6 @@
+ #include <boolean.h>
+ 
+ #include <discord_rpc.h>
+-#include "../deps/discord-rpc/include/discord_rpc.h"
+ #include "presence.h"
+ 
+ /* The Discord API specifies these variables:

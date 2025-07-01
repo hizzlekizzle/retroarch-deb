@@ -14,8 +14,9 @@ MAKEFLAGS                     += --output-sync=target
 DEB_BUILD_MAINT_OPTIONS      ::= future=+lfs hardening=+all optimize=+lto \
 									reproducible=+fixfilepath
 DEB_CFLAGS_MAINT_APPEND      ::= -DLUA_USE_POSIX
+DEB_CPPFLAGS_MAINT_PREPEND   ::= -U_FORTIFY_SOURCE
 DEB_CXXFLAGS_MAINT_APPEND    ::= -DLUA_USE_POSIX
-DEB_LDFLAGS_MAINT_APPEND     ::= -lGL -lpthread
+DEB_LDFLAGS_MAINT_APPEND     ::= -lGL -pthread
 DEB_LDFLAGS_MAINT_PREPEND    ::= -Wl,--copy-dt-needed-entries
 DOXYGEN                      ::= $(realpath /bin/doxygen)
 DPKG_EXPORT_BUILDFLAGS       ::= 1
@@ -70,7 +71,7 @@ QB_BUILD_FLAGS ::= --prefix=/usr --bindir=/usr/games --datarootdir=/usr/share \
 	--with-assets_dir=/usr/share/libretro \
 	--with-filters_dir="/usr/lib/$(DEB_HOST_MULTIARCH)/retroarch" \
 	--with-core_info_dir=/usr/share/libretro
-QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --enable-angle --disable-audioio \
+QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--disable-blissbox --enable-bluetooth --disable-builtinbearssl \
 	--enable-builtinflac --disable-builtinglslang --disable-builtinmbedtls \
 	--disable-builtinzlib --enable-caca --enable-cdrom --enable-check \
@@ -98,10 +99,11 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --enable-angle --disable-audioio \
 	--enable-xvideo --enable-zlib --enable-zstd
 
 ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
-  QB_LIBS_FLAGS += --enable-cg --disable-opengles --disable-rpiled --enable-sse
+  QB_LIBS_FLAGS += --disable-angle --enable-cg --disable-opengles \
+					--disable-rpiled --enable-sse
 else ifeq ($(DEB_HOST_GNU_CPU),aarch64)
-  QB_LIBS_FLAGS += --disable-cg --enable-opengles --enable-opengles3 \
-					--enable-opengles3_1 --enable-opengles3_2
+  QB_LIBS_FLAGS += --disable-angle --disable-cg --enable-opengles \
+					--enable-opengles3 --enable-opengles3_1 --enable-opengles3_2
 else ifeq ($(DEB_HOST_ARCH),armhf)
   QB_LIBS_FLAGS += --disable-cg --enable-floathard --enable-neon \
 					--enable-opengles --enable-opengles3 --enable-opengles3_1 \
@@ -110,7 +112,7 @@ else ifeq ($(DEB_HOST_ARCH),armel)
   QB_LIBS_FLAGS += --disable-cg --enable-floatsoftfp --enable-opengles \
 					--enable-opengles3 --enable-opengles3_1 --enable-opengles3_2
 else
-  QB_LIBS_FLAGS += --disable-cg --disable-opengles
+  QB_LIBS_FLAGS += --disable-angle --disable-cg --disable-opengles
 endif
 
 ifneq ($(GIT_HASH),)
@@ -131,8 +133,9 @@ ifneq ($(glsltest),true)
 endif
 
 export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND \
-		DEB_CXXFLAGS_MAINT_APPEND DEB_LDFLAGS_MAINT_APPEND \
-		DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC QT_SELECT SHELL
+		DEB_CPPFLAGS_MAINT_PREPEND DEB_CXXFLAGS_MAINT_APPEND \
+		DEB_LDFLAGS_MAINT_APPEND DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC \
+		QT_SELECT SHELL
 
 
 %:

@@ -1,5 +1,49 @@
 # These are symlinks only to preserve interactions with other applications.
 package-section-games-but-has-usr-bin *
 
+# False positive: Strings are not exclusively English.
+spelling-error-in-binary Apparence Appearance *
+spelling-error-in-binary Autor Author *
+spelling-error-in-binary Databas Database *
+spelling-error-in-binary Geometrie Geometry *
+spelling-error-in-binary Informations Information *
+spelling-error-in-binary Installe Installer *
+spelling-error-in-binary Mor More *
+spelling-error-in-binary Plattform Platform *
+spelling-error-in-binary Programm Program *
+spelling-error-in-binary Programms Programs *
+spelling-error-in-binary Soket Socket *
+spelling-error-in-binary Standart Standard *
+spelling-error-in-binary Suport Support *
+spelling-error-in-binary Tage Stage *
+spelling-error-in-binary Variabele Variable *
+spelling-error-in-binary Visuale Visual *
+spelling-error-in-binary absolut absolute *
+spelling-error-in-binary accesible accessible *
+spelling-error-in-binary acess access *
+spelling-error-in-binary adress address *
+spelling-error-in-binary adresses addresses *
+spelling-error-in-binary assuma assume *
+spelling-error-in-binary buil build *
+spelling-error-in-binary buit built *
+spelling-error-in-binary compatibile compatible *
+spelling-error-in-binary complet complete *
+spelling-error-in-binary conect connect *
+spelling-error-in-binary correspondance correspondence *
+spelling-error-in-binary diferent different *
+spelling-error-in-binary dont don't *
+spelling-error-in-binary effekt effect *
+spelling-error-in-binary elment element *
+spelling-error-in-binary exemple example *
+spelling-error-in-binary existant existent *
+spelling-error-in-binary filsystem filesystem *
+spelling-error-in-binary funcions functions *
+spelling-error-in-binary gard guard *
+spelling-error-in-binary inclues includes *
+spelling-error-in-binary invalide invalid *
+spelling-error-in-binary leat least *
+spelling-error-in-binary lik link *
+spelling-error-in-binary lon long *
+
 # False positive: *.dsp files aren't Windows files but audio filter sources.
 windows-devel-file-in-package *

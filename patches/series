@@ -1,10 +1,11 @@
-0000-use-system-libstb.patch
+0000-use-system-libs.patch
 0001-print-fatal-errors-to-stdout.patch
 0002-fix-armhf-NEON-support.patch
-0003-use-system-spirv-cross.patch
+0003-remove-assets-from-updater.patch
 0004-remove-GLSL-library-checks.patch
 0005-add-qhash-include.patch
 0006-update-doxygen-config.patch
 0007-fix-quickbuild-behavior.patch
-#0008-make-builds-reproducible.patch
-#0009-default-config-file.patch
+0008-fix-spelling-and-grammar.patch
+#0009-make-builds-reproducible.patch
+#0010-default-config-file.patch
