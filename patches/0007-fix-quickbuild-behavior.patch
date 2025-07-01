@@ -1,0 +1,52 @@
+Description: Fix QuickBuild deficiencies and link to system libraries
+Author: Peter J. Mello <admin@petermello.net>
+Origin: other
+Forwarded: no
+Last-Update: 2025-06-30
+
+--- a/qb/config.libs.sh
++++ b/qb/config.libs.sh
+@@ -24,7 +24,7 @@ check_switch '' NOUNUSED_VARIABLE -Wno-u
+ [ "${GLOBAL_CONFIG_DIR:-}" ] ||
+ {	case "$PREFIX" in
+ 		/usr*) GLOBAL_CONFIG_DIR=/etc ;;
+-		*) GLOBAL_CONFIG_DIR="$PREFIX"/etc ;;
++		*) GLOBAL_CONFIG_DIR="${PREFIX}/etc" ;;
+ 	esac
+ }
+ 
+@@ -155,9 +155,9 @@ fi
+    add_define MAKEFILE libretro "$LIBRETRO"
+ }
+ 
+-add_define MAKEFILE ASSETS_DIR "${ASSETS_DIR:-$SHARE_DIR}/retroarch"
+-add_define MAKEFILE FILTERS_DIR "${FILTERS_DIR:-$SHARE_DIR}/retroarch"
+-add_define MAKEFILE CORE_INFO_DIR "${CORE_INFO_DIR:-$SHARE_DIR}/retroarch"
++add_define MAKEFILE ASSETS_DIR "${ASSETS_DIR:-${SHARE_DIR}/retroarch}"
++add_define MAKEFILE FILTERS_DIR "${FILTERS_DIR:-${SHARE_DIR}/retroarch}"
++add_define MAKEFILE CORE_INFO_DIR "${CORE_INFO_DIR:-${SHARE_DIR}/retroarch}"
+ add_define MAKEFILE BIN_DIR "${BIN_DIR:-${PREFIX}/bin}"
+ add_define MAKEFILE DOC_DIR "${DOC_DIR:-${SHARE_DIR}/doc/retroarch}"
+ add_define MAKEFILE MAN_DIR "${MAN_DIR:-${SHARE_DIR}/man}"
+@@ -353,9 +353,9 @@ check_enabled SSL BUILTINMBEDTLS 'builti
+ check_enabled SSL BUILTINBEARSSL 'builtin bearssl' 'ssl is' false
+ 
+ if [ "$HAVE_SYSTEMMBEDTLS" = "auto" ]; then SYSTEMMBEDTLS_IS_AUTO=yes; else SYSTEMMBEDTLS_IS_AUTO=no; fi
+-check_val '' SYSTEMMBEDTLS '-lmbedtls' 'mbedtls' mbedtls 2.5.1 '' true
+-check_val '' SYSTEMMBEDX509 '-lmbedx509' 'mbedtls' mbedx509 2.5.1 '' true
+-check_val '' SYSTEMMBEDCRYPTO '-lmbedcrypto' 'mbedtls' mbedcrypto 2.5.1 '' true
++check_val '' SYSTEMMBEDTLS '-lmbedtls' 'mbedtls' mbedtls 2.05.1 '' true
++check_val '' SYSTEMMBEDX509 '-lmbedx509' 'mbedtls' mbedx509 2.05.1 '' true
++check_val '' SYSTEMMBEDCRYPTO '-lmbedcrypto' 'mbedtls' mbedcrypto 2.05.1 '' true
+ if [ "$HAVE_SYSTEMMBEDTLS" = 'yes' ] && [ -z "$SYSTEMMBEDTLS_VERSION" ]; then
+   # Ancient versions (such as the one included in the Ubuntu version used for
+   # build checks) don't have this header
+@@ -563,7 +563,7 @@ check_val '' XINERAMA -lXinerama '' xine
+ check_lib '' XRANDR -lXrandr
+ check_header '' XSHM X11/Xlib.h X11/extensions/XShm.h
+ check_val '' XKBCOMMON -lxkbcommon '' xkbcommon 0.3.2 '' false
+-check_val '' WAYLAND '-lwayland-egl -lwayland-client' '' wayland-egl 10.1.0 '' false
++check_val '' WAYLAND '-lwayland-egl -lwayland-client' '' wayland-egl 1.10.1 '' false
+ check_val '' WAYLAND_CURSOR -lwayland-cursor '' wayland-cursor 1.12 '' false
+ check_pkgconf WAYLAND_PROTOS wayland-protocols 1.37
+ check_pkgconf WAYLAND_SCANNER wayland-scanner '1.15 1.12'

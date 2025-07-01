@@ -5,6 +5,6 @@
 0004-remove-GLSL-library-checks.patch
 0005-add-qhash-include.patch
 0006-update-doxygen-config.patch
-#0007-make-builds-reproducible.patch
-#0008-enforce-c++17-standard.patch
+0007-fix-quickbuild-behavior.patch
+#0008-make-builds-reproducible.patch
 #0009-default-config-file.patch
