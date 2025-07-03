@@ -8,7 +8,7 @@ Last-Update: 2024-05-24
 
 --- a/retroarch.c
 +++ b/retroarch.c
-@@ -7770,6 +7770,9 @@ bool retroarch_main_init(int argc, char
+@@ -7773,6 +7773,9 @@ bool retroarch_main_init(int argc, char
  
     if (setjmp(global->error_sjlj_context) > 0)
     {

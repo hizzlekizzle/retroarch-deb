@@ -7,5 +7,6 @@
 0006-update-doxygen-config.patch
 0007-fix-quickbuild-behavior.patch
 0008-fix-spelling-and-grammar.patch
-#0009-make-builds-reproducible.patch
-#0010-default-config-file.patch
+0009-replace-distutils-with-setuptools.patch
+#0010-make-builds-reproducible.patch
+#0011-default-config-file.patch

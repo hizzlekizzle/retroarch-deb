@@ -1,8 +1,8 @@
 Description: Fix spelling and grammar deficiencies in source code
 Author: Peter J. Mello <admin@petermello.net>
-Origin: other
+Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian/commit/patches/0008-fix-spelling-and-grammar.patch?id=00fcf2a6c54be09d8b84443651063c7527f420db
 Forwarded: no
-Last-Update: 2025-07-01
+Last-Update: 2025-07-03
 
 --- a/deps/rcheevos/src/rcheevos/consoleinfo.c
 +++ b/deps/rcheevos/src/rcheevos/consoleinfo.c
@@ -15,6 +15,28 @@ Last-Update: 2025-07-01
  };
  static const rc_memory_regions_t rc_memory_regions_appleii = { _rc_memory_regions_appleii, 2 };
  
+--- a/deps/switchres/custom_video_drmkms.cpp
++++ b/deps/switchres/custom_video_drmkms.cpp
+@@ -277,7 +277,7 @@ drmkms_timing::drmkms_timing(char *devic
+ 	if ((strlen(device_name) + 1) > 32)
+ 	{
+ 		strncpy(m_device_name, device_name, 31);
+-		log_error("DRM/KMS: <%d> (drmkms_timing) [ERROR] the devine name is too long it has been trucated to %s\n", m_id, m_device_name);
++		log_error("DRM/KMS: <%d> (drmkms_timing) [ERROR] The device name is too long; it has been truncated to %s.\n", m_id, m_device_name);
+ 	}
+ 	else
+ 		strcpy(m_device_name, device_name);
+--- a/deps/switchres/custom_video_xrandr.cpp
++++ b/deps/switchres/custom_video_xrandr.cpp
+@@ -109,7 +109,7 @@ xrandr_timing::xrandr_timing(char *devic
+ 	if ((strlen(device_name) + 1) > 32)
+ 	{
+ 		strncpy(m_device_name, device_name, 31);
+-		log_error("XRANDR: <%d> (xrandr_timing) [ERROR] the device name is too long it has been trucated to %s\n", m_id, m_device_name);
++		log_error("XRANDR: <%d> (xrandr_timing) [ERROR] The device name is too long; it has been truncated to %s.\n", m_id, m_device_name);
+ 	}
+ 	else
+ 		strcpy(m_device_name, device_name);
 --- a/intl/msg_hash_us.h
 +++ b/intl/msg_hash_us.h
 @@ -4565,7 +4565,7 @@ MSG_HASH(

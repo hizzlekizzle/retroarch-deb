@@ -1,6 +1,6 @@
 Description: Remove compiled-in datestamps making builds non-reproducible
 Author: Peter J. Mello <admin@petermello.net>
-Origin: other
+Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian/commit/patches?id=07804e2a4dd8a3ae4419b5a7079f91e40fe6ebcd
 Forwarded: no
 Last-Update: 2025-06-24
 

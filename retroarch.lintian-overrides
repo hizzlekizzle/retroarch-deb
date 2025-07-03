@@ -44,6 +44,28 @@ spelling-error-in-binary invalide invalid *
 spelling-error-in-binary leat least *
 spelling-error-in-binary lik link *
 spelling-error-in-binary lon long *
+spelling-error-in-binary ment meant *
+spelling-error-in-binary meny many *
+spelling-error-in-binary nam name *
+spelling-error-in-binary pach patch *
+spelling-error-in-binary paralel parallel *
+spelling-error-in-binary persistance persistence *
+spelling-error-in-binary persistant persistent *
+spelling-error-in-binary plattforms platforms *
+spelling-error-in-binary posible possible *
+spelling-error-in-binary possibile possible *
+spelling-error-in-binary previos previous *
+spelling-error-in-binary procesor processor *
+spelling-error-in-binary quitt quit *
+spelling-error-in-binary recomend recommend *
+spelling-error-in-binary recommand recommend *
+spelling-error-in-binary ressources resources *
+spelling-error-in-binary secund second *
+spelling-error-in-binary sence sense *
+spelling-error-in-binary sequencial sequential *
+spelling-error-in-binary serie series *
+spelling-error-in-binary szes sizes *
+spelling-error-in-binary visuales visuals *
 
 # False positive: *.dsp files aren't Windows files but audio filter sources.
 windows-devel-file-in-package *

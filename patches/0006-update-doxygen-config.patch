@@ -1,6 +1,6 @@
 Description: Adapt upstream Doxygen configuration to produce better offline docs
 Author: Peter J. Mello <admin@petermello.net>
-Origin: other
+Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian/commit/patches/0006-update-doxygen-config.patch?id=7ed2946c2a08c4038f9f29ba05963a5bf56b2073
 Forwarded: not-needed
 Last-Update: 2025-06-26
 

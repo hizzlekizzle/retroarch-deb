@@ -1,0 +1,49 @@
+Description: Replace distutils imports with setuptools
+Author: Peter J. Mello <admin@petermello.net>
+Origin: other
+Forwarded: not-needed
+Last-Update: 2025-07-03
+
+--- a/tools/ps3/ps3py/setup.py
++++ b/tools/ps3/ps3py/setup.py
+@@ -1,8 +1,33 @@
+-from distutils.core import setup, Extension
++from setuptools import Extension, find_packages, setup
+ 
+-module1 = Extension('pkgcrypt', sources = ['crypt.c'])
+-
+-setup (name = 'pkgcrypt',
+-       version = '1.0',
+-       description = 'C implementation of the crypt function from pkg.py',
+-       ext_modules = [module1])
++setup(
++    name='pkgcrypt',
++    version='1.0.0',
++    description='C implementation of the crypt function from pkg.py',
++    author='PSL1GHT Development Team',
++    author_email='francois.galea@cea.fr',
++    url='https://psl1ght.com/',
++    download_url='https://github.com/ps3dev/PSL1GHT/zipball/master',
++    packages=find_packages(
++        where='.',
++        include=['*']
++    ),
++    ext_modules=[
++        Extension(
++            name='pkgcrypt',
++            sources=['crypt.c'],
++            language='c'
++        )
++    ],
++    classifiers=[
++        'Development Status :: 6 - Mature',
++        'Environment :: Other Environment',
++        'Intended Audience :: Developers',
++        'Operating System :: Other OS',
++        'Programming Language :: C',
++        'Programming Language :: Python :: 3',
++        'Programming Language :: Python :: Implementation :: CPython',
++        'Topic :: System :: Hardware'
++    ],
++    license='MIT'
++)

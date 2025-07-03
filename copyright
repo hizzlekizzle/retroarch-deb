@@ -2,17 +2,14 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: RetroArch
 Upstream-Contact: Daniel De Matteis <libretro@gmail.com>
 Source: https://github.com/libretro/RetroArch/releases
-Files-Excluded: deps/bearssl-0.6/*.exe deps/glslang deps/libShake/examples
- deps/switchres/examples emscripten/library_rweb*.js gfx/drivers/gx_gfx_*.c
- gfx/include/Cg gfx/include/d3d9 gfx/include/userland/interface/mmal/test
- libretro-common/include/compat/zlib pkg/android/phoenix/gradle/wrapper/*.jar
- pkg/apple/WebServer/GCDWebUploader/GCDWebUploader.bundle/Contents/Resources/js
- pkg/ctr/tools/*.exe pkg/ctr/tools/*-linux pkg/emscripten
- pkg/msvc-uwp/RetroArch-msvcUWP/ANGLE/x64/*.dll
- pkg/msvc-uwp/RetroArch-msvcUWP/MESA/x64/*.dll pkg/ps3/SSNE10000/PARAM.SFO
- pkg/ps3_iso/PS3_DISC.SFB pkg/ps3_iso/PS3_GAME/PARAM.SFO
- pkg/windows/x86_64/*.dll vita/launcher/builder/vita-*.exe
- nvdaControllerClient64.dll
+Files-Excluded: deps/SPIRV-Cross deps/bearssl-0.6 deps/glslang
+ deps/libShake/examples deps/switchres/examples emscripten/library_rweb*.js
+ gfx/drivers/gx_gfx_*.c gfx/include/Cg gfx/include/d3d9
+ gfx/include/userland/interface/mmal/test libretro-common/include/compat/zlib
+ pkg/android/phoenix/gradle/wrapper/*.jar pkg/apple pkg/ctr pkg/emscripten
+ pkg/msvc pkg/msvc-uwp pkg/ps3/SSNE10000/PARAM.SFO pkg/ps3_iso/PS3_DISC.SFB
+ pkg/ps3_iso/PS3_GAME/PARAM.SFO pkg/windows/x86_64/*.dll
+ vita/launcher/builder/vita-*.exe wii/libogc/libs nvdaControllerClient64.dll
 
 Files: *
 Copyright: 2005–2025, The RetroArch Team

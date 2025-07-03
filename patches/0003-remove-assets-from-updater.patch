@@ -3,7 +3,7 @@ Description: Remove the Update Assets menu entry from the Online Updater
  should be handled by APT as they are installed under /usr. Eliminating this
  entry removes the potential for confusion about this issue with users.
 Author: Peter J. Mello <admin@petermello.net>
-Origin: other
+Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian/commit/patches/0003-remove-assets-from-updater.patch?id=00fcf2a6c54be09d8b84443651063c7527f420db
 Forwarded: no
 Last-Update: 2025-07-02
 
