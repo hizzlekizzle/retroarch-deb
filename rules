@@ -10,18 +10,14 @@
 SHELL                        ::= $(realpath /bin/bash)
 MAKEFLAGS                     += --output-sync=target
 
-# Fix hardening-no-bindnow and hardening-no-pie
 DEB_BUILD_MAINT_OPTIONS      ::= future=+lfs hardening=+all optimize=+lto \
 									reproducible=+fixfilepath
-DEB_CFLAGS_MAINT_APPEND      ::= -DLUA_USE_POSIX
 DEB_CPPFLAGS_MAINT_PREPEND   ::= -U_FORTIFY_SOURCE
-DEB_CXXFLAGS_MAINT_APPEND    ::= -DLUA_USE_POSIX
 DEB_LDFLAGS_MAINT_APPEND     ::= -lGL -pthread
 DEB_LDFLAGS_MAINT_PREPEND    ::= -Wl,--copy-dt-needed-entries
 DOXYGEN                      ::= $(realpath /bin/doxygen)
 DPKG_EXPORT_BUILDFLAGS       ::= 1
 DPKG_EXPORT_BUILDTOOLS       ::= 1
-INSTALL_d                    ::= $(realpath /bin/install) -vd
 LTO                          ::= 1
 MAKE_ARGS                    ::= "QT_VERSION=qt6"
 MOC                          ::= /usr/lib/qt6/libexec/moc
@@ -58,10 +54,16 @@ endif
 
 include /usr/share/dpkg/default.mk
 
-dv       ::= $(DEB_VERSION)
+CP_afv                       ::= $(realpath /bin/cp) --archive --force --verbose
+INSTALL_d                    ::= $(realpath /bin/install) -vd
+
 pcfilesd ::= $(CURDIR)/debian/pkgconf
 usrgames ::= $(CURDIR)/debian/retroarch/usr/games
 usrshare ::= $(CURDIR)/debian/retroarch/usr/share
+usrdocs  ::= $(usrshare)/docs/retroarch
+shadersd ::= $(usrshare)/libretro/shaders/shaders_cg
+
+dv       ::= $(DEB_VERSION)
 GIT_HASH ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
 
 # See ./configure --help for valid flags for the QuickBuild framework
@@ -115,7 +117,7 @@ else
   QB_LIBS_FLAGS += --disable-angle --disable-cg --disable-opengles
 endif
 
-ifneq ($(GIT_HASH),)
+ifneq (,$(GIT_HASH))
   GIT_VERSION  ::= $(GIT_HASH)
   MAKE_ARGS     += "GIT_VERSION='$(GIT_HASH)'"
   export GIT_VERSION
@@ -132,8 +134,7 @@ ifneq ($(glsltest),true)
   MAKE_ARGS     += GLSLANG_LIBS+="-lglslang -lOGLCompiler -lHLSL"
 endif
 
-export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND \
-		DEB_CPPFLAGS_MAINT_PREPEND DEB_CXXFLAGS_MAINT_APPEND \
+export DEB_BUILD_MAINT_OPTIONS DEB_CPPFLAGS_MAINT_PREPEND \
 		DEB_LDFLAGS_MAINT_APPEND DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC \
 		QT_SELECT SHELL
 
@@ -152,11 +153,11 @@ execute_after_dh_auto_clean:
 execute_before_dh_auto_configure-arch:
 	LC_ALL=C.UTF-8 sed -e 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/retroarch.cfg" >"$(CURDIR)/debian/retroarch.cfg"
+# The qt6-base-dev package in the Ubuntu 22.04 package repositories fails to
+# install the pkgconf files for the Qt6 libraries, and since Quickbuild lacks
+# the versatility to fallback to the CMake config files that /are/ provided, the
+# .pc files must be instantiated here at build time to configure successfully.
 ifeq ($(uver),22.04)
-	# The qt6-base-dev package in the Ubuntu 22.04 package repositories fails
-	# to install the pkgconf files for the Qt6 libraries, and since Quickbuild
-	# lacks the versatility to fallback to the CMake config files it /does/
-	# install, the .pc files must be instantiated here at build time.
 	@$(INSTALL_d) "$(pcfilesd)"
 	set -e; for pcfile in Concurrent Core Gui Network Platform Widgets; do \
 		test -e /usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/Qt6$${pcfile}.pc || \
@@ -194,18 +195,31 @@ ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
 	$(DOXYGEN) "$(CURDIR)/Doxyfile"
 endif
 
-# Noop the entire upstream installation routine, only use debhelper routines.
+# No-op the entire upstream installation routine, only use debhelper routines.
 override_dh_auto_install-arch:
 
 override_dh_auto_install-indep:
 	@$(INSTALL_d) "$(CURDIR)/debian/tmp/usr/share/doc/libretro-api"
-	@cp -Rvfa "$(CURDIR)/doxygen/html" \
+	@$(CP_afv) "$(CURDIR)/doxygen/html" \
 		"$(CURDIR)/debian/tmp/usr/share/doc/libretro-api"
 
 execute_after_dh_install-arch:
-	chrpath -d "$(CURDIR)/debian/retroarch/usr/games/retroarch"
-	@cp -vfa "$(CURDIR)/tools/cg2glsl.py" "$(usrgames)/retroarch-cg2glsl"
+	chrpath --delete "$(usrgames)/retroarch"
+	@$(CP_afv) "$(CURDIR)/tools/cg2glsl.py" "$(usrgames)/retroarch-cg2glsl"
 	@chmod -v 0755 "$(usrgames)/retroarch-cg2glsl"
+	@rm -Rfv "$(shadersd)/docs" "$(shadersd)/.gitlab-ci.yml" \
+		"$(shadersd)/Makefile" "$(shadersd)/compat_includes.inc" \
+		"$(shadersd)/configure"
+	find -HO3 "$(usrshare)/libretro/database" -ignore_readdir_race \( -iname \
+		'*.xml' -o -iname '*.zip' \) -type f -printf 'Deleting %p…\n' -delete
+
+execute_after_dh_installdocs-arch:
+	@$(CP_afv) "$(CURDIR)/deps/switchres/README.md" "$(usrdocs)/switchres.md"
+	@$(CP_afv) "$(CURDIR)/media/shaders_cg/docs/README" \
+		"$(usrdocs)/common-shaders.txt"
+	@$(CP_afv) "$(CURDIR/media/autoconfig/README.md" \
+		"$(usrdocs)/retropad-autoconfig.md"
+	@$(CP_afv) "$(CURDIR)/media/libretrodb/README.md" "$(usrdocs)/libretrodb.md"
 
 override_dh_installdocs-indep:
 	dh_installdocs -O-v -plibretro-dev-doc --doc-main-package=retroarch-dev
@@ -217,15 +231,19 @@ ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
 endif
 
 execute_after_dh_link-indep:
-	jdupes -rl "$(CURDIR)/debian/libretro-dev-doc/usr"
-
-override_dh_shlibdeps:
-	dh_shlibdeps -O-v -l/lib/$(DEB_HOST_MULTIARCH)
+# Doxygen has a nasty, persistent habit of generating backend JavaScript for the
+# search feature that becomes duplicated across several files. This target scans
+# the Doxygen docs for any such identifcal files and replaces all but one from
+# each set with symlinks to that remaining file.
+	$(info Removing duplicate files from the Doxygen-generated documentation…)
+	@jdupes --recurse --link-soft --symlinks --print-summarize \
+		"$(CURDIR)/debian/libretro-dev-doc/usr"
 
 .NOTPARALLEL: override_dh_auto_build-arch
 .PHONY: execute_after_dh_auto_clean execute_after_dh_install-arch \
-		execute_after_dh_link-indep execute_before_dh_auto_clean \
-		execute_before_dh_auto_configure-arch override_dh_auto_build-arch \
-		override_dh_auto_build-indep override_dh_auto_configure-arch \
-		override_dh_auto_install-arch override_dh_auto_install-indep \
-		override_dh_doxygen override_dh_installdocs-indep override_dh_shlibdeps
+		execute_after_dh_installdocs-arch execute_after_dh_link-indep \
+		execute_before_dh_auto_clean execute_before_dh_auto_configure-arch \
+		override_dh_auto_build-arch override_dh_auto_build-indep \
+		override_dh_auto_configure-arch override_dh_auto_install-arch \
+		override_dh_auto_install-indep override_dh_doxygen \
+		override_dh_installdocs-indep

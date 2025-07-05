@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText:  2025, Peter J. Mello <admin@petermello.net>
+#
+# SPDX-License-Identifier: MPL-2.0
+Test-Command: builtin echo -e 'AppStream metadata validation performed on: ' \
+  "$(date -Ru)\\n\\nFile: com.libretro.RetroArch.metainfo.xml\\n" \
+    >"${AUTOPKGTEST_ARTIFACTS}/appstreamTest.txt" && appstreamcli validate \
+      --no-color --pedantic -- ./com.libretro.RetroArch.metainfo.xml | tee -p \
+        --append "${AUTOPKGTEST_ARTIFACTS}/appstreamTest.txt"
+Restrictions: needs-internet, superficial
+Features: test-name=validate_metainfo_file
+Depends: appstream, coreutils
+Architecture: any
