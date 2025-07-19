@@ -54,13 +54,14 @@ endif
 
 include /usr/share/dpkg/default.mk
 
-CP_afv                       ::= $(realpath /bin/cp) --archive --force --verbose
-INSTALL_d                    ::= $(realpath /bin/install) -vd
+CP_vfa                       ::= $(realpath /bin/cp) --verbose --force --archive
+INSTALL_vd                   ::= $(realpath /bin/install) --verbose --directory
 
+at_dhm   ::= @DEB_HOST_MULTIARCH@
 pcfilesd ::= $(CURDIR)/debian/pkgconf
 usrgames ::= $(CURDIR)/debian/retroarch/usr/games
 usrshare ::= $(CURDIR)/debian/retroarch/usr/share
-usrdocs  ::= $(usrshare)/docs/retroarch
+usrdoc   ::= $(usrshare)/doc/retroarch
 shadersd ::= $(usrshare)/libretro/shaders/shaders_cg
 
 dv       ::= $(DEB_VERSION)
@@ -69,7 +70,7 @@ GIT_HASH ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
 # See ./configure --help for valid flags for the QuickBuild framework
 QB_BUILD_FLAGS ::= --prefix=/usr --bindir=/usr/games --datarootdir=/usr/share \
 	--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
-	--sysconfdir=/etc --build="$(DEB_BUILD_GNU_TYPE)" \
+	--sysconfdir=/etc --build=$(DEB_BUILD_GNU_TYPE) \
 	--with-assets_dir=/usr/share/libretro \
 	--with-filters_dir="/usr/lib/$(DEB_HOST_MULTIARCH)/retroarch" \
 	--with-core_info_dir=/usr/share/libretro
@@ -81,7 +82,7 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--disable-coreaudio --enable-crtswitchres --disable-d3d9 --disable-d3dx \
 	--enable-dbus --disable-dinput --disable-dr_flac --enable-dr_mp3 \
 	--disable-dsound --enable-dsp_filter --enable-dylib --disable-dynamic_egl \
-	--enable-egl --enable-ffmpeg --enable-flac --enable-freetype \
+	--enable-egl --enable-ffmpeg --disable-flac --enable-freetype \
 	--enable-game_ai --disable-gdi --enable-glslang --enable-hid --enable-jack \
 	--enable-kms --enable-libdecor --enable-libshake --enable-libusb \
 	--enable-lua --enable-materialui --enable-memfd_create --enable-mmap \
@@ -93,12 +94,13 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-sdl2 --enable-sixel --enable-slang --enable-spirv_cross \
 	--enable-ssa --enable-ssl --enable-systemd --enable-systemmbedtls \
 	--enable-threads --enable-thread_storage --disable-tinyalsa --enable-udev \
-	--enable-v4l2 --disable-vg --enable-video_filter --disable-videocore \
-	--enable-videoprocessor --enable-vulkan --disable-wasapi --enable-wayland \
-	--enable-wifi --disable-winmm --disable-winrawinput --enable-x11 \
-	--disable-xaudio --enable-xdelta --enable-xi2 --enable-xinerama \
-	--enable-xmb --enable-xrandr --enable-xscrnsaver --enable-xshm \
-	--enable-xvideo --enable-zlib --enable-zstd
+	--disable-update_assets --enable-v4l2 --disable-vg --enable-video_filter \
+	--disable-videocore --enable-videoprocessor --enable-vulkan \
+	--disable-wasapi --enable-wayland --enable-wifi --disable-winmm \
+	--disable-winrawinput --enable-x11 --disable-xaudio --enable-xdelta \
+	--enable-xi2 --enable-xinerama --enable-xmb --enable-xrandr \
+	--enable-xscrnsaver --enable-xshm --enable-xvideo --enable-zlib \
+	--enable-zstd
 
 ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
   QB_LIBS_FLAGS += --disable-angle --enable-cg --disable-opengles \
@@ -151,14 +153,18 @@ execute_after_dh_auto_clean:
 	dh_auto_clean -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters
 
 execute_before_dh_auto_configure-arch:
-	LC_ALL=C.UTF-8 sed -e 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
-		"$(CURDIR)/retroarch.cfg" >"$(CURDIR)/debian/retroarch.cfg"
+	$(info *** Lines to modify in retroarch.cfg to match build architecture:)
+	@grep -n '$(at_dhm)' "$(CURDIR)/debian/retroarch.cfg.in"; echo
+	@env LC_ALL=C.UTF-8 sed -e 's/$(at_dhm)/$(DEB_HOST_MULTIARCH)/g' \
+		"$(CURDIR)/debian/retroarch.cfg.in" >"$(CURDIR)/debian/retroarch.cfg"
+	$(info *** Same lines in retroarch.cfg after buildsystem modifications:)
+	@grep -n '$(DEB_HOST_MULTIARCH)' "$(CURDIR)/debian/retroarch.cfg"
 # The qt6-base-dev package in the Ubuntu 22.04 package repositories fails to
 # install the pkgconf files for the Qt6 libraries, and since Quickbuild lacks
 # the versatility to fallback to the CMake config files that /are/ provided, the
 # .pc files must be instantiated here at build time to configure successfully.
 ifeq ($(uver),22.04)
-	@$(INSTALL_d) "$(pcfilesd)"
+	@$(INSTALL_vd) "$(pcfilesd)"
 	set -e; for pcfile in Concurrent Core Gui Network Platform Widgets; do \
 		test -e /usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/Qt6$${pcfile}.pc || \
 		LC_ALL=C.UTF-8 sed -e 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
@@ -199,27 +205,29 @@ endif
 override_dh_auto_install-arch:
 
 override_dh_auto_install-indep:
-	@$(INSTALL_d) "$(CURDIR)/debian/tmp/usr/share/doc/libretro-api"
-	@$(CP_afv) "$(CURDIR)/doxygen/html" \
+	@$(INSTALL_vd) "$(CURDIR)/debian/tmp/usr/share/doc/libretro-api"
+	@$(CP_vfa) "$(CURDIR)/doxygen/html" \
 		"$(CURDIR)/debian/tmp/usr/share/doc/libretro-api"
 
 execute_after_dh_install-arch:
 	chrpath --delete "$(usrgames)/retroarch"
-	@$(CP_afv) "$(CURDIR)/tools/cg2glsl.py" "$(usrgames)/retroarch-cg2glsl"
+	@$(CP_vfa) "$(CURDIR)/tools/cg2glsl.py" "$(usrgames)/retroarch-cg2glsl"
 	@chmod -v 0755 "$(usrgames)/retroarch-cg2glsl"
 	@rm -Rfv "$(shadersd)/docs" "$(shadersd)/.gitlab-ci.yml" \
 		"$(shadersd)/Makefile" "$(shadersd)/compat_includes.inc" \
 		"$(shadersd)/configure"
-	find -HO3 "$(usrshare)/libretro/database" -ignore_readdir_race \( -iname \
-		'*.xml' -o -iname '*.zip' \) -type f -printf 'Deleting %p…\n' -delete
+	find -H -O3 "$(usrshare)/libretro/database" -ignore_readdir_race \
+		\( -iname '*.xml' -o -iname '*.zip' \) -type f \
+		-printf 'Deleting %p…\n' -delete
 
 execute_after_dh_installdocs-arch:
-	@$(CP_afv) "$(CURDIR)/deps/switchres/README.md" "$(usrdocs)/switchres.md"
-	@$(CP_afv) "$(CURDIR)/media/shaders_cg/docs/README" \
-		"$(usrdocs)/common-shaders.txt"
-	@$(CP_afv) "$(CURDIR/media/autoconfig/README.md" \
-		"$(usrdocs)/retropad-autoconfig.md"
-	@$(CP_afv) "$(CURDIR)/media/libretrodb/README.md" "$(usrdocs)/libretrodb.md"
+	@if test ! -d "$(usrdoc)"; then $(INSTALL_vd) "$(usrdoc)"; fi
+	@$(CP_vfa) "$(CURDIR)/deps/switchres/README.md" "$(usrdoc)/switchres.md"
+	@$(CP_vfa) "$(CURDIR)/media/shaders_cg/docs/README" \
+		"$(usrdoc)/common-shaders.txt"
+	@$(CP_vfa) "$(CURDIR/media/autoconfig/README.md" \
+		"$(usrdoc)/retropad-autoconfig.md"
+	@$(CP_vfa) "$(CURDIR)/media/libretrodb/README.md" "$(usrdoc)/libretrodb.md"
 
 override_dh_installdocs-indep:
 	dh_installdocs -O-v -plibretro-dev-doc --doc-main-package=retroarch-dev
