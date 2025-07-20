@@ -12,6 +12,7 @@ MAKEFLAGS                     += --output-sync=target
 
 DEB_BUILD_MAINT_OPTIONS      ::= future=+lfs hardening=+all optimize=+lto \
 									reproducible=+fixfilepath
+DEB_CFLAGS_MAINT_APPEND      ::= -Wno-incompatible-pointer-types
 DEB_CPPFLAGS_MAINT_PREPEND   ::= -U_FORTIFY_SOURCE
 DEB_LDFLAGS_MAINT_APPEND     ::= -lGL -pthread
 DEB_LDFLAGS_MAINT_PREPEND    ::= -Wl,--copy-dt-needed-entries
@@ -59,10 +60,10 @@ INSTALL_vd                   ::= $(realpath /bin/install) --verbose --directory
 
 at_dhm   ::= @DEB_HOST_MULTIARCH@
 pcfilesd ::= $(CURDIR)/debian/pkgconf
-usrgames ::= $(CURDIR)/debian/retroarch/usr/games
-usrshare ::= $(CURDIR)/debian/retroarch/usr/share
-usrdoc   ::= $(usrshare)/doc/retroarch
-shadersd ::= $(usrshare)/libretro/shaders/shaders_cg
+data-shr ::= $(CURDIR)/debian/retroarch-data/usr/share/libretro
+ra-docs  ::= $(CURDIR)/debian/retroarch/usr/share/doc/retroarch
+ragamesd ::= $(CURDIR)/debian/retroarch/usr/games
+shadersd ::= $(data-shr)/shaders/shaders_cg
 
 dv       ::= $(DEB_VERSION)
 GIT_HASH ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
@@ -136,9 +137,9 @@ ifneq ($(glsltest),true)
   MAKE_ARGS     += GLSLANG_LIBS+="-lglslang -lOGLCompiler -lHLSL"
 endif
 
-export DEB_BUILD_MAINT_OPTIONS DEB_CPPFLAGS_MAINT_PREPEND \
-		DEB_LDFLAGS_MAINT_APPEND DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC \
-		QT_SELECT SHELL
+export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND \
+		DEB_CPPFLAGS_MAINT_PREPEND DEB_LDFLAGS_MAINT_APPEND \
+		DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC QT_SELECT SHELL
 
 
 %:
@@ -153,10 +154,10 @@ execute_after_dh_auto_clean:
 	dh_auto_clean -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters
 
 execute_before_dh_auto_configure-arch:
-	$(info *** Lines to modify in retroarch.cfg to match build architecture:)
-	@grep -n '$(at_dhm)' "$(CURDIR)/debian/retroarch.cfg.in"; echo
 	@env LC_ALL=C.UTF-8 sed -e 's/$(at_dhm)/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/debian/retroarch.cfg.in" >"$(CURDIR)/debian/retroarch.cfg"
+	$(info *** Lines to modify in retroarch.cfg to match build architecture:)
+	@grep -n '$(at_dhm)' "$(CURDIR)/debian/retroarch.cfg.in"; echo
 	$(info *** Same lines in retroarch.cfg after buildsystem modifications:)
 	@grep -n '$(DEB_HOST_MULTIARCH)' "$(CURDIR)/debian/retroarch.cfg"
 # The qt6-base-dev package in the Ubuntu 22.04 package repositories fails to
@@ -202,32 +203,38 @@ ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
 endif
 
 # No-op the entire upstream installation routine, only use debhelper routines.
-override_dh_auto_install-arch:
-
-override_dh_auto_install-indep:
-	@$(INSTALL_vd) "$(CURDIR)/debian/tmp/usr/share/doc/libretro-api"
-	@$(CP_vfa) "$(CURDIR)/doxygen/html" \
-		"$(CURDIR)/debian/tmp/usr/share/doc/libretro-api"
+override_dh_auto_install:
 
 execute_after_dh_install-arch:
-	chrpath --delete "$(usrgames)/retroarch"
-	@$(CP_vfa) "$(CURDIR)/tools/cg2glsl.py" "$(usrgames)/retroarch-cg2glsl"
-	@chmod -v 0755 "$(usrgames)/retroarch-cg2glsl"
+	chrpath --delete "$(ragamesd)/retroarch"
+	@$(CP_vfa) "$(CURDIR)/tools/cg2glsl.py" "$(ragamesd)/retroarch-cg2glsl"
+	@chmod -v 0755 "$(ragamesd)/retroarch-cg2glsl"
+
+execute_after_dh_install-indep:
+	-@for shdr in interpolation/shaders/smootheststep.cg \
+		interpolation/shaders/smoothstep.cg scalenx/shaders/scale3xSFX.cg \
+		sharpen/shaders/adaptive-sharpen.cg; do iconv --verbose -f ISO-8859-1 \
+			-t UTF-8 "$(shadersd)/$${shdr}"; done
 	@rm -Rfv "$(shadersd)/docs" "$(shadersd)/.gitlab-ci.yml" \
 		"$(shadersd)/Makefile" "$(shadersd)/compat_includes.inc" \
 		"$(shadersd)/configure"
-	find -H -O3 "$(usrshare)/libretro/database" -ignore_readdir_race \
-		\( -iname '*.xml' -o -iname '*.zip' \) -type f \
-		-printf 'Deleting %p…\n' -delete
+	find -H -O3 "$(data-shr)/database" -ignore_readdir_race \( -iname '*.xml' \
+		-o -iname '*.zip' \) -type f -printf 'Deleting %p…\n' -delete
+	find -H -O3 "$(data-shr)/overlays" -ignore_readdir_race \( -iname '*.sh' \
+		-o -iname 'README*' -o -name 'font_info.txt' \) -type f \
+			-printf 'Deleting %p…\n' -delete
+	find -H -O3 "$(shadersd)" -ignore_readdir_race \( -iname 'README*' -o \
+		-iname 'LICENSE.TXT' -o -iname 'THANKS.TXT' \) -type f \
+			-printf 'Deleting %p…\n' -delete
 
 execute_after_dh_installdocs-arch:
-	@if test ! -d "$(usrdoc)"; then $(INSTALL_vd) "$(usrdoc)"; fi
-	@$(CP_vfa) "$(CURDIR)/deps/switchres/README.md" "$(usrdoc)/switchres.md"
+	@if test ! -d "$(ra-docs)"; then $(INSTALL_vd) "$(ra-docs)"; fi
+	@$(CP_vfa) "$(CURDIR)/deps/switchres/README.md" "$(ra-docs)/switchres.md"
 	@$(CP_vfa) "$(CURDIR)/media/shaders_cg/docs/README" \
-		"$(usrdoc)/common-shaders.txt"
-	@$(CP_vfa) "$(CURDIR/media/autoconfig/README.md" \
-		"$(usrdoc)/retropad-autoconfig.md"
-	@$(CP_vfa) "$(CURDIR)/media/libretrodb/README.md" "$(usrdoc)/libretrodb.md"
+		"$(ra-docs)/common-shaders.txt"
+	@$(CP_vfa) "$(CURDIR)/media/autoconfig/README.md" \
+		"$(ra-docs)/retropad-autoconfig.md"
+	@$(CP_vfa) "$(CURDIR)/media/libretrodb/README.md" "$(ra-docs)/libretrodb.md"
 
 override_dh_installdocs-indep:
 	dh_installdocs -O-v -plibretro-dev-doc --doc-main-package=retroarch-dev
@@ -244,7 +251,7 @@ execute_after_dh_link-indep:
 # the Doxygen docs for any such identifcal files and replaces all but one from
 # each set with symlinks to that remaining file.
 	$(info Removing duplicate files from the Doxygen-generated documentation…)
-	@jdupes --recurse --link-soft --symlinks --print-summarize \
+	@jdupes --recurse --link-soft --symlinks \
 		"$(CURDIR)/debian/libretro-dev-doc/usr"
 
 .NOTPARALLEL: override_dh_auto_build-arch
@@ -252,6 +259,5 @@ execute_after_dh_link-indep:
 		execute_after_dh_installdocs-arch execute_after_dh_link-indep \
 		execute_before_dh_auto_clean execute_before_dh_auto_configure-arch \
 		override_dh_auto_build-arch override_dh_auto_build-indep \
-		override_dh_auto_configure-arch override_dh_auto_install-arch \
-		override_dh_auto_install-indep override_dh_doxygen \
-		override_dh_installdocs-indep
+		override_dh_auto_configure-arch override_dh_auto_install \
+		override_dh_doxygen override_dh_installdocs-indep

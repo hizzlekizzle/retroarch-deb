@@ -8,11 +8,11 @@ Files-Excluded: deps/SPIRV-Cross deps/bearssl-0.6 deps/glslang
  gfx/include/userland/interface/mmal/test libretro-common/include/compat/zlib
  pkg/android/phoenix/gradle/wrapper/*.jar pkg/apple pkg/ctr pkg/emscripten
  pkg/msvc pkg/msvc-uwp pkg/ps3/SSNE10000/PARAM.SFO pkg/ps3_iso/PS3_DISC.SFB
- pkg/ps3_iso/PS3_GAME/PARAM.SFO pkg/windows/x86_64/*.dll
+ pkg/ps3_iso/PS3_GAME/PARAM.SFO pkg/vita/assets pkg/windows
  vita/launcher/builder/vita-*.exe wii/libogc/libs nvdaControllerClient64.dll
 
 Files: *
-Copyright: 2005–2025, The RetroArch Team
+Copyright: 2005–2025, Libretro Team <libretro@gmail.com>
            2006–2025, Daniel De Matteis <libretro@gmail.com>
            2010–2024, Hans-Kristian Arntzen <maister@archlinux.us>
            2010–2021, Michael Lelli <toadking@toadking.com>
@@ -49,12 +49,6 @@ License: GPL-3.0-or-later
 
 Files: audio/common/pipewire.?
 Copyright: 2024–2025, Viachaslau Khalikin <viachaslavic@outlook.com>
-License: GPL-3.0-or-later
-
-Files: audio/common/wasapi.c
-Copyright: 2011–2024, Daniel De Matteis <libretro@gmail.com>
-                2023, Jesse Talavera-Greenberg <jesse@jesse.tg>
-                2023, Tony <sonninnos@users.noreply.github.com>
 License: GPL-3.0-or-later
 
 Files: audio/common/wasapi.h
@@ -98,6 +92,12 @@ Copyright: 2010–2014, Hans-Kristian Arntzen <maister@archlinux.us>
                 2020, Francisco José García García <paco.garcia@ual.es>
                 2020, Matthias Lorenz <oschowa@web.de>
                 2023, Jesse Talavera-Greenberg <jesse@jesse.tg>
+License: GPL-3.0-or-later
+
+Files: audio/drivers/wasapi.c
+Copyright: 2011–2024, Daniel De Matteis <libretro@gmail.com>
+                2023, Jesse Talavera-Greenberg <jesse@jesse.tg>
+                2023, Tony <sonninnos@users.noreply.github.com>
 License: GPL-3.0-or-later
 
 Files: com.libretro.RetroArch.metainfo.xml

@@ -39,7 +39,6 @@ Standards-Version: 4.7.2
 Homepage: https://www.libretro.com/
 Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
 Vcs-Browser: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
-Testsuite: autopkgtest
 Rules-Requires-Root: no
 XSBC-Original-Maintainer: Debian Games Team <debian-devel-games@lists.debian.org>
 XS-Original-Uploaders: Jonathan McDowell <noodles@earth.li>
@@ -48,7 +47,7 @@ Package: retroarch
 Architecture: any
 Depends: fonts-dejavu-core, libdecor-0-0 (>= 0.2.0),
  libretro-core-info (>= 1.15.0), python3:any, ${shlibs:Depends}, ${misc:Depends}
-Recommends: retroarch-assets (>= 1.19.0)
+Recommends: retroarch-assets (>= 1.19.0), retroarch-data (= ${binary:Version})
 Suggests: libgamemode0 (>= 1.6.1), xdg-utils
 Provides: retroarch-dbg
 Homepage: https://www.retroarch.com/
@@ -73,6 +72,30 @@ Description: frontend for libretro API-compatible applications
    - XMB: Ozone's predecessor, based on Sony's Playstation 3 and PSP UIs
    - GLUI: for touchscreen devices, following Google's Material UI principles
    - RGUI: for low-power and/or low-resolution devices
+
+Package: retroarch-data
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Homepage: https://www.retroarch.com/
+Description: frontend for libretro applications (architecture-independent files)
+ RetroArch is an open source, multi-platform frontend for emulators and
+ standalone games that are compatible with the libretro API, which it refers to
+ as "cores." Depending on the available cores, RetroArch can be used as a
+ modular multi-emulator system, game engine, media player or merely a 3-D
+ technical demonstration.
+ .
+ A large number of the popular hardware emulators which drive the moderm
+ retro-gaming movement have been adapted into freely available libretro cores,
+ to which RetroArch can then add sophisticated features such as: dynamic rate
+ control, audio filters, multi-pass video shaders, netplay, gameplay rewinding,
+ cheats and many others. Libretro cores also share a standardized set of
+ configuration options, saving users the need to manually configure each one
+ prior to use.
+ .
+ This package contains architecture-independent files used by RetroArch,
+ including the game compatibility database, visual input overlays and video
+ postprocessing shaders.
 
 Package: retroarch-dev
 Architecture: all

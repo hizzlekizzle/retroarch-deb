@@ -599,79 +599,64 @@ input_screenshot = "f8"
 # Input mapping to trigger flipping users during Netplay.
 # input_netplay_flip_players = "i"
 
-# Hold for slow-motion.
-#input_slowmotion = e
+# Input mapping to trigger slow-motion; only lasts while button is depressed.
+# input_slowmotion = "e"
 
-# Toggle sync to exact content framerate.
+# Input mapping to toggle exact framerate syncing to content.
 # input_toggle_vrr_runloop = "nul"
 
-# Enable other hotkeys; if this hotkey is bound to either keyboard, joybutton or
-# joyaxis, all other hotkeys will be disabled unless this hotkey is also held at
-# the same time. This is useful for RETRO_KEYBOARD-centric implementations which
-# query a large area of the keyboard, where it is not desirable that hotkeys get
-# in the way. Alternatively, all hotkeys for keyboard could be disabled by the
-# user.
+# Miscellaneous other input mappings.
+
+# If a button/key is bound to either keyboard, joybutton or joyaxis, all other
+# mappings will be disabled unless this one is also depressed at the same time.
+# Useful for RETRO_KEYBOARD-centric implementations which query a large area of the keyboard and it would be problematic if hotkeys got in the way.
 # input_enable_hotkey_btn = "nul"
 
-# Add a delay in frames before the assigned hotkey blocks input; useful if the
-# hotkey input is mapped to another action.
-#input_hotkey_block_delay = "5"
+# Add a delay, measured in frames, before the assigned mapping blocks input.
+# Useful if the hotkey input is mapped to another action.
+# input_hotkey_block_delay = "5"
 
-# Increases audio volume.
-input_volume_up = "add"
-# Decreases audio volume.
+# Input mapping to Increase/decrease the audio volume.
 input_volume_down = "subtract"
+input_volume_up = "add"
 
-# Toggle to the next overlay; wrapping at the end.
-#input_overlay_next = "nul"
+# Input mapping to cycle (wrapped) through the available input overlays.
+# input_overlay_next = "nul"
 
-# Toggle eject for disks, used for multiple-disk content.
-#input_disk_eject_toggle = "nul"
+# Input mapping to trigger the media eject behavior for multiple-disk content.
+# input_disk_eject_toggle = "nul"
 
-# Cycle through disk images, used after ejecting; complete by toggling eject
-# again.
-#input_disk_next = "nul"
+# Input mapping for cycling through new disk images to load after ejection
+# (trigger ejection again when done).
+# input_disk_next = "nul"
 
-# Toggle menu.
+# Input mapping to toggle menu activation.
 input_menu_toggle = "f1"
 
-# Toggle display of on-screen technical statistics.
-#input_toggle_statistics = "nul"
+# Input mapping to toggle display of on-screen technical information (stats for
+# nerds).
+# input_toggle_statistics = "nul"
 
-# RetroPad button combination to toggle menu.
-#   0: None
-#   1: Down + Y + L1 + R1
-#   2: L3 + R3
-#   3: L1 + R1 + Start + Select
-#   4: Start + Select
-#   5: L3 + R1
-#   6: L1 + R1
-#   7: Hold Start (2 seconds)
-#   8: Hold Select (2 seconds)
-#   9: Down + Select
-#  10: L2 + R2
+# RetroPad button combination to toggle menu activation or exit RetroArch.
+#    0 = None
+#    1 = Down + Y + L1 + R1
+#    2 = L3 + R3
+#    3 = L1 + R1 + Start + Select
+#    4 = Start + Select
+#    5 = L3 + R1
+#    6 = L1 + R1
+#    7 = Depress Start for two seconds
+#    8 = Depress Select for two seconds
+#    9 = Down + Select
+#   10 = L2 + R2
 input_menu_toggle_gamepad_combo = "0"
-
-# RetroPad button combination to quit.
-#   0: None
-#   1: Down + Y + L1 + R1
-#   2: L3 + R3
-#   3: L1 + R1 + Start + Select
-#   4: Start + Select
-#   5: L3 + R1
-#   6: L1 + R1
-#   7: Hold Start (2 seconds)
-#   8: Hold Select (2 seconds)
-#   9: Down + Select
-#  10: L2 + R2
 input_quit_gamepad_combo = "0"
 
-# Allow any RetroPad to control the menu?
-#all_users_control_menu = "false"
+# Allow any RetroPad to control the menu.
+# all_users_control_menu = "false"
 
-# Toggle mouse grab. When mouse is grabbed, RetroArch hides the mouse and keeps
-# the mouse pointer inside the window to allow relative mouse input to work
-# better.
+# Input mapping to toggle mouse capture; when active, the mouse pointer is
+# locked inside the RetroArch window for faster operation and easier control.
 input_grab_mouse_toggle = "f11"
 
 #### Menu

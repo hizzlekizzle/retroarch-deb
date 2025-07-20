@@ -1,6 +1,9 @@
 # These are symlinks only to preserve interactions with other applications.
 package-section-games-but-has-usr-bin *
 
+# False positive: Only an (intentional) substring match of adjacent folders.
+repeated-path-segment shaders *
+
 # False positive: Strings are not exclusively English.
 spelling-error-in-binary Apparence Appearance *
 spelling-error-in-binary Autor Author *

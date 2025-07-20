@@ -1,3 +1,6 @@
+# Compression options in d/s/options to consolidate creating MUT source package.
+custom-compression-in-debian-source-options *
+
 # Field's presence is intentional, similar use by ~1,000 packages indicates
 # evolving consensus that holds current guidance in abeyance.
 built-using-field-on-arch-all-package *
