@@ -213,8 +213,8 @@ execute_after_dh_install-arch:
 execute_after_dh_install-indep:
 	-@for shdr in interpolation/shaders/smootheststep.cg \
 		interpolation/shaders/smoothstep.cg scalenx/shaders/scale3xSFX.cg \
-		sharpen/shaders/adaptive-sharpen.cg; do iconv --verbose -f ISO-8859-1 \
-			-t UTF-8 "$(shadersd)/$${shdr}"; done
+		sharpen/shaders/adaptive-sharpen.cg; do \
+			iconv -f ISO-8859-1 -t UTF-8 "$(shadersd)/$${shdr}"; done
 	@rm -Rfv "$(shadersd)/docs" "$(shadersd)/.gitlab-ci.yml" \
 		"$(shadersd)/Makefile" "$(shadersd)/compat_includes.inc" \
 		"$(shadersd)/configure"

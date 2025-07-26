@@ -32,9 +32,9 @@ Build-Depends-Arch: alsa-utils, glslang-dev, libasound2-dev (>= 1.0.18),
  python3-setuptools (>= 68.1.2), qt6-base-dev (>= 6.2),
  qt6-wayland-dev (>= 6.2), spirv-tools, sunxi-tools [armhf],
  wayland-protocols (>= 1.37), x11proto-xext-dev, zlib1g-dev (>= 1:1.1.4)
-Build-Depends-Indep: dh-sequence-builtusing <!nodoc>,
- dh-sequence-doxygen <!nodoc>, dh-builtusing <!nodoc>,
- doxygen (>= 1.9.4-4) <!nodoc>, libjs-mathjax <!nodoc>, pdf2svg <!nodoc>
+Build-Depends-Indep: dh-builtusing <!nodoc>, dh-sequence-builtusing <!nodoc>,
+ dh-sequence-doxygen <!nodoc>, doxygen (>= 1.9.4-4) <!nodoc>,
+ libjs-mathjax <!nodoc>, pdf2svg <!nodoc>
 Standards-Version: 4.7.2
 Homepage: https://www.libretro.com/
 Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
@@ -49,7 +49,7 @@ Depends: fonts-dejavu-core, libdecor-0-0 (>= 0.2.0),
  libretro-core-info (>= 1.15.0), python3:any, ${shlibs:Depends}, ${misc:Depends}
 Recommends: retroarch-assets (>= 1.19.0), retroarch-data (= ${binary:Version})
 Suggests: libgamemode0 (>= 1.6.1), xdg-utils
-Provides: retroarch-dbg
+Provides: libretro-frontend, retroarch-dbg
 Homepage: https://www.retroarch.com/
 Description: frontend for libretro API-compatible applications
  RetroArch is an open source, multi-platform frontend for emulators and
@@ -67,11 +67,11 @@ Description: frontend for libretro API-compatible applications
  prior to use.
  .
  This package provides all four RetroArch menu drivers, each offering a unique
- "flavor" of graphical user interface.
-   - Ozone: the modern default, modelled after the Nintendo Switch UI
-   - XMB: Ozone's predecessor, based on Sony's Playstation 3 and PSP UIs
-   - GLUI: for touchscreen devices, following Google's Material UI principles
-   - RGUI: for low-power and/or low-resolution devices
+ "flavor" of graphical user interface:
+  * Ozone: the modern default, modelled after the Nintendo Switch UI
+  * XMB: Ozone's predecessor, based on Sony's Playstation 3 and PSP UIs
+  * GLUI: for touchscreen devices, following Google's Material UI principles
+  * RGUI: for low-power devices and/or those with low-resolution displays
 
 Package: retroarch-data
 Architecture: all
@@ -95,7 +95,7 @@ Description: frontend for libretro applications (architecture-independent files)
  .
  This package contains architecture-independent files used by RetroArch,
  including the game compatibility database, visual input overlays and video
- postprocessing shaders.
+ post-processing shaders.
 
 Package: retroarch-dev
 Architecture: all
