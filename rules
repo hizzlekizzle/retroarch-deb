@@ -84,7 +84,7 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-dbus --disable-dinput --disable-dr_flac --enable-dr_mp3 \
 	--disable-dsound --enable-dsp_filter --enable-dylib --disable-dynamic_egl \
 	--enable-egl --enable-ffmpeg --disable-flac --enable-freetype \
-	--enable-game_ai --disable-gdi --enable-glslang --enable-hid --enable-jack \
+	--disable-gdi --enable-glslang --enable-hid --enable-jack \
 	--enable-kms --enable-libdecor --enable-libshake --enable-libusb \
 	--enable-lua --enable-materialui --enable-memfd_create --enable-mmap \
 	--disable-mpv --enable-network_video --enable-networkgamepad \
@@ -105,17 +105,19 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 
 ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
   QB_LIBS_FLAGS += --disable-angle --enable-cg --disable-opengles \
-					--disable-rpiled --enable-sse
+					--disable-rpiled --enable-sse --enable-game_ai
 else ifeq ($(DEB_HOST_GNU_CPU),aarch64)
   QB_LIBS_FLAGS += --disable-angle --disable-cg --enable-opengles \
-					--enable-opengles3 --enable-opengles3_1 --enable-opengles3_2
+					--enable-opengles3 --enable-opengles3_1 --enable-opengles3_2 \
+					--disable-game_ai
 else ifeq ($(DEB_HOST_ARCH),armhf)
   QB_LIBS_FLAGS += --disable-cg --enable-floathard --enable-neon \
 					--enable-opengles --enable-opengles3 --enable-opengles3_1 \
-					--enable-opengles3_2 --enable-sunxi
+					--enable-opengles3_2 --enable-sunxi --disable-game_ai
 else ifeq ($(DEB_HOST_ARCH),armel)
   QB_LIBS_FLAGS += --disable-cg --enable-floatsoftfp --enable-opengles \
-					--enable-opengles3 --enable-opengles3_1 --enable-opengles3_2
+					--enable-opengles3 --enable-opengles3_1 --enable-opengles3_2 \
+					--disable-game_ai
 else
   QB_LIBS_FLAGS += --disable-angle --disable-cg --disable-opengles
 endif
