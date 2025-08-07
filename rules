@@ -7,8 +7,10 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later OR MPL-2.0
 
-SHELL                        ::= $(realpath /bin/bash)
+CP_vfa                       ::= $(realpath /bin/cp) --verbose --force --archive
+INSTALL_vd                   ::= $(realpath /bin/install) --verbose --directory
 MAKEFLAGS                     += --output-sync=target
+SHELL                        ::= $(realpath /bin/bash)
 
 DEB_BUILD_MAINT_OPTIONS      ::= future=+lfs hardening=+all optimize=+lto \
 									reproducible=+fixfilepath
@@ -25,9 +27,8 @@ MOC                          ::= /usr/lib/qt6/libexec/moc
 QT_SELECT                    ::= qt6
 
 ifeq (,$(findstring terse,$(DEB_BUILD_OPTIONS)))
-  DH_VERBOSE                 ::= 1
+  export DH_VERBOSE          ::= 1
   MAKE_ARGS                   += "V=1"
-  export DH_VERBOSE
 endif
 
 # Use Bash's built-in printf to pass the Ubuntu version when the dpkg flag set
@@ -55,9 +56,6 @@ endif
 
 include /usr/share/dpkg/default.mk
 
-CP_vfa                       ::= $(realpath /bin/cp) --verbose --force --archive
-INSTALL_vd                   ::= $(realpath /bin/install) --verbose --directory
-
 at_dhm   ::= @DEB_HOST_MULTIARCH@
 pcfilesd ::= $(CURDIR)/debian/pkgconf
 data-shr ::= $(CURDIR)/debian/retroarch-data/usr/share/libretro
@@ -66,7 +64,13 @@ ragamesd ::= $(CURDIR)/debian/retroarch/usr/games
 shadersd ::= $(data-shr)/shaders/shaders_cg
 
 dv       ::= $(DEB_VERSION)
-GIT_HASH ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
+git_hash ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
+
+ifdef git_hash
+  GIT_VERSION  ::= $(git_hash)
+  MAKE_ARGS     += "GIT_VERSION=$(git_hash)"
+  export GIT_VERSION
+endif
 
 # See ./configure --help for valid flags for the QuickBuild framework
 QB_BUILD_FLAGS ::= --prefix=/usr --bindir=/usr/games --datarootdir=/usr/share \
@@ -84,17 +88,17 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-dbus --disable-dinput --disable-dr_flac --enable-dr_mp3 \
 	--disable-dsound --enable-dsp_filter --enable-dylib --disable-dynamic_egl \
 	--enable-egl --enable-ffmpeg --disable-flac --enable-freetype \
-	--disable-gdi --enable-glslang --enable-hid --enable-jack \
-	--enable-kms --enable-libdecor --enable-libshake --enable-libusb \
-	--enable-lua --enable-materialui --enable-memfd_create --enable-mmap \
-	--disable-mpv --enable-network_video --enable-networkgamepad \
-	--enable-networking --disable-nvda --enable-opengl --disable-osmesa \
-	--disable-oss --enable-ozone --enable-parport --enable-patch \
-	--enable-pipewire --enable-plain_drm --enable-pulse --enable-qt \
-	--enable-rgui --disable-roar --disable-rsound --disable-sapi --disable-sdl \
-	--enable-sdl2 --enable-sixel --enable-slang --enable-spirv_cross \
-	--enable-ssa --enable-ssl --enable-systemd --enable-systemmbedtls \
-	--enable-threads --enable-thread_storage --disable-tinyalsa --enable-udev \
+	--disable-gdi --enable-glslang --enable-hid --enable-jack --enable-kms \
+	--enable-libdecor --enable-libshake --enable-libusb --enable-lua \
+	--enable-materialui --enable-memfd_create --enable-mmap --disable-mpv \
+	--enable-network_video --enable-networkgamepad --enable-networking \
+	--disable-nvda --enable-opengl --disable-osmesa --disable-oss \
+	--enable-ozone --enable-parport --enable-patch --enable-pipewire \
+	--enable-plain_drm --enable-pulse --enable-qt --enable-rgui --disable-roar \
+	--disable-rsound --disable-sapi --disable-sdl --enable-sdl2 --enable-sixel \
+	--enable-slang --enable-spirv_cross --enable-ssa --enable-ssl \
+	--enable-systemd --enable-systemmbedtls --enable-threads \
+	--enable-thread_storage --disable-tinyalsa --enable-udev \
 	--disable-update_assets --enable-v4l2 --disable-vg --enable-video_filter \
 	--disable-videocore --enable-videoprocessor --enable-vulkan \
 	--disable-wasapi --enable-wayland --enable-wifi --disable-winmm \
@@ -103,29 +107,40 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-xscrnsaver --enable-xshm --enable-xvideo --enable-zlib \
 	--enable-zstd
 
-ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
-  QB_LIBS_FLAGS += --disable-angle --enable-cg --disable-opengles \
-					--disable-rpiled --enable-sse --enable-game_ai
-else ifeq ($(DEB_HOST_GNU_CPU),aarch64)
-  QB_LIBS_FLAGS += --disable-angle --disable-cg --enable-opengles \
-					--enable-opengles3 --enable-opengles3_1 --enable-opengles3_2 \
-					--disable-game_ai
-else ifeq ($(DEB_HOST_ARCH),armhf)
-  QB_LIBS_FLAGS += --disable-cg --enable-floathard --enable-neon \
-					--enable-opengles --enable-opengles3 --enable-opengles3_1 \
-					--enable-opengles3_2 --enable-sunxi --disable-game_ai
-else ifeq ($(DEB_HOST_ARCH),armel)
-  QB_LIBS_FLAGS += --disable-cg --enable-floatsoftfp --enable-opengles \
-					--enable-opengles3 --enable-opengles3_1 --enable-opengles3_2 \
-					--disable-game_ai
-else
-  QB_LIBS_FLAGS += --disable-angle --disable-cg --disable-opengles
-endif
+# GCC v15.1.0, released with Ubuntu 25.10 "Questing" has a bug regarding the
+# assembler behavior on 32-bit ARM architectures that happens to be triggered by
+# the moc parts of Qt6-enabled builds. The "-fno-late-combine-instructions" flag
+# is a workaround to prevent such builds from erroring out. This can be pulled
+# whenever Canonical releases a backport patching this bug.
+gcc-d_v ::= $(shell dpkg-query -f '$${Version}' -W gcc-defaults)
+gcctest ::= $(shell dpkg --compare-versions $(gcc-d_v) ge 1.222 && echo "true")
 
-ifneq (,$(GIT_HASH))
-  GIT_VERSION  ::= $(GIT_HASH)
-  MAKE_ARGS     += "GIT_VERSION='$(GIT_HASH)'"
-  export GIT_VERSION
+ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
+  QB_LIBS_FLAGS += --disable-angle --enable-cg --enable-game_ai \
+					--disable-opengles --disable-rpiled --enable-sse
+else ifeq ($(DEB_HOST_GNU_CPU),aarch64)
+  QB_LIBS_FLAGS += --disable-angle --disable-cg --disable-game_ai \
+					--enable-opengles --enable-opengles3 --enable-opengles3_1 \
+					--enable-opengles3_2
+else ifeq ($(DEB_HOST_ARCH),armhf)
+  QB_LIBS_FLAGS += --disable-cg --enable-floathard --disable-game_ai \
+					--enable-neon --enable-opengles --enable-opengles3 \
+					--enable-opengles3_1 --enable-opengles3_2 --enable-sunxi
+  ifeq ($(gcctest),true)
+    DEB_CFLAGS_MAINT_APPEND    += -fno-late-combine-instructions
+    DEB_CXXFLAGS_MAINT_APPEND ::= -fno-late-combine-instructions
+  endif
+else ifeq ($(DEB_HOST_ARCH),armel)
+  QB_LIBS_FLAGS += --disable-cg --enable-floatsoftfp --disable-game_ai \
+					--enable-opengles --enable-opengles3 --enable-opengles3_1 \
+					--enable-opengles3_2
+  ifeq ($(gcctest),true)
+    DEB_CFLAGS_MAINT_APPEND    += -fno-late-combine-instructions
+    DEB_CXXFLAGS_MAINT_APPEND ::= -fno-late-combine-instructions
+  endif
+else
+  QB_LIBS_FLAGS += --disable-angle --disable-cg --disable-game_ai \
+					--disable-opengles
 endif
 
 # GLSL v14.0.0 dropped legacy stub libraries libIGLCompiler and libHLSL and a
@@ -140,8 +155,9 @@ ifneq ($(glsltest),true)
 endif
 
 export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND \
-		DEB_CPPFLAGS_MAINT_PREPEND DEB_LDFLAGS_MAINT_APPEND \
-		DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC QT_SELECT SHELL
+		DEB_CPPFLAGS_MAINT_PREPEND DEB_CXXFLAGS_MAINT_APPEND \
+		DEB_LDFLAGS_MAINT_APPEND DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC \
+		QT_SELECT SHELL
 
 
 %:
@@ -158,10 +174,8 @@ execute_after_dh_auto_clean:
 execute_before_dh_auto_configure-arch:
 	@env LC_ALL=C.UTF-8 sed -e 's/$(at_dhm)/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/debian/retroarch.cfg.in" >"$(CURDIR)/debian/retroarch.cfg"
-	$(info *** Lines to modify in retroarch.cfg to match build architecture:)
-	@grep -n '$(at_dhm)' "$(CURDIR)/debian/retroarch.cfg.in"; echo
-	$(info *** Same lines in retroarch.cfg after buildsystem modifications:)
-	@grep -n '$(DEB_HOST_MULTIARCH)' "$(CURDIR)/debian/retroarch.cfg"
+	$(info *** Lines modified in retroarch.cfg to match build architecture:)
+	@echo; grep -n '$(DEB_HOST_MULTIARCH)' "$(CURDIR)/debian/retroarch.cfg"
 # The qt6-base-dev package in the Ubuntu 22.04 package repositories fails to
 # install the pkgconf files for the Qt6 libraries, and since Quickbuild lacks
 # the versatility to fallback to the CMake config files that /are/ provided, the
