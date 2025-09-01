@@ -88,17 +88,17 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--enable-dbus --disable-dinput --disable-dr_flac --enable-dr_mp3 \
 	--disable-dsound --enable-dsp_filter --enable-dylib --disable-dynamic_egl \
 	--enable-egl --enable-ffmpeg --disable-flac --enable-freetype \
-	--disable-gdi --enable-glslang --enable-hid --enable-jack --enable-kms \
-	--enable-libdecor --enable-libshake --enable-libusb --enable-lua \
-	--enable-materialui --enable-memfd_create --enable-mmap --disable-mpv \
-	--enable-network_video --enable-networkgamepad --enable-networking \
-	--disable-nvda --enable-opengl --disable-osmesa --disable-oss \
-	--enable-ozone --enable-parport --enable-patch --enable-pipewire \
-	--enable-plain_drm --enable-pulse --enable-qt --enable-rgui --disable-roar \
-	--disable-rsound --disable-sapi --disable-sdl --enable-sdl2 --enable-sixel \
-	--enable-slang --enable-spirv_cross --enable-ssa --enable-ssl \
-	--enable-systemd --enable-systemmbedtls --enable-threads \
-	--enable-thread_storage --disable-tinyalsa --enable-udev \
+	--disable-game_ai --disable-gdi --enable-glslang --enable-hid --enable-jack \
+	--enable-kms --enable-libdecor --enable-libshake --enable-libusb \
+	--enable-lua 	--enable-materialui --enable-memfd_create --enable-mmap \
+	--disable-mpv --enable-network_video --enable-networkgamepad \
+	--enable-networking 	--disable-nvda --enable-opengl --disable-osmesa \
+	--disable-oss --enable-ozone --enable-parport --enable-patch \
+	--enable-pipewire --enable-plain_drm --enable-pulse --enable-qt \
+	--enable-rgui --disable-roar --disable-rsound --disable-sapi --disable-sdl \
+	--enable-sdl2 --enable-sixel --enable-slang --enable-spirv_cross \
+	--enable-ssa --enable-ssl --enable-systemd --enable-systemmbedtls \
+	--enable-threads --enable-thread_storage --disable-tinyalsa --enable-udev \
 	--disable-update_assets --enable-v4l2 --disable-vg --enable-video_filter \
 	--disable-videocore --enable-videoprocessor --enable-vulkan \
 	--disable-wasapi --enable-wayland --enable-wifi --disable-winmm \
@@ -116,14 +116,14 @@ gcc-d_v ::= $(shell dpkg-query -f '$${Version}' -W gcc-defaults)
 gcctest ::= $(shell dpkg --compare-versions $(gcc-d_v) ge 1.222 && echo "true")
 
 ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
-  QB_LIBS_FLAGS += --disable-angle --enable-cg --enable-game_ai \
+  QB_LIBS_FLAGS += --disable-angle --enable-cg \
 					--disable-opengles --disable-rpiled --enable-sse
 else ifeq ($(DEB_HOST_GNU_CPU),aarch64)
-  QB_LIBS_FLAGS += --disable-angle --disable-cg --disable-game_ai \
+  QB_LIBS_FLAGS += --disable-angle --disable-cg \
 					--enable-opengles --enable-opengles3 --enable-opengles3_1 \
 					--enable-opengles3_2
 else ifeq ($(DEB_HOST_ARCH),armhf)
-  QB_LIBS_FLAGS += --disable-cg --enable-floathard --disable-game_ai \
+  QB_LIBS_FLAGS += --disable-cg --enable-floathard \
 					--enable-neon --enable-opengles --enable-opengles3 \
 					--enable-opengles3_1 --enable-opengles3_2 --enable-sunxi
   ifeq ($(gcctest),true)
