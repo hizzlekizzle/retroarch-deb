@@ -1,3 +1,10 @@
+retroarch (1.22.1-1) plucky; urgency=medium
+
+  * New upstream release: v1.22.1
+  * Hotfix release.
+
+ -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 15 Nov 2025 21:23:42 -0300
+
 retroarch (1.22.0-1) plucky; urgency=medium
 
   * New upstream release: v1.22.0
