@@ -1,25 +1,31 @@
-retroarch (1.22.2-1) plucky; urgency=medium
+retroarch (1.22.2+ds1-1) questing; urgency=medium
 
   * New upstream release: v1.22.2
   * More hotfixes.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Tue, 18 Nov 2025 21:23:42 -0300
 
-retroarch (1.22.1-1) plucky; urgency=medium
+retroarch (1.22.1+ds1-1) questing; urgency=medium
 
   * New upstream release: v1.22.1
   * Hotfix release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 15 Nov 2025 21:23:42 -0300
 
-retroarch (1.22.0-1) plucky; urgency=medium
+retroarch (1.22.0+ds1-1) questing; urgency=medium
 
   * New upstream release: v1.22.0
   * Lots of fixes and features.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Sun, 09 Nov 2025 21:23:42 -0300
- 
- retroarch (1.21.0+ds1-1) plucky; urgency=medium
+
+retroarch (1.20.0+dfsg-3) unstable; urgency=medium
+
+  * Fix CVE-2025-9136 (out of bounds read) (Closes: #1111614)
+
+ -- Jonathan McDowell <noodles@earth.li>  Sat, 30 Aug 2025 13:20:14 +0100
+
+retroarch (1.21.0+ds1-1) plucky; urgency=medium
 
   * New upstream release: v1.21.0
   * Add option to mute audio during gameplay rewinds.
@@ -46,6 +52,25 @@ retroarch (1.22.0-1) plucky; urgency=medium
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Mon, 28 Apr 2025 21:23:42 -0300
 
+retroarch (1.20.0+dfsg-2) unstable; urgency=medium
+
+  * Build-depend on libpipewire-0.3-dev (Closes: #1095996)
+
+ -- Jonathan McDowell <noodles@earth.li>  Sat, 15 Feb 2025 17:35:28 +0000
+
+retroarch (1.20.0+dfsg-1) unstable; urgency=medium
+
+  [ Pino Toscano ]
+  * Drop the retroarch.svg symlink in the legacy pixmaps location.
+
+  [ Jonathan McDowell ]
+  * New upstream release
+    * Drop patches/02_set_c++17.patch
+    * Switch desktop filename to com.libretro.RetroArch
+    * Update debian/copyright
+
+ -- Jonathan McDowell <noodles@earth.li>  Sun, 09 Feb 2025 11:48:11 +0000
+
 retroarch (1.20.0-1) oracular; urgency=medium
 
   * New upstream release: v1.20.0
@@ -57,6 +82,14 @@ retroarch (1.19.1-2) noble; urgency=medium
   * Fix wonky path on new configs
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 23 Aug 2024 19:44:00 -0300
+
+retroarch (1.19.1+dfsg-1) unstable; urgency=medium
+
+  * New upstream release
+    * Update to new desktop filename (org.libretro.RetroArch.desktop)
+  * Don't build without optimisation (Closes: #1069607)
+
+ -- Jonathan McDowell <noodles@earth.li>  Sun, 07 Jul 2024 15:41:01 +0100
 
 retroarch (1.19.1-1) noble; urgency=medium
 
@@ -78,6 +111,16 @@ retroarch (1.18.0-2) noble; urgency=medium
 
  -- Peter J. Mello <admin@petermello.net>  Thu, 23 May 2024 21:23:43 -0700
 
+retroarch (1.18.0+dfsg-1) unstable; urgency=medium
+
+  * New upstream release
+    * Refresh patches
+    * Update debian/copyright
+  * Fix compilation with glslang 14.0 (Closes: #1064681)
+  * Switch pkg-config dep to pkgconf
+
+ -- Jonathan McDowell <noodles@earth.li>  Tue, 02 Apr 2024 10:39:04 +0100
+
 retroarch (1.18.0-1) mantic; urgency=medium
 
   * New upstream release: v1.18.0
@@ -98,11 +141,30 @@ retroarch (1.17.0-1) mantic; urgency=medium
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 03 Feb 2024 19:44:00 -0300
 
+retroarch (1.16.0.3+dfsg-1) unstable; urgency=medium
+
+  * New upstream release
+    * Drop 02_hide_settings.patch in favour of --disable-update_assets
+    * Enable c++17 (Closes: #1058367)
+    * Update debian/copyright
+
+ -- Jonathan McDowell <noodles@earth.li>  Sat, 16 Dec 2023 19:45:14 +0000
+
 retroarch (1.16.0.3-1) lunar; urgency=medium
 
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 29 Sep 2023 19:44:00 -0300
+
+retroarch (1.15.0+dfsg-1) unstable; urgency=medium
+
+  * New upstream release
+    * Refresh patches
+  * Enable spirv-cross (Closes: #1053190)
+  * Clean generated Wayland files (Closes: #1045150)
+  * Add myself to Uploaders
+
+ -- Jonathan McDowell <noodles@earth.li>  Fri, 29 Sep 2023 21:03:03 +0000
 
 retroarch (1.16.0.1-1) lunar; urgency=medium
 
@@ -132,6 +194,58 @@ retroarch (1.15.0-1) kinetic; urgency=medium
   * New upstream release.
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Fri, 10 Mar 2023 19:44:00 -0300
+
+retroarch (1.14.0+dfsg-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream release
+  * Add Vcs-* fields pointing to Salsa
+  * Mark retroarch-dev as Multi-Arch: foreign
+  * Actually install upstream AppStream file
+  * Drop manual DEB_HOST_MULTIARCH substitution for support available in
+    debhelper compat level 13
+
+ -- Jonathan McDowell <noodles@earth.li>  Fri, 13 Jan 2023 19:16:31 +0000
+
+retroarch (1.13.0+dfsg-3) unstable; urgency=medium
+
+  * Team upload
+  * Modernise Build-Depends
+  * Switch to debhelper-compat, level 13
+  * Switch to upstream's appstream file
+  * Lintian cleanups for debian/copyright
+  * Enable verbose builds
+  * Fix missing verbosity include in wayland_common
+  * Set Rules-Requires-Root to no
+  * Bump Standards-Version to 4.6.2
+  * Update description to mention Ozone UI
+  * Add retroarch-dev package for includes (Closes: #1027741)
+
+ -- Jonathan McDowell <noodles@earth.li>  Tue, 10 Jan 2023 18:48:28 +0000
+
+retroarch (1.13.0+dfsg-2) unstable; urgency=medium
+
+  * Add a Suggests on xdg-utils (for xdg-screensaver)
+  * Add a Recommends on libgamemode0
+  * Make sure fatal errors are output to stderr (Closes: #956849)
+  * Fix armhf NEON build
+  * Cleanup joyconfig mentions (Closes: #900654)
+  * Add versioned depend on updated retroarch-assets (Closes: #931834)
+
+ -- Jonathan McDowell <noodles@earth.li>  Fri, 30 Dec 2022 20:44:53 +0000
+
+retroarch (1.13.0+dfsg-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream release (Closes: #946933).
+    * Update patches
+    * Update configure options
+    * Add extra dependencies
+    * Update debian/copyright
+  * Switch to system libstb (Closes: #949708)
+  * Enable DBUS (Closes: #943443)
+
+ -- Jonathan McDowell <noodles@earth.li>  Fri, 23 Dec 2022 18:17:23 +0000
 
 retroarch (1.14.0-1) kinetic; urgency=medium
 
@@ -314,6 +428,15 @@ retroarch (1.8.5-1) eoan; urgency=low
 
  -- Hunter Kaller <hunter_kaller@yahoo.com>  Sat, 21 Mar 2020 12:02:00 -0300
 
+retroarch (1.7.3+dfsg1-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix Ftbfs: add missing dependency libx11-xcb-dev (Closes: #949282)
+  * Remove unnecessary dependency libc6-dev (Closes: #866733)
+  * Fix lintian error: typo in debian/copyright
+
+ -- Emfox Zhou <emfox@debian.org>  Tue, 11 Feb 2020 13:13:03 +0800
+
 retroarch (1.8.4-1) eoan; urgency=low
 
   * New upstream release.
@@ -392,6 +515,24 @@ retroarch (1.7.4-1) bionic; urgency=low
   * New upstream release.
 
  -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Fri, 31 Aug 2018 22:03:00 -0300
+
+retroarch (1.3.6+dfsg1-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * debian/patches: Fix build with ffmpeg 4.0. (Closes: #888356)
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Wed, 11 Jul 2018 21:35:41 +0200
+
+retroarch (1.7.3+dfsg1-1) unstable; urgency=low
+
+  * New upstream release (Closes: #878252).
+  * Declare compliance with Debian Policy 4.0.1.
+  * Switch to compat level 10.
+  * Upstream no longer uses libglm-dev.
+  * Added libminiupnpc-dev dependency.
+  * Added AppStream desktop meta-info file.
+
+ -- Sérgio Benjamim <sergio_br2@yahoo.com.br>  Wed, 06 Jun 2018 21:27:00 -0300
 
 retroarch (1.7.3-1) bionic; urgency=low
 
