@@ -28,7 +28,7 @@ Last-Update: 2025-06-30
  add_define MAKEFILE BIN_DIR "${BIN_DIR:-${PREFIX}/bin}"
  add_define MAKEFILE DOC_DIR "${DOC_DIR:-${SHARE_DIR}/doc/retroarch}"
  add_define MAKEFILE MAN_DIR "${MAN_DIR:-${SHARE_DIR}/man}"
-@@ -343,19 +343,21 @@ if [ "$HAVE_QT" != 'no' ]; then
+@@ -333,19 +333,21 @@ if [ "$HAVE_QT" != 'no' ]; then
     check_pkgconf OPENSSL openssl 1.0.0
  fi
  
@@ -55,7 +55,7 @@ Last-Update: 2025-06-30
  if [ "$HAVE_SYSTEMMBEDTLS" = 'yes' ] && [ -z "$SYSTEMMBEDTLS_VERSION" ]; then
    # Ancient versions (such as the one included in the Ubuntu version used for
    # build checks) don't have this header
-@@ -563,7 +565,7 @@ check_val '' XINERAMA -lXinerama '' xine
+@@ -548,7 +550,7 @@ check_val '' XINERAMA -lXinerama '' xine
  check_lib '' XRANDR -lXrandr
  check_header '' XSHM X11/Xlib.h X11/extensions/XShm.h
  check_val '' XKBCOMMON -lxkbcommon '' xkbcommon 0.3.2 '' false

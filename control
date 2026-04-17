@@ -5,10 +5,10 @@ Maintainer: Libretro Team <libretro@gmail.com>
 Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
  Sérgio Benjamim <sergio_br2@yahoo.com.br>, Paul Preuss <paul@dokomi.de>,
  Peter J. Mello <admin@petermello.net>
-Build-Depends: debhelper-compat (= 13), appstream <!nocheck>,
+Build-Depends: debhelper-compat (= 13), alsa-utils, appstream <!nocheck>,
  check (>= 0.15) <!nocheck>, chrpath, dpkg-build-api (= 1) | dpkg-dev (<< 1.22),
  jdupes, lsb-release, pkgconf, python3-dev:any, quilt
-Build-Depends-Arch: alsa-utils, glslang-dev, libasound2-dev (>= 1.0.18),
+Build-Depends-Arch: dh-package-notes, glslang-dev, libasound2-dev (>= 1.0.18),
  libass-dev (>= 1:0.13.6), libavcodec-dev (>= 7:4.4),
  libavdevice-dev (>= 7:4.4), libavformat-dev (>= 7:4.4),
  libavutil-dev (>= 7:4.4), libcaca-dev (>= 0.99.beta20~),
@@ -18,8 +18,9 @@ Build-Depends-Arch: alsa-utils, glslang-dev, libasound2-dev (>= 1.0.18),
  libgbm-dev (>= 9.1.3), libglvnd-dev (>= 1.0.0), libjack-jackd2-dev (>= 1.9.12),
  liblua5.3-dev (>= 5.3.6), liblzma-dev (>= 5.2.2), libmbedtls-dev (>= 2.28.0),
  libopenal-dev (>= 1:1.14), libpipewire-0.3-dev (>= 1.0.4),
- libpulse-dev (>= 1:0.99.1), libsdl2-dev (>= 2.0.12), libsixel-dev (>= 1.10.3),
- libspirv-cross-c-shared-dev (>= 2021.01.15+1.3.239.0), libssl-dev (>= 1.0.0),
+ libpulse-dev (>= 1:0.99.1), libreadline-dev, libsdl2-dev (>= 2.0.12),
+ libsixel-dev (>= 1.10.3), libsmb2-dev (>= 6.1.0),
+ libspirv-cross-c-shared-dev (>= 2021.01.15+1.3.239), libssl-dev (>= 1.0.0),
  libswresample-dev (>= 7:4.4), libswscale-dev (>= 7:4.4),
  libsystemd-dev (>= 204), libudev-dev (>= 204), libusb-1.0-0-dev (>= 2:1.0.16),
  libv4l-dev (>= 0.5.0), libvulkan-dev (>= 1.2.135.0),
@@ -35,7 +36,7 @@ Build-Depends-Arch: alsa-utils, glslang-dev, libasound2-dev (>= 1.0.18),
 Build-Depends-Indep: dh-builtusing <!nodoc>, dh-sequence-builtusing <!nodoc>,
  dh-sequence-doxygen <!nodoc>, doxygen (>= 1.9.4-4) <!nodoc>,
  libjs-mathjax <!nodoc>, pdf2svg <!nodoc>
-Standards-Version: 4.7.2
+Standards-Version: 4.7.4
 Homepage: https://www.libretro.com/
 Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
 Vcs-Browser: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian

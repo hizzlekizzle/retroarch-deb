@@ -1,23 +1,25 @@
-Description: Build against system libs instead of vendored libraries
- This patch changes the QuickBuild toolchain to link to the system versions of:
+Description: Build against system libraries instead of vendored ones
+ This patch changes the QuickBuild configuration output so that the linker
+ invocation commands produce binaries which are linked to the system versions
+ of:
    - libdiscord-rpc
    - libFLAC
    - liblua5.3
    - libzstd
    - SPIRV-Cross
- …rather than the vendored versions of those libraries present in the tarball
- and typically compiled at build time. The resulting retroarch binary produced
- is roughly 1 MiB smaller, on average.
+ …rather than the vendored snapshots of those projects' codebase present in the
+ release tarball and typically compiled at build time. This produces a RetroArch
+ binary roughly 1 MiB smaller, on average.
 Author: Peter J. Mello <admin@petermello.net>
 Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian/commit/patches/0000-use-system-libs.patch?id=00fcf2a6c54be09d8b84443651063c7527f420db
 Bug-Debian: https://bugs.debian.org/949708
 Bug-Debian: https://bugs.debian.org/1053190
 Forwarded: no
-Last-Update: 2025-07-19
+Last-Update: 2026-04-16
 
 --- a/Makefile.common
 +++ b/Makefile.common
-@@ -1895,14 +1895,9 @@ endif
+@@ -1910,14 +1910,9 @@ endif
  
  ifeq ($(HAVE_SPIRV_CROSS), 1)
     DEFINES += -DHAVE_SPIRV_CROSS
@@ -35,7 +37,7 @@ Last-Update: 2025-07-19
  endif
  
  ifeq ($(WANT_WGL), 1)
-@@ -1946,31 +1941,9 @@ ifeq ($(HAVE_7ZIP),1)
+@@ -1961,32 +1956,10 @@ ifeq ($(HAVE_7ZIP),1)
  endif
  
  ifeq ($(HAVE_ZSTD),1)
@@ -64,23 +66,28 @@ Last-Update: 2025-07-19
 -           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress.o \
 -           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress_block.o
 -
--   OBJ +=  $(ZSOBJ)
+-   OBJ +=  $(LIBRETRO_COMM_DIR)/file/archive_file_zstd.o \
+-           $(ZSOBJ)
++   OBJ +=  $(LIBRETRO_COMM_DIR)/file/archive_file_zstd.o
 +   LIBS += -lzstd
  endif
  
  ifeq ($(HAVE_IBXM), 1)
-@@ -2007,6 +1980,7 @@ ifeq ($(HAVE_BUILTINFLAC),1)
+@@ -2023,7 +1996,8 @@ ifeq ($(HAVE_BUILTINFLAC),1)
     OBJ += $(FLACOBJ)
  else ifeq ($(HAVE_FLAC),1)
     DEFINES += -DHAVE_FLAC
+-   LIBS    += $(FLAC_LIBS)
 +   INCLUDE_DIRS += -I/usr/include
-    LIBS    += $(FLAC_LIBS)
++   LIBS    += -lFLAC
  endif
  
-@@ -2392,41 +2366,10 @@ ifeq ($(HAVE_NETWORKING), 1)
+ ifeq ($(HAVE_BUILTINZLIB), 1)
+@@ -2423,42 +2397,9 @@ ifeq ($(HAVE_NETWORKING), 1)
+       endif
  
        ifeq ($(HAVE_LUA), 1)
-          DEFINES += -DHAVE_LUA \
+-         DEFINES += -DHAVE_LUA \
 -                    -DLUA_32BITS
 -         INCLUDE_DIRS += -Ideps/lua/src
 -         OBJ += deps/lua/src/lapi.o \
@@ -116,19 +123,19 @@ Last-Update: 2025-07-19
 -                deps/lua/src/lutf8lib.o \
 -                deps/lua/src/loadlib.o \
 -                deps/lua/src/linit.o
-+                    -DLUA_32BITS \
-+                    -DLUA_USE_POSIX
++         DEFINES += -DHAVE_LUA -DLUA_32BITS -DLUA_USE_LINUX -DLUA_USE_C89
 +         INCLUDE_DIRS += -I/usr/include/lua5.3
-+         LIBS += -llua5.3 -lm -ldl
++         LIBS += -llua5.3 -lreadline
        else
           DEFINES += -DRC_DISABLE_LUA
        endif
-@@ -2437,15 +2380,13 @@ ifeq ($(HAVE_NETWORKING), 1)
+@@ -2469,31 +2410,14 @@ ifeq ($(HAVE_NETWORKING), 1)
        NEED_CXX_LINKER = 1
        HAVE_PRESENCE = 1
        DEFINES += -DHAVE_DISCORD
 -      INCLUDE_DIRS += -Ideps/discord-rpc/include
 +      INCLUDE_DIRS += -I/usr/include/DiscordRPC
++      LIBS += -ldiscord-rpc
  
        ifneq ($(HAVE_THREADS), 1)
           DEFINES += -DDISCORD_DISABLE_IO_THREAD
@@ -137,21 +144,25 @@ Last-Update: 2025-07-19
 -      OBJ     += deps/discord-rpc/src/discord_rpc.o \
 -                 deps/discord-rpc/src/rpc_connection.o \
 -                 deps/discord-rpc/src/serialization.o
-+      LIBS += -ldiscord-rpc
- 
+-
        OBJ     += network/discord.o
- 
-@@ -2454,10 +2395,6 @@ ifeq ($(HAVE_NETWORKING), 1)
-                  deps/discord-rpc/src/connection_win.o
-          LIBS += -lpsapi -ladvapi32
-       endif
+-
+-      ifneq ($(findstring Win32,$(OS)),)
+-         OBJ  += deps/discord-rpc/src/discord_register_win.o \
+-                 deps/discord-rpc/src/connection_win.o
+-         LIBS += -lpsapi -ladvapi32
+-      endif
 -      ifneq ($(findstring Linux,$(OS)),)
 -         OBJ  += deps/discord-rpc/src/discord_register_linux.o \
 -                 deps/discord-rpc/src/connection_unix.o
 -      endif
-       ifneq ($(findstring Darwin,$(OS)),)
-          OBJ  += deps/discord-rpc/src/discord_register_osx.o \
-                  deps/discord-rpc/src/connection_unix.o
+-      ifneq ($(findstring Darwin,$(OS)),)
+-         OBJ  += deps/discord-rpc/src/discord_register_osx.o \
+-                 deps/discord-rpc/src/connection_unix.o
+-      endif
+    endif
+ 
+    ifeq ($(HAVE_TRANSLATE), 1)
 --- a/libretro-common/formats/libchdr/libchdr_flac.c
 +++ b/libretro-common/formats/libchdr/libchdr_flac.c
 @@ -17,6 +17,8 @@

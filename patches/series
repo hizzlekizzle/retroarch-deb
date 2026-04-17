@@ -2,9 +2,8 @@
 0001-print-fatal-errors-to-stdout.patch
 0002-fix-armhf-NEON-support.patch
 0003-remove-GLSL-library-checks.patch
-0004-add-qhash-include.patch
-0005-update-doxygen-config.patch
-0006-fix-quickbuild-behavior.patch
-0007-fix-spelling-and-grammar.patch
-0008-replace-distutils-with-setuptools.patch
-#0009-make-builds-reproducible.patch
+0004-update-doxygen-config.patch
+0005-fix-quickbuild-behavior.patch
+0006-fix-spelling-and-grammar.patch
+0007-replace-distutils-with-setuptools.patch
+#0008-make-builds-reproducible.patch
