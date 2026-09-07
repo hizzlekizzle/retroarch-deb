@@ -15,14 +15,14 @@ Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debia
 Bug-Debian: https://bugs.debian.org/949708
 Bug-Debian: https://bugs.debian.org/1053190
 Forwarded: no
-Last-Update: 2026-04-16
+Last-Update: 2026-09-06
 
 --- a/Makefile.common
 +++ b/Makefile.common
-@@ -1910,14 +1910,9 @@ endif
- 
- ifeq ($(HAVE_SPIRV_CROSS), 1)
-    DEFINES += -DHAVE_SPIRV_CROSS
+@@ -1966,15 +1966,9 @@ ifeq ($(HAVE_SPIRV_CROSS), 1)
+ # by -DHAVE_SPIRV_CROSS and never reach this block.
+ ifneq ($(HAVE_BUILTINSPIRV_CROSS), 0)
+    DEFINES += -DHAVE_BUILTINSPIRV_CROSS
 -   INCLUDE_DIRS += -I$(DEPS_DIR)/SPIRV-Cross
 -   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cross.o
 -   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cfg.o
@@ -31,13 +31,14 @@ Last-Update: 2026-04-16
 -   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_msl.o
 -   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_parser.o
 -   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cross_parsed_ir.o
+-   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cross_c.o
 +   INCLUDE_DIRS += -I/usr/include/spirv_cross
 +   LIBS += -lspirv-cross-cpp -lspirv-cross-msl -lspirv-cross-glsl \
 +			-lspirv-cross-c-shared -lspirv-cross-core
- endif
- 
- ifeq ($(WANT_WGL), 1)
-@@ -1961,32 +1956,10 @@ ifeq ($(HAVE_7ZIP),1)
+    # The C API translation unit compiles its backend wrappers only
+    # when these are defined truthy.
+    DEFINES += -DSPIRV_CROSS_C_API_GLSL=1
+@@ -2031,31 +2025,10 @@ ifeq ($(HAVE_RZSTD),1)
  endif
  
  ifeq ($(HAVE_ZSTD),1)
@@ -66,24 +67,13 @@ Last-Update: 2026-04-16
 -           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress.o \
 -           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress_block.o
 -
--   OBJ +=  $(LIBRETRO_COMM_DIR)/file/archive_file_zstd.o \
--           $(ZSOBJ)
+-   OBJ += $(ZSOBJ)
 +   OBJ +=  $(LIBRETRO_COMM_DIR)/file/archive_file_zstd.o
 +   LIBS += -lzstd
  endif
  
- ifeq ($(HAVE_IBXM), 1)
-@@ -2023,7 +1996,8 @@ ifeq ($(HAVE_BUILTINFLAC),1)
-    OBJ += $(FLACOBJ)
- else ifeq ($(HAVE_FLAC),1)
-    DEFINES += -DHAVE_FLAC
--   LIBS    += $(FLAC_LIBS)
-+   INCLUDE_DIRS += -I/usr/include
-+   LIBS    += -lFLAC
- endif
- 
- ifeq ($(HAVE_BUILTINZLIB), 1)
-@@ -2423,42 +2397,9 @@ ifeq ($(HAVE_NETWORKING), 1)
+ # The archive backend needs one decoder, not a particular one. Testing
+@@ -2591,42 +2564,9 @@ ifeq ($(HAVE_NETWORKING), 1)
        endif
  
        ifeq ($(HAVE_LUA), 1)
@@ -129,87 +119,21 @@ Last-Update: 2026-04-16
        else
           DEFINES += -DRC_DISABLE_LUA
        endif
-@@ -2469,31 +2410,14 @@ ifeq ($(HAVE_NETWORKING), 1)
-       NEED_CXX_LINKER = 1
+@@ -2636,7 +2576,8 @@ ifeq ($(HAVE_NETWORKING), 1)
+    ifeq ($(HAVE_DISCORD), 1)
        HAVE_PRESENCE = 1
        DEFINES += -DHAVE_DISCORD
--      INCLUDE_DIRS += -Ideps/discord-rpc/include
+-
 +      INCLUDE_DIRS += -I/usr/include/DiscordRPC
 +      LIBS += -ldiscord-rpc
- 
-       ifneq ($(HAVE_THREADS), 1)
-          DEFINES += -DDISCORD_DISABLE_IO_THREAD
-       endif
- 
--      OBJ     += deps/discord-rpc/src/discord_rpc.o \
--                 deps/discord-rpc/src/rpc_connection.o \
--                 deps/discord-rpc/src/serialization.o
--
        OBJ     += network/discord.o
--
--      ifneq ($(findstring Win32,$(OS)),)
--         OBJ  += deps/discord-rpc/src/discord_register_win.o \
--                 deps/discord-rpc/src/connection_win.o
--         LIBS += -lpsapi -ladvapi32
--      endif
--      ifneq ($(findstring Linux,$(OS)),)
--         OBJ  += deps/discord-rpc/src/discord_register_linux.o \
--                 deps/discord-rpc/src/connection_unix.o
--      endif
--      ifneq ($(findstring Darwin,$(OS)),)
--         OBJ  += deps/discord-rpc/src/discord_register_osx.o \
--                 deps/discord-rpc/src/connection_unix.o
--      endif
     endif
  
-    ifeq ($(HAVE_TRANSLATE), 1)
---- a/libretro-common/formats/libchdr/libchdr_flac.c
-+++ b/libretro-common/formats/libchdr/libchdr_flac.c
-@@ -17,6 +17,8 @@
- #define DR_FLAC_IMPLEMENTATION
- #define DRFLAC_API static INLINE
- #include <dr/dr_flac.h>
-+#else
-+#include <FLAC/stream_decoder.h>
- #endif
- 
- /***************************************************************************
-@@ -25,8 +27,12 @@
-  */
- 
- static size_t flac_decoder_read_callback(void *userdata, void *buffer, size_t bytes);
-+#ifdef HAVE_DR_FLAC
- static drflac_bool32 flac_decoder_seek_callback(void *userdata, int offset, drflac_seek_origin origin);
- static void flac_decoder_metadata_callback(void *userdata, drflac_metadata *metadata);
-+#else
-+static void flac_decoder_metadata_callback(const FLAC__StreamDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data);
-+#endif
- static void flac_decoder_write_callback(void *userdata, void *buffer, size_t bytes);
- 
- 
-@@ -64,10 +70,15 @@ int flac_decoder_init(flac_decoder *deco
- 
- void flac_decoder_free(flac_decoder* decoder)
- {
-+#ifdef HAVE_DR_FLAC
- 	if ((decoder != NULL) && (decoder->decoder != NULL)) {
- 		drflac_close(decoder->decoder);
- 		decoder->decoder = NULL;
- 	}
-+#else
-+	if ((decoder != NULL) && (decoder->decoder != NULL))
-+		FLAC__stream_decoder_delete(decoder->decoder);
-+#endif
- }
- 
- /*-------------------------------------------------
---- a/network/discord.h
-+++ b/network/discord.h
-@@ -24,7 +24,6 @@
- #include <boolean.h>
- 
- #include <discord_rpc.h>
--#include "../deps/discord-rpc/include/discord_rpc.h"
- #include "presence.h"
- 
- /* The Discord API specifies these variables:
+@@ -2883,6 +2824,7 @@ ifneq (,$(filter 1,$(HAVE_SMBCLIENT) $(H
+       # system libsmb2
+       ifeq ($(shell pkg-config --exists libsmb2 && echo yes),yes)
+          CFLAGS += $(shell pkg-config --cflags libsmb2)
++         DEFINES += -DHAVE_STDINT_H -DHAVE_TIME_H
+          LIBS   += $(shell pkg-config --libs libsmb2)
+       else
+          LIBS   += -lsmb2

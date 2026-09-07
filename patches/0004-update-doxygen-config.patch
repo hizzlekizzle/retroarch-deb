@@ -2,7 +2,7 @@ Description: Adapt upstream Doxygen configuration to produce better offline docs
 Author: Peter J. Mello <admin@petermello.net>
 Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian/commit/patches/0006-update-doxygen-config.patch?id=7ed2946c2a08c4038f9f29ba05963a5bf56b2073
 Forwarded: not-needed
-Last-Update: 2025-06-26
+Last-Update: 2026-09-06
 
 --- a/Doxyfile
 +++ b/Doxyfile
@@ -11,7 +11,7 @@ Last-Update: 2025-06-26
  # control system is used.
  
 -PROJECT_NUMBER         =
-+PROJECT_NUMBER         = 1.21.0
++PROJECT_NUMBER         = 1.22.2
  
  # Using the PROJECT_BRIEF tag one can provide an optional one line description
  # for a project that appears at the top of each page and should give viewer a

@@ -3,11 +3,11 @@ Author: Peter J. Mello <admin@petermello.net>
 Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian/commit/patches/0004-remove-GLSL-library-checks.patch?id=5491e645fa1b77ba22cac8673980fb1fc36acbbe
 Bug-Debian: https://bugs.debian.org/1064681
 Forwarded: yes, https://github.com/libretro/RetroArch/issues/16571
-Last-Update: 2026-04-16
+Last-Update: 2026-09-06
 
 --- a/qb/config.libs.sh
 +++ b/qb/config.libs.sh
-@@ -656,16 +656,13 @@ if [ "$HAVE_GLSLANG" != no ]; then
+@@ -843,16 +843,13 @@ if [ "$HAVE_GLSLANG" != no ]; then
  
     check_lib cxx GLSLANG -lglslang '' '-lSPIRV'
     check_lib cxx GLSLANG_OSDEPENDENT -lOSDependent

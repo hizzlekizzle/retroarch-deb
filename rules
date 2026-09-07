@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: © 2012-2025, Hunter Kaller <hunter_kaller@yahoo.com>
 # SPDX-FileCopyrightText: © 2014-2018, Sergio Benjamim <sergio_br2@yahoo.com.br>
 # SPDX-FileCopyrightText: © 2020-2025, Paul Preuss <paul@dokomi.de>
-# SPDX-FileCopyrightText: © 2021-2025, Peter J. Mello <admin@petermello.net>
+# SPDX-FileCopyrightText: © 2021-2026, Peter J. Mello <admin@petermello.net>
 #
 # SPDX-License-Identifier: GPL-3.0-or-later OR MPL-2.0
 
@@ -12,10 +12,9 @@ INSTALL_vd                   ::= $(realpath /bin/install) --verbose --directory
 MAKEFLAGS                     += --output-sync=target
 SHELL                        ::= $(realpath /bin/bash)
 
-DEB_BUILD_MAINT_OPTIONS      ::= future=+lfs hardening=+all optimize=+lto \
+DEB_BUILD_MAINT_OPTIONS      ::= abi=+all hardening=+all optimize=+lto \
 									reproducible=+fixfilepath
 DEB_CFLAGS_MAINT_APPEND      ::= -Wno-incompatible-pointer-types
-DEB_CPPFLAGS_MAINT_PREPEND   ::= -U_FORTIFY_SOURCE
 DEB_LDFLAGS_MAINT_APPEND     ::= -lGL -pthread
 DEB_LDFLAGS_MAINT_PREPEND    ::= -Wl,--copy-dt-needed-entries
 DOXYGEN                      ::= $(realpath /bin/doxygen)
@@ -31,27 +30,14 @@ ifeq (,$(findstring terse,$(DEB_BUILD_OPTIONS)))
   MAKE_ARGS                   += "V=1"
 endif
 
-# Use Bash's built-in printf to pass the Ubuntu version when the dpkg flag set
-# was introduced, and compare it to the version of the build system (host) by
-# supplying them on separate lines to 'sort' with greatest first ordering, then
-# pipe to 'head' to isolate the larger value. If the output matches the build
-# system (i.e. it's ≥the version of introduction), then set the flags.
-uver ::= $(shell lsb_release -rs | cut -c-5)
-include /usr/share/dpkg/vendor.mk
-ifeq (Ubuntu,$(DEB_VENDOR))
-  # Add C preprocessor definitions for Large File Support and time64.
-  ifeq ($(uver),$(shell printf "$(uver)\n23.10\n" | sort -gr | head -1))
-    DEB_BUILD_MAINT_OPTIONS   += abi=+all
-  endif
-
-  # Pass ELF package metadata to linker for easier debugging by users.
-  ifeq ($(uver),$(shell printf "$(uver)\n24.10\n" | sort -gr | head -1))
-    DEB_BUILD_MAINT_OPTIONS   += qa=-bug-implicit-func,+elfpackagemetadata
-    DEB_BUILD_DEBUG_INFO_URL ::= https://debuginfod.ubuntu.com/
-    export DEB_BUILD_DEBUG_INFO_URL
-  else
-    DEB_BUILD_MAINT_OPTIONS   += qa=-bug-implicit-func
-  endif
+# Use dpkg to introspect its installed version and compare it to the version of
+# the version of introduction for dpkg-buildflags named feature areas.
+dpkg_v ::= $(shell dpkg-query -f '$${Version}' -W dpkg-dev)
+# Pass ELF package metadata to linker for easier debugging by users.
+ifneq (0,$(shell dpkg --compare-versions $(dpkg_v) ge 1.22.6ubuntu11 && echo 1))
+  DEB_BUILD_MAINT_OPTIONS   += qa=-bug-implicit-func,+elfpackagemetadata
+else ifneq (,$(shell dpkg --compare-versions $(dpkg_v) ge 1.22.3 && echo 1))
+  DEB_BUILD_MAINT_OPTIONS   += qa=-bug-implicit-func
 endif
 
 include /usr/share/dpkg/default.mk
@@ -67,9 +53,8 @@ dv       ::= $(DEB_VERSION)
 git_hash ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
 
 ifdef git_hash
-  GIT_VERSION  ::= $(git_hash)
-  MAKE_ARGS     += "GIT_VERSION=$(git_hash)"
-  export GIT_VERSION
+  export GIT_VERSION  ::= $(git_hash)
+  MAKE_ARGS            += "GIT_VERSION=$(git_hash)"
 endif
 
 # See ./configure --help for valid flags for the QuickBuild framework
@@ -81,23 +66,23 @@ QB_BUILD_FLAGS ::= --prefix=/usr --bindir=/usr/games --datarootdir=/usr/share \
 	--with-core_info_dir=/usr/share/libretro
 QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 	--disable-blissbox --enable-bluetooth --disable-builtinbearssl \
-	--disable-builtinflac --disable-builtinglslang --disable-builtinmbedtls \
-	--disable-builtinzlib --enable-caca --enable-cdrom --enable-check \
+	--disable-builtinglslang --disable-builtinmbedtls \
+	--disable-builtinsmbclient --enable-caca --enable-cdrom --enable-check \
 	--enable-command --enable-configfile --disable-core_info_cache \
-	--disable-coreaudio --enable-crtswitchres --disable-d3d9 --disable-d3dx \
-	--enable-dbus --disable-dinput --disable-dr_flac --enable-dr_mp3 \
-	--disable-dsound --enable-dsp_filter --enable-dylib --disable-dynamic_egl \
-	--enable-egl --enable-ffmpeg --disable-flac --enable-freetype \
-	--disable-game_ai --disable-gdi --enable-glslang --enable-hid --enable-jack \
-	--enable-kms --enable-libdecor --enable-libshake --enable-libusb \
-	--enable-lua 	--enable-materialui --enable-memfd_create --enable-mmap \
-	--disable-mpv --enable-network_video --enable-networkgamepad \
-	--enable-networking 	--disable-nvda --enable-opengl --disable-osmesa \
-	--disable-oss --enable-ozone --enable-parport --enable-patch \
-	--enable-pipewire --enable-plain_drm --enable-pulse --enable-qt \
-	--enable-rgui --disable-roar --disable-rsound --disable-sapi --disable-sdl \
-	--enable-sdl2 --enable-sixel --enable-slang --enable-spirv_cross \
-	--enable-ssa --enable-ssl --enable-systemd --enable-systemmbedtls \
+	--disable-coreaudio --enable-crtswitchres --disable-d3d9 --enable-dbus \
+	--disable-dinput --disable-dsound --enable-dsp_filter --enable-dylib \
+	--disable-dynamic_egl --enable-egl --enable-ffmpeg --enable-flac \
+	--enable-freetype --disable-game_ai --disable-gdi --enable-glslang \
+	--enable-hid --enable-jack --enable-kms --enable-libdecor \
+	--enable-libshake --enable-libusb --enable-lua --enable-materialui \
+	--enable-memfd_create --enable-microphone --enable-mmap --disable-mpv \
+	--enable-network_video --enable-networkgamepad --enable-networking \
+	--disable-nvda --enable-opengl --disable-osmesa --disable-oss \
+	--enable-ozone --enable-parport --enable-patch --enable-pipewire \
+	--enable-plain_drm --enable-pulse --enable-qt --enable-rgui --disable-roar \
+	--disable-rsound --disable-sapi --disable-sdl --enable-sdl2 --enable-sixel \
+	--enable-slang --enable-smbclient --enable-spirv_cross --enable-ssa \
+	--enable-ssl --enable-systemd --enable-systemmbedtls --enable-test_drivers \
 	--enable-threads --enable-thread_storage --disable-tinyalsa --enable-udev \
 	--disable-update_assets --enable-v4l2 --disable-vg --enable-video_filter \
 	--disable-videocore --enable-videoprocessor --enable-vulkan \
@@ -112,8 +97,8 @@ QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
 # the moc parts of Qt6-enabled builds. The "-fno-late-combine-instructions" flag
 # is a workaround to prevent such builds from erroring out. This can be pulled
 # whenever Canonical releases a backport patching this bug.
-gcc-d_v ::= $(shell dpkg-query -f '$${Version}' -W gcc-defaults)
-gcctest ::= $(shell dpkg --compare-versions $(gcc-d_v) ge 1.222 && echo "true")
+gcc_v ::= $(shell dpkg-query -f '$${Version}' -W gcc)
+gcctest ::= $(shell dpkg --compare-versions $(gcc_v) ge 15.1.0 && echo "true")
 
 ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
   QB_LIBS_FLAGS += --disable-angle --enable-cg \
@@ -122,18 +107,14 @@ else ifeq ($(DEB_HOST_GNU_CPU),aarch64)
   QB_LIBS_FLAGS += --disable-angle --disable-cg \
 					--enable-opengles --enable-opengles3 --enable-opengles3_1 \
 					--enable-opengles3_2
-else ifeq ($(DEB_HOST_ARCH),armhf)
+  ifeq ($(gcctest),true)
+    DEB_CFLAGS_MAINT_APPEND    += -mno-early-ldp-fusion
+    DEB_CXXFLAGS_MAINT_APPEND  += -mno-early-ldp-fusion
+  endif
+else ifeq ($(DEB_HOST_GNU_CPU),arm)
   QB_LIBS_FLAGS += --disable-cg --enable-floathard \
 					--enable-neon --enable-opengles --enable-opengles3 \
 					--enable-opengles3_1 --enable-opengles3_2 --enable-sunxi
-  ifeq ($(gcctest),true)
-    DEB_CFLAGS_MAINT_APPEND    += -fno-late-combine-instructions
-    DEB_CXXFLAGS_MAINT_APPEND ::= -fno-late-combine-instructions
-  endif
-else ifeq ($(DEB_HOST_ARCH),armel)
-  QB_LIBS_FLAGS += --disable-cg --enable-floatsoftfp --disable-game_ai \
-					--enable-opengles --enable-opengles3 --enable-opengles3_1 \
-					--enable-opengles3_2
   ifeq ($(gcctest),true)
     DEB_CFLAGS_MAINT_APPEND    += -fno-late-combine-instructions
     DEB_CXXFLAGS_MAINT_APPEND ::= -fno-late-combine-instructions
@@ -155,13 +136,12 @@ ifneq ($(glsltest),true)
 endif
 
 export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND \
-		DEB_CPPFLAGS_MAINT_PREPEND DEB_CXXFLAGS_MAINT_APPEND \
-		DEB_LDFLAGS_MAINT_APPEND DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC \
-		QT_SELECT SHELL
+		DEB_CXXFLAGS_MAINT_APPEND DEB_LDFLAGS_MAINT_APPEND \
+		DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC QT_SELECT SHELL
 
 
 %:
-	dh $@ -v -Smakefile --without autoreconf,autotools-dev
+	dh $@ -v -Smakefile --without autoreconf
 
 
 execute_before_dh_auto_clean:

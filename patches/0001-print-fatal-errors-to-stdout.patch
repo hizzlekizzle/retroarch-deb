@@ -4,11 +4,11 @@ Origin: vendor, https://salsa.debian.org/games-team/libretro/retroarch/-/commit/
 Bug-Debian: https://bugs.debian.org/956849
 Forwarded: no
 Reviewed-By: Peter J. Mello <admin@petermello.net>
-Last-Update: 2024-07-19
+Last-Update: 2026-09-06
 
 --- a/retroarch.c
 +++ b/retroarch.c
-@@ -8049,6 +8049,9 @@ bool retroarch_main_init(int argc, char
+@@ -8448,6 +8448,9 @@ bool retroarch_main_init(int argc, char 
  
     if (setjmp(global->error_sjlj_context) > 0)
     {

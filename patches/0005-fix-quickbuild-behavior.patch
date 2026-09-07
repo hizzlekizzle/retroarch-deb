@@ -2,7 +2,7 @@ Description: Fix QuickBuild deficiencies at handling custom paths
 Author: Peter J. Mello <admin@petermello.net>
 Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian/commit/patches/0007-fix-quickbuild-behavior.patch?id=1f721a3cf7f255efbc53e99da6362c4b33fbb958
 Forwarded: no
-Last-Update: 2025-06-30
+Last-Update: 2026-09-06
 
 --- a/qb/config.libs.sh
 +++ b/qb/config.libs.sh
@@ -15,7 +15,7 @@ Last-Update: 2025-06-30
  	esac
  }
  
-@@ -155,9 +155,9 @@ fi
+@@ -165,9 +165,9 @@ fi
     add_define MAKEFILE libretro "$LIBRETRO"
  }
  
@@ -28,21 +28,7 @@ Last-Update: 2025-06-30
  add_define MAKEFILE BIN_DIR "${BIN_DIR:-${PREFIX}/bin}"
  add_define MAKEFILE DOC_DIR "${DOC_DIR:-${SHARE_DIR}/doc/retroarch}"
  add_define MAKEFILE MAN_DIR "${MAN_DIR:-${SHARE_DIR}/man}"
-@@ -333,19 +333,21 @@ if [ "$HAVE_QT" != 'no' ]; then
-    check_pkgconf OPENSSL openssl 1.0.0
- fi
- 
-+if [ "${HAVE_FLAC}" = 'yes' ] && [ "${HAVE_BUILTINFLAC}" = 'no' ]; then
-+  check_val '' FLAC '-lFLAC' '' flac 1.3.2 '' true && HAVE_DR_FLAC=no
-+elif [ "${HAVE_FLAC}" = 'yes' ] && [ "${HAVE_BUILTINFLAC}" != 'no' ]; then
- check_enabled FLAC BUILTINFLAC 'builtin flac' 'flac is' true
--
- check_val '' FLAC '-lFLAC' '' flac '' '' false
--
-+fi
- 
- check_enabled SSL SYSTEMMBEDTLS 'system mbedtls' 'ssl is' false
- check_enabled SSL BUILTINMBEDTLS 'builtin mbedtls' 'ssl is' false
+@@ -498,9 +498,9 @@ check_enabled SSL BUILTINMBEDTLS 'builti
  check_enabled SSL BUILTINBEARSSL 'builtin bearssl' 'ssl is' false
  
  if [ "$HAVE_SYSTEMMBEDTLS" = "auto" ]; then SYSTEMMBEDTLS_IS_AUTO=yes; else SYSTEMMBEDTLS_IS_AUTO=no; fi
@@ -55,22 +41,12 @@ Last-Update: 2025-06-30
  if [ "$HAVE_SYSTEMMBEDTLS" = 'yes' ] && [ -z "$SYSTEMMBEDTLS_VERSION" ]; then
    # Ancient versions (such as the one included in the Ubuntu version used for
    # build checks) don't have this header
-@@ -548,7 +550,7 @@ check_val '' XINERAMA -lXinerama '' xine
+@@ -712,7 +712,7 @@ check_val '' XINERAMA -lXinerama '' xine
  check_lib '' XRANDR -lXrandr
  check_header '' XSHM X11/Xlib.h X11/extensions/XShm.h
  check_val '' XKBCOMMON -lxkbcommon '' xkbcommon 0.3.2 '' false
 -check_val '' WAYLAND '-lwayland-egl -lwayland-client' '' wayland-egl 10.1.0 '' false
 +check_val '' WAYLAND '-lwayland-egl -lwayland-client' '' wayland-egl 1.10.1 '' false
  check_val '' WAYLAND_CURSOR -lwayland-cursor '' wayland-cursor 1.12 '' false
- check_pkgconf WAYLAND_PROTOS wayland-protocols 1.37
+ check_pkgconf WAYLAND_PROTOS wayland-protocols 1.43
  check_pkgconf WAYLAND_SCANNER wayland-scanner '1.15 1.12'
---- a/qb/config.params.sh
-+++ b/qb/config.params.sh
-@@ -144,6 +144,7 @@ CXX_CHD=no
- HAVE_7ZIP=yes              # Compile in 7z support
- HAVE_ZSTD=yes              # Compile in Zstandard support
- HAVE_FLAC=auto             # Compile in flac support
-+HAVE_DR_FLAC=yes           # Compile in Dr. FLAC support
- HAVE_DR_MP3=yes            # Compile in Dr. MP3 support
- HAVE_BUILTINFLAC=auto      # Bake in flac support
- HAVE_ONLINE_UPDATER=yes    # Disable the online updater

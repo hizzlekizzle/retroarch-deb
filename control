@@ -6,8 +6,8 @@ Uploaders: Hunter Kaller <hunter_kaller@yahoo.com>,
  Sérgio Benjamim <sergio_br2@yahoo.com.br>, Paul Preuss <paul@dokomi.de>,
  Peter J. Mello <admin@petermello.net>
 Build-Depends: debhelper-compat (= 13), alsa-utils, appstream <!nocheck>,
- check (>= 0.15) <!nocheck>, chrpath, dpkg-build-api (= 1) | dpkg-dev (<< 1.22),
- jdupes, lsb-release, pkgconf, python3-dev:any, quilt
+ check (>= 0.15) <!nocheck>, chrpath, dpkg-build-api (= 1), jdupes, pkgconf,
+ python3-dev:any, quilt
 Build-Depends-Arch: dh-package-notes, glslang-dev, libasound2-dev (>= 1.0.18),
  libass-dev (>= 1:0.13.6), libavcodec-dev (>= 7:4.4),
  libavdevice-dev (>= 7:4.4), libavformat-dev (>= 7:4.4),
