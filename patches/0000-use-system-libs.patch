@@ -1,79 +1,27 @@
 Description: Build against system libraries instead of vendored ones
  This patch changes the QuickBuild configuration output so that the linker
  invocation commands produce binaries which are linked to the system versions
- of:
-   - libdiscord-rpc
-   - libFLAC
-   - liblua5.3
-   - libzstd
-   - SPIRV-Cross
- …rather than the vendored snapshots of those projects' codebase present in the
- release tarball and typically compiled at build time. This produces a RetroArch
- binary roughly 1 MiB smaller, on average.
+ of liblua5.3 and SPIRV-Cross rather than the vendored project snapshots present
+ in the release tarball and typically compiled at build time. This produces a
+ RetroArch binary roughly 1 MiB smaller, on average.
 Author: Peter J. Mello <admin@petermello.net>
 Origin: other, https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian/commit/patches/0000-use-system-libs.patch?id=00fcf2a6c54be09d8b84443651063c7527f420db
 Bug-Debian: https://bugs.debian.org/949708
 Bug-Debian: https://bugs.debian.org/1053190
 Forwarded: no
-Last-Update: 2026-09-06
+Last-Update: 2026-10-14
 
 --- a/Makefile.common
 +++ b/Makefile.common
-@@ -1966,15 +1966,9 @@ ifeq ($(HAVE_SPIRV_CROSS), 1)
- # by -DHAVE_SPIRV_CROSS and never reach this block.
- ifneq ($(HAVE_BUILTINSPIRV_CROSS), 0)
-    DEFINES += -DHAVE_BUILTINSPIRV_CROSS
--   INCLUDE_DIRS += -I$(DEPS_DIR)/SPIRV-Cross
--   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cross.o
--   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cfg.o
--   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_glsl.o
--   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_hlsl.o
--   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_msl.o
--   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_parser.o
--   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cross_parsed_ir.o
--   OBJ += $(DEPS_DIR)/SPIRV-Cross/spirv_cross_c.o
-+   INCLUDE_DIRS += -I/usr/include/spirv_cross
-+   LIBS += -lspirv-cross-cpp -lspirv-cross-msl -lspirv-cross-glsl \
-+			-lspirv-cross-c-shared -lspirv-cross-core
-    # The C API translation unit compiles its backend wrappers only
-    # when these are defined truthy.
-    DEFINES += -DSPIRV_CROSS_C_API_GLSL=1
-@@ -2031,31 +2025,10 @@ ifeq ($(HAVE_RZSTD),1)
+@@ -398,6 +398,7 @@ OBJ += \
+ 
+ ifeq ($(HAVE_VIDEO_FILTER), 1)
+ DEFINES += -DHAVE_VIDEO_FILTER
++INCLUDE_DIRS += -I./gfx
+ OBJ     += gfx/video_filter.o
  endif
  
- ifeq ($(HAVE_ZSTD),1)
--   INCLUDE_DIRS += -I$(DEPS_DIR)/zstd/lib
-+   INCLUDE_DIRS += -I/usr/include
-    DEFINES += -DHAVE_ZSTD -DZSTD_DISABLE_ASM
--   ZSOBJ = $(DEPS_DIR)/zstd/lib/common/entropy_common.o \
--           $(DEPS_DIR)/zstd/lib/common/error_private.o \
--           $(DEPS_DIR)/zstd/lib/common/fse_decompress.o \
--           $(DEPS_DIR)/zstd/lib/common/zstd_common.o \
--           $(DEPS_DIR)/zstd/lib/common/xxhash.o \
--           $(DEPS_DIR)/zstd/lib/compress/fse_compress.o \
--           $(DEPS_DIR)/zstd/lib/compress/hist.o \
--           $(DEPS_DIR)/zstd/lib/compress/huf_compress.o \
--           $(DEPS_DIR)/zstd/lib/compress/zstd_compress.o \
--           $(DEPS_DIR)/zstd/lib/compress/zstd_compress_literals.o \
--           $(DEPS_DIR)/zstd/lib/compress/zstd_compress_sequences.o \
--           $(DEPS_DIR)/zstd/lib/compress/zstd_compress_superblock.o \
--           $(DEPS_DIR)/zstd/lib/compress/zstd_double_fast.o \
--           $(DEPS_DIR)/zstd/lib/compress/zstd_fast.o \
--           $(DEPS_DIR)/zstd/lib/compress/zstd_lazy.o \
--           $(DEPS_DIR)/zstd/lib/compress/zstd_ldm.o \
--           $(DEPS_DIR)/zstd/lib/compress/zstd_opt.o \
--           $(DEPS_DIR)/zstd/lib/decompress/huf_decompress.o \
--           $(DEPS_DIR)/zstd/lib/decompress/zstd_ddict.o \
--           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress.o \
--           $(DEPS_DIR)/zstd/lib/decompress/zstd_decompress_block.o
--
--   OBJ += $(ZSOBJ)
-+   OBJ +=  $(LIBRETRO_COMM_DIR)/file/archive_file_zstd.o
-+   LIBS += -lzstd
- endif
- 
- # The archive backend needs one decoder, not a particular one. Testing
-@@ -2591,42 +2564,9 @@ ifeq ($(HAVE_NETWORKING), 1)
+@@ -2720,42 +2721,9 @@ ifeq ($(HAVE_NETWORKING), 1)
        endif
  
        ifeq ($(HAVE_LUA), 1)
@@ -113,27 +61,9 @@ Last-Update: 2026-09-06
 -                deps/lua/src/lutf8lib.o \
 -                deps/lua/src/loadlib.o \
 -                deps/lua/src/linit.o
-+         DEFINES += -DHAVE_LUA -DLUA_32BITS -DLUA_USE_LINUX -DLUA_USE_C89
++         DEFINES      += -DHAVE_LUA -DLUA_32BITS -DLUA_USE_LINUX -DLUA_USE_C89
 +         INCLUDE_DIRS += -I/usr/include/lua5.3
-+         LIBS += -llua5.3 -lreadline
++         LIBS         += -llua5.3 -lreadline
        else
           DEFINES += -DRC_DISABLE_LUA
        endif
-@@ -2636,7 +2576,8 @@ ifeq ($(HAVE_NETWORKING), 1)
-    ifeq ($(HAVE_DISCORD), 1)
-       HAVE_PRESENCE = 1
-       DEFINES += -DHAVE_DISCORD
--
-+      INCLUDE_DIRS += -I/usr/include/DiscordRPC
-+      LIBS += -ldiscord-rpc
-       OBJ     += network/discord.o
-    endif
- 
-@@ -2883,6 +2824,7 @@ ifneq (,$(filter 1,$(HAVE_SMBCLIENT) $(H
-       # system libsmb2
-       ifeq ($(shell pkg-config --exists libsmb2 && echo yes),yes)
-          CFLAGS += $(shell pkg-config --cflags libsmb2)
-+         DEFINES += -DHAVE_STDINT_H -DHAVE_TIME_H
-          LIBS   += $(shell pkg-config --libs libsmb2)
-       else
-          LIBS   += -lsmb2

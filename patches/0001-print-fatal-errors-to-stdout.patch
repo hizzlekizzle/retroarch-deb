@@ -4,17 +4,17 @@ Origin: vendor, https://salsa.debian.org/games-team/libretro/retroarch/-/commit/
 Bug-Debian: https://bugs.debian.org/956849
 Forwarded: no
 Reviewed-By: Peter J. Mello <admin@petermello.net>
-Last-Update: 2026-09-06
+Last-Update: 2026-10-11
 
 --- a/retroarch.c
 +++ b/retroarch.c
-@@ -8448,6 +8448,9 @@ bool retroarch_main_init(int argc, char 
+@@ -9016,6 +9016,9 @@ bool retroarch_main_init_core(int argc,
  
-    if (setjmp(global->error_sjlj_context) > 0)
+    if (setjmp(rarch_st.error_sjlj_context) > 0)
     {
 +      fprintf(stderr, "%s: \"%s\"\n",
 +            msg_hash_to_str(MSG_FATAL_ERROR_RECEIVED_IN),
-+            global_get_ptr()->error_string);
++            rarch_st.error_string);
        RARCH_ERR("%s: \"%s\"\n",
              msg_hash_to_str(MSG_FATAL_ERROR_RECEIVED_IN),
-             global_get_ptr()->error_string);
+             rarch_st.error_string);

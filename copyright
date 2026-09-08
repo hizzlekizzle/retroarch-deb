@@ -12,22 +12,45 @@ Files-Excluded: deps/SPIRV-Cross deps/bearssl-0.6 deps/glslang
  vita/launcher/builder/vita-*.exe wii/libogc/libs nvdaControllerClient64.dll
 
 Files: *
-Copyright: 2005–2025, Libretro Team <libretro@gmail.com>
-           2006–2025, Daniel De Matteis <libretro@gmail.com>
+Copyright: 2005–2026, The RetroArch authors <libretro@gmail.com>
+           2005–2026, Daniel De Matteis <libretro@gmail.com>
            2010–2024, Hans-Kristian Arntzen <maister@archlinux.us>
-           2010–2021, Michael Lelli <toadking@toadking.com>
-           2010–2014, OV2 <ov2@ov2.eu>
-           2012–2014, Jason Fetters <jasonfetters@gmail.com>
-           2013–2021, Alfred Agrell <floating@muncher.se>
            2014–2022, Andrés Suárez <andres.430@gmail.com>
-           2014–2022, Jean-André Santoni <jean.andre.santoni@gmail.com>
-           2014–2023, Ali Bouhlel <aliaspider@gmail.com>
-           2014–2020, Higor Eurípedes <heuripedes@gmail.com>
-           2015–2018, Andre Leiradella <andre@leiradella.com>
            2016–2019, Brad Parker <bparker06@bparker.net>
+           2020–2026, Tony Peter Jansson <tony@pihaus.org>
+           2014–2026, Jean-André Santoni <jean.andre.santoni@gmail.com>
+           2018–2022, James D. G. Leaver <author@jdgleaver.com>
+           2023–2026, Eric Warmenhoven <eric@warmenhoven.org>
+           2014–2023, Ali Bouhlel <aliaspider@gmail.com>
+           2010–2021, Michael Lelli <toadking@toadking.com>
+           2013–2021, Alfred Agrell <floating@muncher.se>
+           2014–2020, Higor Eurípedes de Araújo <heuripedes@gmail.com>
+           2012–2014, Jason Fetters <jasonfetters@gmail.com>
+           2016–2020, Michael Fredslev Christoffersen <orbea@fredslev.dk>
            2016–2019, Gregor Richards <hg-yff@gregor.im>
-           2018–2022, J. D. G. Leaver <jdgleaver@users.noreply.github.com>
-           2020–2025, Tony <sonninnos@users.noreply.github.com>
+           2019–2026, Ben Templeman <ben@alphanudesign.co.uk>
+           2019–2026, Andy Cairns <jamiras@users.noreply.github.com>
+           2016–2026, Rob Loach <robloach@gmail.com>
+           2015–2022, Francisco José García García <paco.garcia@ual.es>
+           2013–2016, Mathew Maidment <mathew1800@gmail.com>
+           2015–2025, Andre Leiradella <andre@leiradella.com>
+           2022–2026, Zoltan V. Balogh <balogh.zoltan.v@gmail.com>
+           2015–2020, Nathan Salaun <natinusala@gmail.com>
+           2018–2026, Francisco Javier Trujillo Mata <fjtrujy@gmail.com>
+           2021–2022, Roberto V. Rampim <Cthulhu-throwaway@users.noreply.github.com>
+           2024–2026, pstef <pstef@users.noreply.github.com>
+           2013–2026, Hunter Kaller <hunter_kaller@yahoo.com>
+           2019–2020, Johan Margueritte <weeedyweedsmoker@yahoo.fr>
+           2017–2022, gblues <gblues@users.noreply.github.com>
+           2017–2026, Tatsuya79 <Tatsuya79@users.noreply.github.com>
+           2024–2026, Craig Carnell <cscd98@users.noreply.github.com>
+           2015–2023, Yoshinobu Sugawara <yoshi.sugawara@gmail.com>
+           2017–2019, Alfredo Monclus <alfredomonclus@gmail.com>
+           2022–2026, Jesse Talavera-Greenberg <jesse@jesse.tg>
+           2019–2024, Vladimir Serbinenko <phcoder@gmail.com>
+           2020–2025, Bernhard Schelling <schellingb@gmail.com>
+           2018–2020, Dan Weiss <danweiss@gmail.com>
+           2016–2021, Mark W. Kidd <mark@stardart.net>
 License: GPL-3.0-or-later
 
 Files: ai/game_ai.?
@@ -57,7 +80,7 @@ Copyright: 2010–2013, Hans-Kristian Arntzen <maister@archlinux.us>
            2017–2018, gblues <gblues@users.noreply.github.com>
                 2020, Francisco José García García <paco.garcia@ual.es>
                 2023, Jesse Talavera-Greenberg <jesse@jesse.tg>
-                2023, Tony <sonninnos@users.noreply.github.com>
+                2023, Tony Peter Jansson <tony@pihaus.org>
 License: GPL-3.0-or-later
 
 Files: audio/drivers/alsa.c
@@ -76,7 +99,7 @@ Files: audio/drivers/alsa_qsa.c
 Copyright: 2013–2025, Daniel De Matteis <libretro@gmail.com>
                 2014, Mathew Maidment <mathew1800@gmail.com>
                 2017, gblues <gblues@users.noreply.github.com>
-                2019, Orbea <orbea@fredslev.dk>
+                2019, Michael Fredslev Christoffersen <orbea@fredslev.dk>
                 2020, Francisco José García García <paco.garcia@ual.es>
 License: GPL-3.0-or-later
 
@@ -87,7 +110,7 @@ Copyright: 2010–2014, Hans-Kristian Arntzen <maister@archlinux.us>
                 2015, Alfred Agrell <floating@muncher.se>
                 2016, Jean-André Santoni <jean.andre.santoni@gmail.com>
                 2016, gouchi <gouchi@free.fr>
-                2016, Sergio Benjamim Rocha Filho <sergiobenrocha2@gmail.com>
+                2016, Sérgio Benjamim Rocha Filho <sergiobenrocha2@gmail.com>
                 2017, gblues <gblues@users.noreply.github.com>
                 2020, Francisco José García García <paco.garcia@ual.es>
                 2020, Matthias Lorenz <oschowa@web.de>
@@ -97,7 +120,7 @@ License: GPL-3.0-or-later
 Files: audio/drivers/wasapi.c
 Copyright: 2011–2024, Daniel De Matteis <libretro@gmail.com>
                 2023, Jesse Talavera-Greenberg <jesse@jesse.tg>
-                2023, Tony <sonninnos@users.noreply.github.com>
+                2023, Tony Peter Jansson <tony@pihaus.org>
 License: GPL-3.0-or-later
 
 Files: com.libretro.RetroArch.metainfo.xml
@@ -114,15 +137,19 @@ License: BSD-2-Clause
 
 Files: deps/7zip/*
 Copyright: 1999–2023, Igor Pavlov <ipavlov@users.sourceforge.net>
-License: LicenseRef-PublicDomain
+License: public-domain
+Comment: These files have been put in the public domain by their author.
 
 Files: deps/libvita2d/*
 Copyright: 2015, Sergi Granell <xerpi.g.12@gmail.com>
 License: MIT
 
 Files: deps/stb/*
-Copyright: 2006–2015, Sean Barrett
-License: LicenseRef-BarrettPD
+Copyright: 2006–2015, Sean Barrett <sean@nothings.org>
+License: public-domain
+Comment: This software is in the public domain. Where that dedication is not
+ recognized, you are granted a perpetual, irrevocable license to copy and modify
+ this file however you want.
 
 Files: gfx/drivers/dispmanx_gfx.c gfx/drivers/sunxi_gfx.c
 Copyright: 2015–2016, Manuel Alfayate <redwindwanderer@gmail.com>
@@ -148,7 +175,7 @@ Files: gfx/include/vulkan/vk_icd.h gfx/include/vulkan/vk_layer.h
  gfx/include/vulkan/vk_sdk_platform.h
 Copyright: 2015–2016, The Khronos Group, Inc. <memberservices@khronos.org>
            2015–2016, Valve Corporation <milton@valvesoftware.com>
-           2015–2016, LunarG, Inc. <info@lunarg.com>
+           2015–2016, LunarG Inc. <info@lunarg.com>
 License: Apache-2.0
 
 Files: gfx/include/vulkan/vk_platform.h gfx/include/vulkan/vulkan.h
@@ -168,7 +195,7 @@ License: GPL-3.0-or-later
 
 Files: input/drivers_joypad/parport_joypad.c
 Copyright: 2011–2017, Daniel De Matteis <libretro@gmail.com>
-           2014–2015, Mike Robinson
+           2014–2015, Mike Robinson <mikeprobinsonuk@gmail.com>
 License: GPL-3.0-or-later
 
 Files: input/drivers_keyboard/keyboard_event_apple.h
@@ -178,20 +205,20 @@ License: BSD-2-Clause
 Files: input/drivers/qnx_input.c input/drivers_joypad/qnx_joypad.c
 Copyright: 2010–2014, Hans-Kristian Arntzen <maister@archlinux.us>
            2011–2017, Daniel De Matteis <libretro@gmail.com>
-           2013–2014, CatalystG
+           2013–2014, CatalystG <catalystgdev@gmail.com>
 License: GPL-3.0-or-later
 
 Files: input/drivers_joypad/xinput_joypad.c
 Copyright: 2011–2017, Daniel De Matteis <libretro@gmail.com>
-           2013–2015, pinumbernumber
+           2013–2015, pinumbernumber <1337rz@gmail.com>
 License: GPL-3.0-or-later
 
 Files: libretro-common/* libretro-db/*
-Copyright: 2010–2021, The RetroArch Team
+Copyright: 2010–2021, Team Libretro <libretro@gmail.com>
 License: MIT
 
 Files: libretro-common/compat/compat_ifaddrs.c
-Copyright: 2013, Kenneth MacKay
+Copyright: 2013, Kenneth MacKay <kmackay@chromium.org>
 License: BSD-2-Clause
 
 Files: libretro-common/audio/conversion/s16_to_float.c
@@ -200,65 +227,83 @@ Copyright: 2010–2014, Hans-Kristian Arntzen <maister@archlinux.us>
 License: GPL-3.0-or-later
 
 Files: libretro-common/include/compat/msvc/stdint.h
-Copyright: 2006–2008, Alexander Chemeris
+Copyright: 2006–2008, Alexander Chemeris <Alexander.Chemeris@fairwaves.ru>
 License: BSD-3-Clause
 
 Files: libretro-common/include/compat/ifaddrs.h
-Copyright: 1995–1999 Berkeley Software Design, Inc.
+Copyright: 1995–1999, Berkeley Software Design, Inc. <bsdi-info@bsdi.com>
 License: BSD-1-Clause
 
 Files: libretro-common/libco/*
-Copyright: 2008–2010 byuu
-License: LicenseRef-PublicDomain
+Copyright: 2008–2010, David Kirk Ginder <setsunakun0@hotmail.com>
+License: public-domain
+Comment: These files have been put in the public domain by their author.
 
 Files: libretro-common/libco/armeabi.c
 Copyright: 2013, Hans-Kristian Arntzen <maister@archlinux.us>
-License: LicenseRef-PublicDomain
+License: public-domain
+Comment: These files have been put in the public domain by their author.
 
 Files: libretro-common/libco/fiber.c
-Copyright: 2008, Nach
-           2008, byuu
-License: LicenseRef-PublicDomain
+Copyright: 2008, Nach <n-a-c-h@users.sourceforge.net>
+           2008, David Kirk Ginder <setsunakun0@hotmail.com>
+License: public-domain
+Comment: These files have been put in the public domain by their author.
 
 Files: libretro-common/libco/ppc.c
 Copyright: 2013, Shay Green <blargg@hotpop.com>
-License: LicenseRef-PublicDomain
+License: public-domain
+Comment: These files have been put in the public domain by their author.
 
 Files: libretro-common/libco/sjlj.c libretro-common/libco/ucontext.c
-Copyright: 2008, Nach
-License: LicenseRef-PublicDomain
+Copyright: 2008, Nach <n-a-c-h@users.sourceforge.net>
+License: public-domain
+Comment: These files have been put in the public domain by their author.
 
 Files: libretro-common/net/* libretro-common/include/formats/image.h
-Copyright: 2010–2016, The RetroArch Team
+Copyright: 2010–2016, Team Libretro <libretro@gmail.com>
 License: GPL-3.0-or-later
 
 Files: libretro-common/utils/md5.c
-Copyright: 2001, Alexander Peslyak
-License: LicenseRef-PeslyakPD
+Copyright: 2001, Alexander Peslyak <solar@openwall.com>
+License: public-domain
+Comment: This software was written by Alexander Peslyak in 2001. No copyright is
+ claimed, and the software is hereby placed in the public domain. In case this
+ attempt to disclaim copyright and place the software in the public domain is
+ deemed null and void, then the software is Copyright © 2001 Alexander Peslyak
+ and it is hereby released to the general public under the following terms:
+ .
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted.
+ .
+ There's ABSOLUTELY NO WARRANTY, express or implied.
 
 Files: libretro-common/utils/sha1.c
-Copyright: 1998, 2009 Paul E. Jones <paulej@packetizer.com>
+Copyright: 1998–2009, Paul E. Jones <paulej@packetizer.com>
 License: LicenseRef-FPL
 
 Files: memory/neon/memcpy-neon.S
-Copyright: Siarhei Siamashka <siarhei.siamashka@nokia.com>
-           Jim Huang <jserv@0xlab.org>
+Copyright: 2009, Siarhei Siamashka <siarhei.siamashka@nokia.com>
+           2011, Jim Huang <jserv@0xlab.org>
 License: LGPL-2.1-or-later
 
 Files: tools/gas-preprocessor.pl
-Copyright: David Conrad
+Copyright: 2009–2012, David Conrad <lessen42@gmail.com>
 License: GPL-2.0-or-later
 
 Files: tools/cg2glsl.py
-Copyright: Hans-Kristian Arntzen <maister@archlinux.us>
-License: LicenseRef-PublicDomain
+Copyright: 2013–2014, Hans-Kristian Arntzen <maister@archlinux.us>
+           2013–2015, Daniel De Matteis <libretro@gmail.com>
+                2015, Felix Laurie von Massenbach <f@erbridge.co.uk>
+License: public-domain
+Comment: These files have been put in the public domain by their author.
 
 Files: ui/drivers/qt/*
 Copyright: 2011–2015, Andrés Suárez <andres.430@gmail.com>
 License: GPL-3.0-or-later
 
 Files: wii/app_booter/elf_abi.h
-Copyright: 1995–2002, Erik Theisen
+Copyright: 1995–2002, Erik Theisen <etheisen@mindspring.com>
 License: BSD-3-Clause
 
 Files: wii/app_booter/link.ld wii/app_booter/crt0.s
@@ -266,7 +311,7 @@ Copyright: 2008–2009, Segher Boessenkool <segher@kernel.crashing.org>
 License: GPL-2.0-or-later
 
 Files: wii/app_booter/main.c
-Copyright: 2011, Dimok
+Copyright: 2011, Dimok <dimok789@users.sourceforge.net>
 License: GPL-2.0-or-later
 
 Files: cheevos/cheevos*
@@ -275,9 +320,9 @@ License: GPL-3.0-or-later
 
 Files: debian/*
 Copyright: 2012–2025, Hunter Kaller <hunter_kaller@yahoo.com>
-           2014–2018, Sergio Benjamim <sergio_br2@yahoo.com.br>
+           2014–2018, Sérgio Benjamim Rocha Filho <sergio_br2@yahoo.com.br>
            2020–2025, Paul Preuss <paul@dokomi.de>
-           2021–2025, Peter J. Mello <admin@petermello.net>
+           2021–2026, Peter J. Mello <admin@petermello.net>
 License: GPL-3.0-or-later or MPL-2.0
 
 License: GPL-3.0-or-later
@@ -331,9 +376,6 @@ License: BSD-2-Clause
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-License: LicenseRef-PublicDomain
- These files have been put in the public domain by their author.
-
 License: MIT
  Permission is hereby granted, free of charge, to any person obtaining a copy of
  this software and associated documentation files (the "Software"), to deal in
@@ -353,11 +395,6 @@ License: MIT
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
-
-License: LicenseRef-BarrettPD
- This software is in the public domain. Where that dedication is not recognized,
- you are granted a perpetual, irrevocable license to copy and modify this file
- however you want.
 
 License: Apache-2.0
  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -451,18 +488,6 @@ License: GPL-2.0-or-later
  On Debian(-based) GNU/Linux systems, the complete text of the GNU General
  Public License, version 2, can be found in the file
  '/usr/share/common-licenses/GPL-2'.
-
-License: LicenseRef-PeslyakPD
- This software was written by Alexander Peslyak in 2001. No copyright is
- claimed, and the software is hereby placed in the public domain. In case this
- attempt to disclaim copyright and place the software in the public domain is
- deemed null and void, then the software is Copyright © 2001 Alexander Peslyak
- and it is hereby released to the general public under the following terms:
- .
- Redistribution and use in source and binary forms, with or without
- modification, are permitted.
- .
- There's ABSOLUTELY NO WARRANTY, express or implied.
 
 License: LicenseRef-FPL
  Freeware Public License (FPL)

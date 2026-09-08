@@ -7,170 +7,173 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later OR MPL-2.0
 
-MAKEFLAGS                     += --output-sync=target
-SHELL                        ::= $(realpath /bin/bash)
+SHELL                     ::= $(realpath /bin/bash)
 
-DEB_BUILD_MAINT_OPTIONS      ::= abi=+all hardening=+all optimize=+lto \
-									reproducible=+fixfilepath
-DEB_CFLAGS_MAINT_APPEND      ::= -Wno-incompatible-pointer-types
-DEB_LDFLAGS_MAINT_APPEND     ::= -lGL -pthread
-DEB_LDFLAGS_MAINT_PREPEND    ::= -Wl,--copy-dt-needed-entries
-DOXYGEN                      ::= $(realpath /bin/doxygen)
-DPKG_EXPORT_BUILDFLAGS       ::= 1
-DPKG_EXPORT_BUILDTOOLS       ::= 1
-LTO                          ::= 1
-MAKE_ARGS                    ::= QT_VERSION=$(QT_SELECT)
-MOC                          ::= /usr/lib/qt6/libexec/moc
-QT_SELECT                    ::= qt6
+DEB_BUILD_MAINT_OPTIONS   ::= abi=+all hardening=+all optimize=+lto
+DEB_CFLAGS_MAINT_APPEND   ::= --include-directory-after=/usr/include \
+								-ftabstop=4 -Wno-incompatible-pointer-types
+DEB_CXXFLAGS_MAINT_APPEND ::= --include-directory-after=/usr/include \
+								-ftabstop=4
+DEB_LDFLAGS_MAINT_APPEND  ::= -lGL -pthread
+DEB_LDFLAGS_MAINT_PREPEND ::= -Wl,--copy-dt-needed-entries
+DOXYGEN                   ::= $(realpath /bin/doxygen)
+DPKG_EXPORT_BUILDFLAGS    ::= 1
+DPKG_EXPORT_BUILDTOOLS    ::= 1
+LTO                       ::= 1
+MOC                       ::= /usr/lib/qt6/libexec/moc
+QT_SELECT                 ::= qt6
+
+MAKEARGS                  ::= MOC=$(MOC) QT_VERSION=$(QT_SELECT)
+MAKEFLAGS                  += --output-sync=target
 
 ifeq (,$(findstring terse,$(DEB_BUILD_OPTIONS)))
-  export DH_VERBOSE          ::= 1
-  MAKE_ARGS                   += "V=1"
+  export DH_VERBOSE       ::= 1
+  MAKEARGS                 += V=1
 endif
 
 # Use dpkg to introspect its own installed -dev package version and compare it
 # to the version of introduction for dpkg-buildflags named feature areas.
-dpkg_v ::= $(shell dpkg-query -f '$${Version}' -W dpkg-dev)
+dpkgd ::= $(shell dpkg-query -f '$${Version}' -W dpkg-dev)
+include /usr/share/dpkg/vendor.mk
+ifeq (Ubuntu,$(DEB_VENDOR))
 # Pass ELF package metadata to linker for easier debugging by users.
-ifneq (0,$(shell dpkg --compare-versions $(dpkg_v) ge 1.22.6ubuntu11 && echo 1))
-  DEB_BUILD_MAINT_OPTIONS   += qa=-bug-implicit-func,+elfpackagemetadata
-else ifneq (0,$(shell dpkg --compare-versions $(dpkg_v) ge 1.22.3 && echo 1))
-  DEB_BUILD_MAINT_OPTIONS   += qa=-bug-implicit-func
+  ifneq (,$(shell dpkg --compare-versions $(dpkgd) ge 1.22.6ubuntu11 && echo 1))
+    DEB_BUILD_MAINT_OPTIONS += qa=-bug-implicit-func,+elfpackagemetadata
+  else ifneq (,$(shell dpkg --compare-versions $(dpkgd) ge 1.22.3 && echo 1))
+    DEB_BUILD_MAINT_OPTIONS += qa=-bug-implicit-func
+  endif
 endif
 
 include /usr/share/dpkg/default.mk
 
-cp_vfa     ::= $(realpath /bin/cp) --verbose --force --archive
-install_vd ::= $(realpath /bin/install) --verbose --directory
-data-share ::= $(CURDIR)/debian/retroarch-data/usr/share/libretro
-ra-docs    ::= $(CURDIR)/debian/retroarch/usr/share/doc/retroarch
-ragamesd   ::= $(CURDIR)/debian/retroarch/usr/games
-shadersd   ::= $(data-share)/shaders/shaders_cg
+at_dhm        ::= @DEB_HOST_MULTIARCH@
+cp_vfa        ::= $(realpath /bin/cp) --verbose --force --archive
+install_vd    ::= $(realpath /bin/install) --verbose --directory --mode=0755
+ra-data-share ::= $(CURDIR)/debian/retroarch-data/usr/share/libretro
+ra-dev-docd   ::= $(CURDIR)/debian/retroarch-dev-doc/usr
+ra-docs       ::= $(CURDIR)/debian/retroarch/usr/share/doc/retroarch
+ragamesd      ::= $(CURDIR)/debian/retroarch/usr/games
+shadersd      ::= $(ra-data-share)/shaders/shaders_cg
+define nl     ::=
+
+
+endef
 
 dv       ::= $(DEB_VERSION)
 git_hash ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
 
 ifdef git_hash
   export GIT_VERSION ::= $(git_hash)
-  MAKE_ARGS           += "GIT_VERSION=$(git_hash)"
+  MAKEARGS            += GIT_VERSION=$(git_hash)
 endif
 
-# See ./configure --help for valid flags for the QuickBuild framework or visit
-# https://git.libretro.com/libretro/RetroArch/-/blob/master/qb/config.params.sh
-QB_BUILD_FLAGS ::= --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
-	--bindir=/usr/games --datarootdir=/usr/share \
-	--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
-	--sysconfdir=/etc --with-assets_dir=/usr/share/libretro \
-	--with-core_info_dir=/usr/share/libretro \
-	--with-filters_dir="/usr/lib/$(DEB_HOST_MULTIARCH)/retroarch"
-
-# Before making alterations to these flags, look below to the block of
-# conditionals determined by the architecture of the build target; those present
-# there should never be set here as well due to potential state conflicts.
-QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-asio --disable-audioio \
+# Before making alterations to these flags, first look below to the block of
+# build target architecture-specific conditionals; flags present there should
+# never also be set here to prevent undefined outcomes.
+QB_LIBS_FLAGS ::= --enable-al --enable-alsa --disable-asio --disable-audioio \
 	--disable-avf --disable-blissbox --enable-bluetooth \
-	--disable-builtinbearssl --disable-builtinglslang --disable-builtinmbedtls \
-	--disable-builtinspirv_cross --enable-caca --enable-cdrom --enable-check \
-	--disable-cocoa --enable-command --disable-core_info_cache \
-	--disable-coreaudio --disable-corelocation --disable-d3d9 --disable-d3d10 \
-	--disable-d3d11 --disable-d3d12 --enable-dbus --disable-dinput \
-	--disable-dsound --enable-dylib --enable-egl --enable-ffmpeg --enable-flac \
-	--enable-freetype --disable-gdi --enable-glslang --disable-glx \
-	--enable-hid --enable-hlsl --enable-jack --enable-kms --enable-libdecor \
-	--enable-libshake --enable-libsmb --enable-libusb --enable-lua \
-	--enable-materialui --enable-memfd_create --disable-mfi --enable-mmap \
+	--disable-builtinglslang --disable-builtinspirv_cross --enable-caca \
+	--enable-cdrom --enable-check --disable-cocoa --enable-command \
+	--enable-core_info_cache --disable-coreaudio --disable-corelocation \
+	--disable-d3d9 --disable-d3d10 --disable-d3d11 --disable-d3d12 \
+	--enable-dbus --disable-dinput --disable-dsound --enable-dylib \
+	--enable-egl --enable-ffmpeg --enable-flac --enable-freetype --disable-gdi \
+	--enable-glslang --disable-glx --enable-hid --enable-hidraw --disable-hlsl \
+	--enable-jack --enable-kms --enable-libdecor --enable-libshake \
+	--enable-libsmb --enable-libusb --enable-lua --enable-materialui \
+	--enable-mbedtls --enable-memfd_create --disable-mfi --enable-mmap \
 	--enable-network_video --enable-networkgamepad --enable-networking \
-	--disable-nvda --disable-online_updater --enable-opengl --disable-oss \
-	--enable-ozone --enable-parport --enable-pipewire --enable-pipewire_stable \
-	--enable-plain_drm --enable-pulse --enable-qt --disable-rchd \
-	--disable-retroarch_playlist_manager --disable-rflac --enable-rgui \
+	--disable-nvda --disable-online_updater --enable-opengl --enable-openxr \
+	--enable-osmesa --disable-oss --enable-ozone --enable-parport \
+	--enable-pipewire --enable-plain_drm --enable-pulse --enable-qt \
+	--disable-rchd --disable-retroarch_playlist_manager --enable-retronfs \
+	--disable-retrosmb --disable-retrossl --disable-rflac --enable-rgui \
 	--disable-roar --disable-rsound --disable-rzstd --disable-sdl \
 	--disable-sdl2 --enable-sdl3 --enable-sixel --enable-slang \
 	--enable-smbclient --enable-spirv_cross --enable-ssa --enable-ssl \
-	--enable-systemd --enable-systemmbedtls --enable-test_drivers \
-	--enable-threads --enable-thread_storage --disable-tinyalsa --enable-udev \
-	--disable-update_assets --enable-v4l2 --disable-vg --disable-videocore \
-	--enable-videoprocessor --enable-vulkan --disable-wasapi --enable-wayland \
+	--enable-systemd --enable-test_drivers --enable-threads \
+	--enable-thread_storage --disable-tinyalsa --enable-udev \
+	--disable-update_assets --disable-update_core_info --disable-update_cores \
+	--enable-v4l2 --disable-vg --disable-videocore --enable-videoprocessor \
+	--enable-vulkan --disable-wasapi --enable-wayland --disable-wdmks \
 	--enable-webmplayer --enable-wifi --disable-winmm --disable-winrawinput \
-	--enable-x11 --disable-xaudio --enable-xdelta --enable-xi2 \
-	--enable-xinerama --enable-xmb --enable-xrandr --enable-xscrnsaver \
-	--enable-xshm --enable-xvideo --enable-zlib --enable-zstd
-
-# GCC v15.1.0, released with Ubuntu 25.10 "Questing" has a bug regarding the
-# assembler behavior on 32-bit ARM architectures that happens to be triggered by
-# the moc parts of Qt6-enabled builds. The "-fno-late-combine-instructions" flag
-# is a workaround to prevent such builds from erroring out. This can be pulled
-# whenever Canonical releases a backport patching this bug.
-gcc_v ::= $(shell dpkg-query -f '$${Version}' -W gcc)
-gcctest ::= $(shell dpkg --compare-versions $(gcc_v) ge 15.1.0 && echo "true")
+	--disable-winusb --enable-x11 --disable-xaudio --enable-xdelta \
+	--enable-xi2 --enable-xinerama --enable-xmb --enable-xrandr \
+	--enable-xscrnsaver --enable-xshm --enable-xvideo --enable-zlib \
+	--enable-zstd
 
 ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
-  QB_LIBS_FLAGS              += --enable-cg --disable-rpiled --enable-sse
+  QB_LIBS_FLAGS += --enable-cg --disable-rpiled --enable-sse
 else ifeq ($(DEB_HOST_GNU_CPU),aarch64)
-  QB_LIBS_FLAGS              += --disable-cg --enable-opengles \
-								--enable-opengles3 --enable-opengles3_1 \
-								--enable-opengles3_2 --enable-rpiled
-  DEB_CFLAGS_MAINT_APPEND    += -mno-early-ldp-fusion
-  DEB_CXXFLAGS_MAINT_APPEND ::= -mno-early-ldp-fusion
+  QB_LIBS_FLAGS += --disable-cg --enable-opengles --enable-opengles3 \
+					--enable-opengles3_1 --enable-opengles3_2 --enable-rpiled
 else ifeq ($(DEB_HOST_GNU_CPU),arm)
-  QB_LIBS_FLAGS              += --enable-angle --disable-cg --enable-floathard \
-								--enable-neon --enable-opengles \
-								--enable-opengles3 --enable-opengles3_1 \
-								--enable-opengles3_2 --enable-rpiled \
-								--enable-sunxi
-  DEB_CFLAGS_MAINT_APPEND    += -fno-late-combine-instructions
-  DEB_CXXFLAGS_MAINT_APPEND ::= -fno-late-combine-instructions
+  QB_LIBS_FLAGS += --enable-angle --disable-cg --enable-floathard \
+					--enable-neon --enable-opengles --enable-opengles3 \
+					--enable-opengles3_1 --enable-opengles3_2 --enable-rpiled \
+					--enable-sunxi
 else
-  QB_LIBS_FLAGS              += --disable-cg
+  QB_LIBS_FLAGS += --disable-cg
 endif
 
 export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND \
 		DEB_CXXFLAGS_MAINT_APPEND DEB_LDFLAGS_MAINT_APPEND \
-		DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MOC QT_SELECT SHELL
+		DEB_LDFLAGS_MAINT_PREPEND DOXYGEN LTO MAKEARGS MOC QT_SELECT SHELL
 
 
 %:
-	dh $@ -v -Smakefile --without autoreconf
+	dh $@ --verbose --buildsystem=makefile --without autoreconf,autotools-dev
 
 
 execute_before_dh_auto_clean:
 	touch "$(CURDIR)/config.mk"
 
-execute_after_dh_auto_clean:
-	dh_auto_clean -O-v -O-Smakefile -O-Dgfx/video_filters
-	dh_auto_clean -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters
+override_dh_auto_clean:
+	$(DH_OVERRIDDEN_COMMAND)
+	$(DH_OVERRIDDEN_COMMAND) -O--builddir=gfx/video_filters
+	$(DH_OVERRIDDEN_COMMAND) -O--builddir=libretro-common/audio/dsp_filters
 
-execute_before_dh_auto_configure-arch: at_dhm=@DEB_HOST_MULTIARCH@
-	@env LC_ALL=C.UTF-8 sed -e 's/$(at_dhm)/$(DEB_HOST_MULTIARCH)/g' \
+execute_before_dh_auto_configure-arch:
+	$(info $(nl) ⁂ Making arch-dependent changes to retroarch.cfg…$(nl))
+	env LC_ALL="C.UTF-8" sed -e 's/$(at_dhm)/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/debian/retroarch.cfg.in" >"$(CURDIR)/debian/retroarch.cfg"
-	$(info *** Lines modified in retroarch.cfg to match build architecture:)
-	@echo; grep -n '$(DEB_HOST_MULTIARCH)' "$(CURDIR)/debian/retroarch.cfg"
 
+# See ./configure --help for valid flags for the QuickBuild framework or visit
+# https://git.libretro.com/libretro/RetroArch/-/blob/master/qb/config.params.sh
 override_dh_auto_configure-arch:
-	QT_VERSION="$(QT_SELECT)" MOC="$(MOC)" $(CURDIR)/configure \
-		$(QB_BUILD_FLAGS) $(QB_LIBS_FLAGS)
+	if env $(MAKEARGS) $(SHELL) -eux -o pipefail -c $(CURDIR)/configure -- \
+		--build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --bindir=/usr/games \
+		--datarootdir=/usr/share --docdir=/usr/share/doc/retroarch \
+		--mandir=/usr/share/man --sysconfdir=/etc \
+		--with-assets_dir=/usr/share/libretro \
+		--with-core_info_dir=/usr/share/libretro \
+		--with-filters_dir=/usr/lib/$(DEB_HOST_MULTIARCH)/retroarch \
+		$(QB_LIBS_FLAGS); then echo -e \
+	'\n ⁂ Build config output file, config.mk, contents…\n' && \
+	cat "$(CURDIR)/config.mk" && echo -e '\n\t\t+++===+++EOF+++===+++\n'; fi
 
-# Nothing to do here, we handle the Doxygen configuration with a quilt patch.
+# Nothing to do here, the Doxygen configuration is performed by a quilt patch.
 override_dh_auto_configure-indep:
 
-override_dh_auto_build-arch: | BUILDretroarch BUILDsoft_filters BUILDdsp_plugins
+override_dh_auto_build-arch: BUILDretroarch BUILDsoftfilters BUILDdsp_plugins
 
 BUILDretroarch:
-	$(info Building Retroarch…)
-	dh_auto_build -O-v -O-Smakefile -- $(MAKE_ARGS)
+	$(info $(nl) ⁂ Building Retroarch…$(nl))
+	dh_auto_build -O--verbose -O--buildsystem=makefile -- $(MAKEARGS)
 
-BUILDsoft_filters:
-	$(info Building Video SoftFilters…)
-	dh_auto_build -O-v -O-Smakefile -O-Dgfx/video_filters -- $(MAKE_ARGS)
+BUILDsoftfilters:
+	$(info $(nl) ⁂ Building Video SoftFilters…$(nl))
+	dh_auto_build -O--verbose -O--buildsystem=makefile \
+		-O--builddir=gfx/video_filters -- $(MAKEARGS)
 
 BUILDdsp_plugins:
-	$(info Building Audio DSP plugins…)
-	dh_auto_build -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters -- \
-		$(MAKE_ARGS)
+	$(info $(nl) ⁂ Building Audio DSP plugins…$(nl))
+	dh_auto_build -O--verbose -O--buildsystem=makefile \
+		-O--builddir=libretro-common/audio/dsp_filters -- $(MAKEARGS)
 
 override_dh_auto_build-indep:
 ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
-	$(info Building Doxygen developer documentation…)
+	$(info $(nl) ⁂ Building Doxygen developer documentation…$(nl))
 	$(DOXYGEN) "$(CURDIR)/Doxyfile"
 endif
 
@@ -180,56 +183,63 @@ override_dh_auto_install:
 execute_after_dh_install-arch:
 	chrpath --delete "$(ragamesd)/retroarch"
 	@$(cp_vfa) "$(CURDIR)/tools/cg2glsl.py" "$(ragamesd)/retroarch-cg2glsl"
-	@chmod -v 0755 "$(ragamesd)/retroarch-cg2glsl"
+	@chmod --changes 0755 "$(ragamesd)/retroarch-cg2glsl"
 
 execute_after_dh_install-indep:
-	-@for shdr in interpolation/shaders/smootheststep.cg \
+	$(info $(nl) ⁂ Converting shaders saved as ASCII to UTF-8…$(nl))
+	for shader in interpolation/shaders/smootheststep.cg \
 		interpolation/shaders/smoothstep.cg scalenx/shaders/scale3xSFX.cg \
-		sharpen/shaders/adaptive-sharpen.cg; do \
-			iconv -f ISO-8859-1 -t UTF-8 "$(shadersd)/$${shdr}"; done
-	@rm -Rfv "$(shadersd)/docs" "$(shadersd)/.gitlab-ci.yml" \
-		"$(shadersd)/Makefile" "$(shadersd)/compat_includes.inc" \
-		"$(shadersd)/configure"
-	find -H -O3 "$(data-share)/database" -ignore_readdir_race \( -iname \
-		'*.xml' -o -iname '*.zip' \) -type f -printf 'Deleting %p…\n' -delete
-	find -H -O3 "$(data-share)/overlays" -ignore_readdir_race \( -iname '*.sh' \
-		-o -iname 'README*' -o -name 'font_info.txt' \) -type f \
-			-printf 'Deleting %p…\n' -delete
+		sharpen/shaders/adaptive-sharpen.cg; do iconv -f ISO-8859-1 -t UTF-8 \
+			"$(shadersd)/$${shader}" | sponge "$(shadersd)/$${shader}"; done
+	$(info $(nl) ⁂ Removing buildsystem artifacts from shaders directory…$(nl))
+	rm --verbose --recursive --force "$(shadersd)/docs" \
+		"$(shadersd)/.gitlab-ci.yml" "$(shadersd)/Makefile" \
+		"$(shadersd)/compat_includes.inc" "$(shadersd)/configure"
+	$(info $(nl) ⁂ Removing intermediate files from database directory…$(nl))
+	find -H -O3 "$(ra-data-share)/database" -ignore_readdir_race \( -iname \
+		'*.xml' -o -iname '*.zip' \) -type f -printf '\tDeleting %p…\n' -delete
+	$(info $(nl) ⁂ Removing developer docs from overlays directory…$(nl))
+	find -H -O3 "$(ra-data-share)/overlays" -ignore_readdir_race \( -iname \
+		'*.sh' -o -iname 'README*' -o -name 'font_info.txt' \) -type f \
+			-printf '\tDeleting %p…\n' -delete
+	$(info $(nl) ⁂ Removing developer docs from shaders directory…$(nl))
 	find -H -O3 "$(shadersd)" -ignore_readdir_race \( -iname 'README*' -o \
 		-iname 'LICENSE.TXT' -o -iname 'THANKS.TXT' \) -type f \
-			-printf 'Deleting %p…\n' -delete
+			-printf '\tDeleting %p…\n' -delete
 
 execute_after_dh_installdocs-arch:
-	@if test ! -d "$(ra-docs)"; then $(install_vd) "$(ra-docs)"; fi
-	@$(cp_vfa) "$(CURDIR)/deps/switchres/README.md" "$(ra-docs)/switchres.md"
-	@$(cp_vfa) "$(CURDIR)/media/shaders_cg/docs/README" \
+	if test ! -d "$(ra-docs)"; then $(install_vd) "$(ra-docs)"; fi
+	$(cp_vfa) "$(CURDIR)/media/shaders_cg/docs/README" \
 		"$(ra-docs)/common-shaders.txt"
-	@$(cp_vfa) "$(CURDIR)/media/autoconfig/README.md" \
+	$(cp_vfa) "$(CURDIR)/media/autoconfig/README.md" \
 		"$(ra-docs)/retropad-autoconfig.md"
-	@$(cp_vfa) "$(CURDIR)/media/libretrodb/README.md" "$(ra-docs)/libretrodb.md"
+	$(cp_vfa) "$(CURDIR)/media/libretrodb/README.md" "$(ra-docs)/libretrodb.md"
 
 override_dh_installdocs-indep:
-	dh_installdocs -O-v -plibretro-dev-doc --doc-main-package=retroarch-dev
-	dh_installdocs -O-v --indep --remaining-packages
+	$(DH_OVERRIDDEN_COMMAND) -pretroarch-dev-doc \
+		--doc-main-package=retroarch-dev
+	$(DH_OVERRIDDEN_COMMAND) --remaining-packages
 
 override_dh_doxygen:
 ifeq (,$(findstring nodoc,$(DEB_BUILD_OPTIONS) $(DEB_BUILD_PROFILES)))
-	dh_doxygen -plibretro-dev-doc
+	$(DH_OVERRIDDEN_COMMAND) -pretroarch-dev-doc
 endif
 
+# Doxygen has a nasty habit of generating backend JavaScript for the search
+# feature that is then duplicated across several files. This target scans the
+# newly-generated documentation for any such duplicates and replaces all but the
+# first from each set with symlinks to that remaining file.
 execute_after_dh_link-indep:
-# Doxygen has a nasty, persistent habit of generating backend JavaScript for the
-# search feature that becomes duplicated across several files. This target scans
-# the Doxygen docs for any such identifcal files and replaces all but one from
-# each set with symlinks to that remaining file.
-	$(info Removing duplicate files from the Doxygen-generated documentation…)
-	@jdupes --recurse --link-soft --symlinks \
-		"$(CURDIR)/debian/libretro-dev-doc/usr"
+	$(info $(nl) ⁂ Removing duplicate files from the documentation…$(nl))
+	jdupes --recurse --link-soft --symlinks "$(ra-dev-docd)"
 
-.NOTPARALLEL: override_dh_auto_build-arch
-.PHONY: execute_after_dh_auto_clean execute_after_dh_install-arch \
-		execute_after_dh_installdocs-arch execute_after_dh_link-indep \
-		execute_before_dh_auto_clean execute_before_dh_auto_configure-arch \
-		override_dh_auto_build-arch override_dh_auto_build-indep \
+.NOTPARALLEL: override_dh_auto_build-arch override_dh_auto_configure-arch
+.PHONY: execute_after_dh_install-arch execute_after_dh_installdocs-arch \
+		execute_after_dh_link-indep execute_before_dh_auto_clean \
+		execute_before_dh_auto_configure-arch override_dh_auto_build-arch \
+		override_dh_auto_build-indep override_dh_auto_clean \
 		override_dh_auto_configure-arch override_dh_auto_install \
 		override_dh_doxygen override_dh_installdocs-indep
+.SILENT: execute_after_dh_install-indep execute_after_dh_installdocs-arch \
+			execute_before_dh_auto_configure-arch \
+			override_dh_auto_configure-arch

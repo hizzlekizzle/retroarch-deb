@@ -1,0 +1,91 @@
+Description: Fix QuickBuild library detection environment flaws
+ RetroArch's QuickBuild system having about as much flexibility and elegance as
+ an arthritic great-grandmother trying to doing the limbo on roller skates, a
+ number of failures in function must here be set right. These are:
+   * The variable assignment syntax is a trainwrech, so repair the broken ones
+     and those vulnerable to non-standard filesystem paths.
+   * The architecture flags for 32-bit ARM hosts fail to propagate to the C
+     compiler as Makefile variable, so reassign them in the shell.
+   * The minor version values for MBEDTLS are missing the leading zero, and
+     wayland-client has the major and minor values reversed. Yee-haw!
+   * Lastly, remove explicit checks for stub libraries that were dropped in GLSL
+     v14.0.0.
+Author: Jonathan McDowell <noodles@earth.li>
+Origin: vendor, https://salsa.debian.org/games-team/libretro/retroarch/-/commit/f0b45a4951805c89bde3c91eac5d948053caa779
+Bug-Debian: https://bugs.debian.org/956849
+Bug-Debian: https://bugs.debian.org/1064681
+Forwarded: yes, https://github.com/libretro/RetroArch/issues/16571
+Reviewed-by: Peter J. Mello <admin@petermello.net>
+Last-Update: 2026-10-11
+
+--- a/qb/config.libs.sh
++++ b/qb/config.libs.sh
+@@ -30,7 +30,7 @@ [ -z "$CROSS_COMPILE" ] && [ -d /opt/loc
+ [ "${GLOBAL_CONFIG_DIR:-}" ] ||
+ {	case "$PREFIX" in
+ 		/usr*) GLOBAL_CONFIG_DIR=/etc ;;
+-		*) GLOBAL_CONFIG_DIR="$PREFIX"/etc ;;
++		*) GLOBAL_CONFIG_DIR="${PREFIX}/etc" ;;
+ 	esac
+ }
+ 
+@@ -114,6 +114,7 @@ fi
+ if [ "$HAVE_NEON" = "yes" ]; then
+    add_define MAKEFILE NEON_CFLAGS '-mfpu=neon -marm'
+    add_define MAKEFILE NEON_ASFLAGS -mfpu=neon
++   CFLAGS="${CFLAGS} -mfpu=neon -marm"
+ fi
+ 
+ if [ "$HAVE_FLOATHARD" = "yes" ]; then
+@@ -165,9 +166,9 @@ [ "$HAVE_DYNAMIC" = 'yes' ] || {
+    add_define MAKEFILE libretro "$LIBRETRO"
+ }
+ 
+-add_define MAKEFILE ASSETS_DIR "${ASSETS_DIR:-$SHARE_DIR}/retroarch"
+-add_define MAKEFILE FILTERS_DIR "${FILTERS_DIR:-$SHARE_DIR}/retroarch"
+-add_define MAKEFILE CORE_INFO_DIR "${CORE_INFO_DIR:-$SHARE_DIR}/retroarch"
++add_define MAKEFILE ASSETS_DIR "${ASSETS_DIR:-${SHARE_DIR}/retroarch}"
++add_define MAKEFILE FILTERS_DIR "${FILTERS_DIR:-${SHARE_DIR}/retroarch}"
++add_define MAKEFILE CORE_INFO_DIR "${CORE_INFO_DIR:-${SHARE_DIR}/retroarch}"
+ add_define MAKEFILE BIN_DIR "${BIN_DIR:-${PREFIX}/bin}"
+ add_define MAKEFILE DOC_DIR "${DOC_DIR:-${SHARE_DIR}/doc/retroarch}"
+ add_define MAKEFILE MAN_DIR "${MAN_DIR:-${SHARE_DIR}/man}"
+@@ -589,9 +590,9 @@ if [ "$HAVE_MBEDTLS" = 'yes' ] && [ "$HA
+   die 1 "Can't enable multiple SSL backends"
+ fi
+ if [ "$HAVE_MBEDTLS" = 'yes' ]; then
+-  check_val '' MBEDTLS '-lmbedtls' 'mbedtls' mbedtls 2.5.1 '' true
+-  check_val '' MBEDX509 '-lmbedx509' 'mbedtls' mbedx509 2.5.1 '' true
+-  check_val '' MBEDCRYPTO '-lmbedcrypto' 'mbedtls' mbedcrypto 2.5.1 '' true
++  check_val '' MBEDTLS '-lmbedtls' 'mbedtls' mbedtls 2.05.1 '' true
++  check_val '' MBEDX509 '-lmbedx509' 'mbedtls' mbedx509 2.05.1 '' true
++  check_val '' MBEDCRYPTO '-lmbedcrypto' 'mbedtls' mbedcrypto 2.05.1 '' true
+   if [ "$HAVE_MBEDTLS" = 'yes' ] && [ -z "$MBEDTLS_VERSION" ]; then
+     # Ancient versions (such as the one included in the Ubuntu version used
+     # for build checks) don't have this header
+@@ -837,7 +838,7 @@ check_val '' XINERAMA -lXinerama '' xin
+ check_lib '' XRANDR -lXrandr
+ check_header '' XSHM X11/Xlib.h X11/extensions/XShm.h
+ check_val '' XKBCOMMON -lxkbcommon '' xkbcommon 0.3.2 '' false
+-check_val '' WAYLAND '-lwayland-egl -lwayland-client' '' wayland-egl 10.1.0 '' false
++check_val '' WAYLAND '-lwayland-egl -lwayland-client' '' wayland-egl 1.10.1 '' false
+ check_val '' WAYLAND_CURSOR -lwayland-cursor '' wayland-cursor 1.12 '' false
+ check_pkgconf WAYLAND_PROTOS wayland-protocols 1.43
+ check_pkgconf WAYLAND_SCANNER wayland-scanner '1.15 1.12' '' '' nopkg
+@@ -998,16 +999,13 @@ if [ "$HAVE_GLSLANG" != no ]; then
+ 
+    check_lib cxx GLSLANG -lglslang '' '-lSPIRV'
+    check_lib cxx GLSLANG_OSDEPENDENT -lOSDependent
+-   check_lib cxx GLSLANG_OGLCOMPILER -lOGLCompiler
+    check_lib cxx GLSLANG_MACHINEINDEPENDENT -lMachineIndependent
+    check_lib cxx GLSLANG_GENERICCODEGEN -lGenericCodeGen
+-   check_lib cxx GLSLANG_HLSL -lHLSL '' '-lglslang -lSPIRV'
+    check_lib cxx GLSLANG_SPIRV -lSPIRV
+    check_lib cxx GLSLANG_SPIRV_TOOLS_OPT -lSPIRV-Tools-opt
+    check_lib cxx GLSLANG_SPIRV_TOOLS -lSPIRV-Tools
+ 
+    if [ "$HAVE_GLSLANG" = no ] ||
+-      [ "$HAVE_GLSLANG_HLSL" = no ] ||
+       [ "$HAVE_GLSLANG_SPIRV" = no ] ||
+       [ "$HAVE_GLSLANG_SPIRV_TOOLS_OPT" = no ] ||
+       [ "$HAVE_GLSLANG_SPIRV_TOOLS" = no ]; then

@@ -1,0 +1,18 @@
+Description: Link build to system copy of libxxhash, not vendored copy
+Author: Jonathan McDowell <noodles@earth.li>
+Origin: vendor, https://salsa.debian.org/games-team/libretro/retroarch/-/commit/b2ae1f0089670ac6cd430310c38084d12604d735
+Forwarded: no
+Reviewed-By: Peter J. Mello <admin@petermello.net>
+Last-Update: 2026-10-10
+
+--- a/input/bsv/uint32s_index.c
++++ b/input/bsv/uint32s_index.c
+@@ -24,7 +24,7 @@
+ #include "../../verbosity.h"
+ 
+ #define XXH_INLINE_ALL
+-#include <xxHash/xxhash.h>
++#include <xxhash.h>
+ 
+ #define HASHMAP_CAP 65536
+ /* A test build can define its own hash to force collisions. */

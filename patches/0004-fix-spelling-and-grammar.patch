@@ -17,7 +17,7 @@ Last-Update: 2026-09-06
  
 --- a/intl/msg_hash_us.h
 +++ b/intl/msg_hash_us.h
-@@ -24961,7 +24961,7 @@ MSG_HASH(
+@@ -25556,7 +25556,7 @@ MSG_HASH(
     )
  MSG_HASH(
     MENU_ENUM_LABEL_HELP_VIDEO_SHADER_NUM_PASSES,
@@ -26,7 +26,7 @@ Last-Update: 2026-09-06
     )
  MSG_HASH(
     MENU_ENUM_LABEL_VALUE_SHADER,
-@@ -33900,7 +33900,7 @@ MSG_HASH(
+@@ -34786,7 +34786,7 @@ MSG_HASH(
     )
  MSG_HASH(
     MENU_ENUM_SUBLABEL_VALUE_CPU_PERF_MODE_MANUAL,
@@ -35,12 +35,12 @@ Last-Update: 2026-09-06
     )
  MSG_HASH(
     MENU_ENUM_LABEL_VALUE_CPU_PERF_MODE_MANAGED_PERF,
-@@ -33916,7 +33916,7 @@ MSG_HASH(
+@@ -34802,7 +34802,7 @@ MSG_HASH(
     )
  MSG_HASH(
     MENU_ENUM_SUBLABEL_VALUE_CPU_PERF_MODE_MANAGED_PER_CONTEXT,
 -   "Allows to choose what governors to use in menus and during gameplay. Performance, Ondemand or Schedutil are recommended during gameplay."
-+   "Allows choosing what governors to use in menus and during gameplay. Performance, Ondemand or Schedutil are recommended during gameplay."
++   "Sets which CPU performance governor is used for the menu interface and—separately—during gameplay (for which Performance, Ondemand or Schedutil are recommended)."
     )
  MSG_HASH(
     MENU_ENUM_LABEL_VALUE_CPU_PERF_MODE_MAX_PERF,

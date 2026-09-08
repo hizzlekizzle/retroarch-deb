@@ -1,9 +1,8 @@
 0000-use-system-libs.patch
 0001-print-fatal-errors-to-stdout.patch
-0002-fix-armhf-NEON-support.patch
-0003-remove-GLSL-library-checks.patch
-0004-update-doxygen-config.patch
-0005-fix-quickbuild-behavior.patch
-0006-fix-spelling-and-grammar.patch
-0007-replace-distutils-with-setuptools.patch
-#0008-make-builds-reproducible.patch
+0002-fix-quickbuild-shortcomings.patch
+0003-update-doxygen-config.patch
+0004-fix-spelling-and-grammar.patch
+0005-python-distutils-to-setuptools.patch
+0006-use-system-libxxhash.patch
+#0007-make-builds-reproducible.patch
