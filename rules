@@ -7,8 +7,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later OR MPL-2.0
 
-CP_vfa                       ::= $(realpath /bin/cp) --verbose --force --archive
-INSTALL_vd                   ::= $(realpath /bin/install) --verbose --directory
 MAKEFLAGS                     += --output-sync=target
 SHELL                        ::= $(realpath /bin/bash)
 
@@ -21,7 +19,7 @@ DOXYGEN                      ::= $(realpath /bin/doxygen)
 DPKG_EXPORT_BUILDFLAGS       ::= 1
 DPKG_EXPORT_BUILDTOOLS       ::= 1
 LTO                          ::= 1
-MAKE_ARGS                    ::= "QT_VERSION=qt6"
+MAKE_ARGS                    ::= QT_VERSION=$(QT_SELECT)
 MOC                          ::= /usr/lib/qt6/libexec/moc
 QT_SELECT                    ::= qt6
 
@@ -30,67 +28,73 @@ ifeq (,$(findstring terse,$(DEB_BUILD_OPTIONS)))
   MAKE_ARGS                   += "V=1"
 endif
 
-# Use dpkg to introspect its installed version and compare it to the version of
-# the version of introduction for dpkg-buildflags named feature areas.
+# Use dpkg to introspect its own installed -dev package version and compare it
+# to the version of introduction for dpkg-buildflags named feature areas.
 dpkg_v ::= $(shell dpkg-query -f '$${Version}' -W dpkg-dev)
 # Pass ELF package metadata to linker for easier debugging by users.
 ifneq (0,$(shell dpkg --compare-versions $(dpkg_v) ge 1.22.6ubuntu11 && echo 1))
   DEB_BUILD_MAINT_OPTIONS   += qa=-bug-implicit-func,+elfpackagemetadata
-else ifneq (,$(shell dpkg --compare-versions $(dpkg_v) ge 1.22.3 && echo 1))
+else ifneq (0,$(shell dpkg --compare-versions $(dpkg_v) ge 1.22.3 && echo 1))
   DEB_BUILD_MAINT_OPTIONS   += qa=-bug-implicit-func
 endif
 
 include /usr/share/dpkg/default.mk
 
-at_dhm   ::= @DEB_HOST_MULTIARCH@
-pcfilesd ::= $(CURDIR)/debian/pkgconf
-data-shr ::= $(CURDIR)/debian/retroarch-data/usr/share/libretro
-ra-docs  ::= $(CURDIR)/debian/retroarch/usr/share/doc/retroarch
-ragamesd ::= $(CURDIR)/debian/retroarch/usr/games
-shadersd ::= $(data-shr)/shaders/shaders_cg
+cp_vfa     ::= $(realpath /bin/cp) --verbose --force --archive
+install_vd ::= $(realpath /bin/install) --verbose --directory
+data-share ::= $(CURDIR)/debian/retroarch-data/usr/share/libretro
+ra-docs    ::= $(CURDIR)/debian/retroarch/usr/share/doc/retroarch
+ragamesd   ::= $(CURDIR)/debian/retroarch/usr/games
+shadersd   ::= $(data-share)/shaders/shaders_cg
 
 dv       ::= $(DEB_VERSION)
 git_hash ::= $(shell echo '$(dv)' | sed -Ene 's/.*~([0-9a-f]{7,10})-\d*.*/\1/p')
 
 ifdef git_hash
-  export GIT_VERSION  ::= $(git_hash)
-  MAKE_ARGS            += "GIT_VERSION=$(git_hash)"
+  export GIT_VERSION ::= $(git_hash)
+  MAKE_ARGS           += "GIT_VERSION=$(git_hash)"
 endif
 
-# See ./configure --help for valid flags for the QuickBuild framework
-QB_BUILD_FLAGS ::= --prefix=/usr --bindir=/usr/games --datarootdir=/usr/share \
+# See ./configure --help for valid flags for the QuickBuild framework or visit
+# https://git.libretro.com/libretro/RetroArch/-/blob/master/qb/config.params.sh
+QB_BUILD_FLAGS ::= --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
+	--bindir=/usr/games --datarootdir=/usr/share \
 	--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
-	--sysconfdir=/etc --build=$(DEB_BUILD_GNU_TYPE) \
-	--with-assets_dir=/usr/share/libretro \
-	--with-filters_dir="/usr/lib/$(DEB_HOST_MULTIARCH)/retroarch" \
-	--with-core_info_dir=/usr/share/libretro
-QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-audioio \
-	--disable-blissbox --enable-bluetooth --disable-builtinbearssl \
-	--disable-builtinglslang --disable-builtinmbedtls \
-	--disable-builtinsmbclient --enable-caca --enable-cdrom --enable-check \
-	--enable-command --enable-configfile --disable-core_info_cache \
-	--disable-coreaudio --enable-crtswitchres --disable-d3d9 --enable-dbus \
-	--disable-dinput --disable-dsound --enable-dsp_filter --enable-dylib \
-	--disable-dynamic_egl --enable-egl --enable-ffmpeg --enable-flac \
-	--enable-freetype --disable-game_ai --disable-gdi --enable-glslang \
-	--enable-hid --enable-jack --enable-kms --enable-libdecor \
-	--enable-libshake --enable-libusb --enable-lua --enable-materialui \
-	--enable-memfd_create --enable-microphone --enable-mmap --disable-mpv \
+	--sysconfdir=/etc --with-assets_dir=/usr/share/libretro \
+	--with-core_info_dir=/usr/share/libretro \
+	--with-filters_dir="/usr/lib/$(DEB_HOST_MULTIARCH)/retroarch"
+
+# Before making alterations to these flags, look below to the block of
+# conditionals determined by the architecture of the build target; those present
+# there should never be set here as well due to potential state conflicts.
+QB_LIBS_FLAGS  ::= --enable-al --enable-alsa --disable-asio --disable-audioio \
+	--disable-avf --disable-blissbox --enable-bluetooth \
+	--disable-builtinbearssl --disable-builtinglslang --disable-builtinmbedtls \
+	--disable-builtinspirv_cross --enable-caca --enable-cdrom --enable-check \
+	--disable-cocoa --enable-command --disable-core_info_cache \
+	--disable-coreaudio --disable-corelocation --disable-d3d9 --disable-d3d10 \
+	--disable-d3d11 --disable-d3d12 --enable-dbus --disable-dinput \
+	--disable-dsound --enable-dylib --enable-egl --enable-ffmpeg --enable-flac \
+	--enable-freetype --disable-gdi --enable-glslang --disable-glx \
+	--enable-hid --enable-hlsl --enable-jack --enable-kms --enable-libdecor \
+	--enable-libshake --enable-libsmb --enable-libusb --enable-lua \
+	--enable-materialui --enable-memfd_create --disable-mfi --enable-mmap \
 	--enable-network_video --enable-networkgamepad --enable-networking \
-	--disable-nvda --enable-opengl --disable-osmesa --disable-oss \
-	--enable-ozone --enable-parport --enable-patch --enable-pipewire \
-	--enable-plain_drm --enable-pulse --enable-qt --enable-rgui --disable-roar \
-	--disable-rsound --disable-sapi --disable-sdl --enable-sdl2 --enable-sixel \
-	--enable-slang --enable-smbclient --enable-spirv_cross --enable-ssa \
-	--enable-ssl --enable-systemd --enable-systemmbedtls --enable-test_drivers \
+	--disable-nvda --disable-online_updater --enable-opengl --disable-oss \
+	--enable-ozone --enable-parport --enable-pipewire --enable-pipewire_stable \
+	--enable-plain_drm --enable-pulse --enable-qt --disable-rchd \
+	--disable-retroarch_playlist_manager --disable-rflac --enable-rgui \
+	--disable-roar --disable-rsound --disable-rzstd --disable-sdl \
+	--disable-sdl2 --enable-sdl3 --enable-sixel --enable-slang \
+	--enable-smbclient --enable-spirv_cross --enable-ssa --enable-ssl \
+	--enable-systemd --enable-systemmbedtls --enable-test_drivers \
 	--enable-threads --enable-thread_storage --disable-tinyalsa --enable-udev \
-	--disable-update_assets --enable-v4l2 --disable-vg --enable-video_filter \
-	--disable-videocore --enable-videoprocessor --enable-vulkan \
-	--disable-wasapi --enable-wayland --enable-wifi --disable-winmm \
-	--disable-winrawinput --enable-x11 --disable-xaudio --enable-xdelta \
-	--enable-xi2 --enable-xinerama --enable-xmb --enable-xrandr \
-	--enable-xscrnsaver --enable-xshm --enable-xvideo --enable-zlib \
-	--enable-zstd
+	--disable-update_assets --enable-v4l2 --disable-vg --disable-videocore \
+	--enable-videoprocessor --enable-vulkan --disable-wasapi --enable-wayland \
+	--enable-webmplayer --enable-wifi --disable-winmm --disable-winrawinput \
+	--enable-x11 --disable-xaudio --enable-xdelta --enable-xi2 \
+	--enable-xinerama --enable-xmb --enable-xrandr --enable-xscrnsaver \
+	--enable-xshm --enable-xvideo --enable-zlib --enable-zstd
 
 # GCC v15.1.0, released with Ubuntu 25.10 "Questing" has a bug regarding the
 # assembler behavior on 32-bit ARM architectures that happens to be triggered by
@@ -101,38 +105,23 @@ gcc_v ::= $(shell dpkg-query -f '$${Version}' -W gcc)
 gcctest ::= $(shell dpkg --compare-versions $(gcc_v) ge 15.1.0 && echo "true")
 
 ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
-  QB_LIBS_FLAGS += --disable-angle --enable-cg \
-					--disable-opengles --disable-rpiled --enable-sse
+  QB_LIBS_FLAGS              += --enable-cg --disable-rpiled --enable-sse
 else ifeq ($(DEB_HOST_GNU_CPU),aarch64)
-  QB_LIBS_FLAGS += --disable-angle --disable-cg \
-					--enable-opengles --enable-opengles3 --enable-opengles3_1 \
-					--enable-opengles3_2
-  ifeq ($(gcctest),true)
-    DEB_CFLAGS_MAINT_APPEND    += -mno-early-ldp-fusion
-    DEB_CXXFLAGS_MAINT_APPEND  += -mno-early-ldp-fusion
-  endif
+  QB_LIBS_FLAGS              += --disable-cg --enable-opengles \
+								--enable-opengles3 --enable-opengles3_1 \
+								--enable-opengles3_2 --enable-rpiled
+  DEB_CFLAGS_MAINT_APPEND    += -mno-early-ldp-fusion
+  DEB_CXXFLAGS_MAINT_APPEND ::= -mno-early-ldp-fusion
 else ifeq ($(DEB_HOST_GNU_CPU),arm)
-  QB_LIBS_FLAGS += --disable-cg --enable-floathard \
-					--enable-neon --enable-opengles --enable-opengles3 \
-					--enable-opengles3_1 --enable-opengles3_2 --enable-sunxi
-  ifeq ($(gcctest),true)
-    DEB_CFLAGS_MAINT_APPEND    += -fno-late-combine-instructions
-    DEB_CXXFLAGS_MAINT_APPEND ::= -fno-late-combine-instructions
-  endif
+  QB_LIBS_FLAGS              += --enable-angle --disable-cg --enable-floathard \
+								--enable-neon --enable-opengles \
+								--enable-opengles3 --enable-opengles3_1 \
+								--enable-opengles3_2 --enable-rpiled \
+								--enable-sunxi
+  DEB_CFLAGS_MAINT_APPEND    += -fno-late-combine-instructions
+  DEB_CXXFLAGS_MAINT_APPEND ::= -fno-late-combine-instructions
 else
-  QB_LIBS_FLAGS += --disable-angle --disable-cg --disable-game_ai \
-					--disable-opengles
-endif
-
-# GLSL v14.0.0 dropped legacy stub libraries libIGLCompiler and libHLSL and a
-# patch was added to the series to remove them from QuickBuild. This conditional
-# tests if we are using such a GLSL, and if not, adds back the linker flags for
-# both libraries as arguments to the $(MAKE) invocation. Drop this once builds
-# are no longer needed for Ubuntu 23.10 "Mantic Minotaur" and its predecessors.
-glsl_v   ::= $(shell dpkg-query -f '$${Version}' -W glslang-dev)
-glsltest ::= $(shell dpkg --compare-versions $(glsl_v) ge 14.0.0 && echo "true")
-ifneq ($(glsltest),true)
-  MAKE_ARGS     += GLSLANG_LIBS+="-lglslang -lOGLCompiler -lHLSL"
+  QB_LIBS_FLAGS              += --disable-cg
 endif
 
 export DEB_BUILD_MAINT_OPTIONS DEB_CFLAGS_MAINT_APPEND \
@@ -151,28 +140,15 @@ execute_after_dh_auto_clean:
 	dh_auto_clean -O-v -O-Smakefile -O-Dgfx/video_filters
 	dh_auto_clean -O-v -O-Smakefile -O-Dlibretro-common/audio/dsp_filters
 
-execute_before_dh_auto_configure-arch:
+execute_before_dh_auto_configure-arch: at_dhm=@DEB_HOST_MULTIARCH@
 	@env LC_ALL=C.UTF-8 sed -e 's/$(at_dhm)/$(DEB_HOST_MULTIARCH)/g' \
 		"$(CURDIR)/debian/retroarch.cfg.in" >"$(CURDIR)/debian/retroarch.cfg"
 	$(info *** Lines modified in retroarch.cfg to match build architecture:)
 	@echo; grep -n '$(DEB_HOST_MULTIARCH)' "$(CURDIR)/debian/retroarch.cfg"
-# The qt6-base-dev package in the Ubuntu 22.04 package repositories fails to
-# install the pkgconf files for the Qt6 libraries, and since Quickbuild lacks
-# the versatility to fallback to the CMake config files that /are/ provided, the
-# .pc files must be instantiated here at build time to configure successfully.
-ifeq ($(uver),22.04)
-	@$(INSTALL_vd) "$(pcfilesd)"
-	set -e; for pcfile in Concurrent Core Gui Network Platform Widgets; do \
-		test -e /usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/Qt6$${pcfile}.pc || \
-		LC_ALL=C.UTF-8 sed -e 's/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g' \
-			"$(pcfilesd).in/Qt6$${pcfile}.pc.in" \
-				>"$(pcfilesd)/Qt6$${pcfile}.pc"; done
-endif
 
 override_dh_auto_configure-arch:
-	PKG_CONFIG_PATH="$(pcfilesd)$${PKG_CONFIG_PATH:+:$$PKG_CONFIG_PATH}" \
-		QT_VERSION="$(QT_SELECT)" MOC="$(MOC)" $(CURDIR)/configure \
-			$(QB_BUILD_FLAGS) $(QB_LIBS_FLAGS)
+	QT_VERSION="$(QT_SELECT)" MOC="$(MOC)" $(CURDIR)/configure \
+		$(QB_BUILD_FLAGS) $(QB_LIBS_FLAGS)
 
 # Nothing to do here, we handle the Doxygen configuration with a quilt patch.
 override_dh_auto_configure-indep:
@@ -203,7 +179,7 @@ override_dh_auto_install:
 
 execute_after_dh_install-arch:
 	chrpath --delete "$(ragamesd)/retroarch"
-	@$(CP_vfa) "$(CURDIR)/tools/cg2glsl.py" "$(ragamesd)/retroarch-cg2glsl"
+	@$(cp_vfa) "$(CURDIR)/tools/cg2glsl.py" "$(ragamesd)/retroarch-cg2glsl"
 	@chmod -v 0755 "$(ragamesd)/retroarch-cg2glsl"
 
 execute_after_dh_install-indep:
@@ -214,9 +190,9 @@ execute_after_dh_install-indep:
 	@rm -Rfv "$(shadersd)/docs" "$(shadersd)/.gitlab-ci.yml" \
 		"$(shadersd)/Makefile" "$(shadersd)/compat_includes.inc" \
 		"$(shadersd)/configure"
-	find -H -O3 "$(data-shr)/database" -ignore_readdir_race \( -iname '*.xml' \
-		-o -iname '*.zip' \) -type f -printf 'Deleting %p…\n' -delete
-	find -H -O3 "$(data-shr)/overlays" -ignore_readdir_race \( -iname '*.sh' \
+	find -H -O3 "$(data-share)/database" -ignore_readdir_race \( -iname \
+		'*.xml' -o -iname '*.zip' \) -type f -printf 'Deleting %p…\n' -delete
+	find -H -O3 "$(data-share)/overlays" -ignore_readdir_race \( -iname '*.sh' \
 		-o -iname 'README*' -o -name 'font_info.txt' \) -type f \
 			-printf 'Deleting %p…\n' -delete
 	find -H -O3 "$(shadersd)" -ignore_readdir_race \( -iname 'README*' -o \
@@ -224,13 +200,13 @@ execute_after_dh_install-indep:
 			-printf 'Deleting %p…\n' -delete
 
 execute_after_dh_installdocs-arch:
-	@if test ! -d "$(ra-docs)"; then $(INSTALL_vd) "$(ra-docs)"; fi
-	@$(CP_vfa) "$(CURDIR)/deps/switchres/README.md" "$(ra-docs)/switchres.md"
-	@$(CP_vfa) "$(CURDIR)/media/shaders_cg/docs/README" \
+	@if test ! -d "$(ra-docs)"; then $(install_vd) "$(ra-docs)"; fi
+	@$(cp_vfa) "$(CURDIR)/deps/switchres/README.md" "$(ra-docs)/switchres.md"
+	@$(cp_vfa) "$(CURDIR)/media/shaders_cg/docs/README" \
 		"$(ra-docs)/common-shaders.txt"
-	@$(CP_vfa) "$(CURDIR)/media/autoconfig/README.md" \
+	@$(cp_vfa) "$(CURDIR)/media/autoconfig/README.md" \
 		"$(ra-docs)/retropad-autoconfig.md"
-	@$(CP_vfa) "$(CURDIR)/media/libretrodb/README.md" "$(ra-docs)/libretrodb.md"
+	@$(cp_vfa) "$(CURDIR)/media/libretrodb/README.md" "$(ra-docs)/libretrodb.md"
 
 override_dh_installdocs-indep:
 	dh_installdocs -O-v -plibretro-dev-doc --doc-main-package=retroarch-dev
