@@ -88,19 +88,17 @@ QB_LIBS_FLAGS ::= --enable-al --enable-alsa --disable-asio --disable-audioio \
 	--enable-pipewire --enable-plain_drm --enable-pulse --enable-qt \
 	--disable-rchd --disable-retroarch_playlist_manager --enable-retronfs \
 	--disable-retrosmb --disable-retrossl --disable-rflac --enable-rgui \
-	--disable-roar --disable-rsound --disable-rzstd --disable-sdl \
-	--disable-sdl2 --enable-sdl3 --enable-sixel --enable-slang \
-	--enable-smbclient --enable-spirv_cross --enable-ssa --enable-ssl \
-	--enable-systemd --enable-test_drivers --enable-threads \
-	--enable-thread_storage --disable-tinyalsa --enable-udev \
+	--disable-roar --disable-rsound --disable-sdl --disable-sdl2 --enable-sdl3 \
+	--enable-sixel --enable-slang --enable-smbclient --enable-spirv_cross \
+	--enable-ssa --enable-ssl --enable-systemd --enable-test_drivers \
+	--enable-threads --enable-thread_storage --disable-tinyalsa --enable-udev \
 	--disable-update_assets --disable-update_core_info --disable-update_cores \
 	--enable-v4l2 --disable-vg --disable-videocore --enable-videoprocessor \
 	--enable-vulkan --disable-wasapi --enable-wayland --disable-wdmks \
 	--enable-webmplayer --enable-wifi --disable-winmm --disable-winrawinput \
 	--disable-winusb --enable-x11 --disable-xaudio --enable-xdelta \
 	--enable-xi2 --enable-xinerama --enable-xmb --enable-xrandr \
-	--enable-xscrnsaver --enable-xshm --enable-xvideo --enable-zlib \
-	--enable-zstd
+	--enable-xscrnsaver --enable-xshm --enable-xvideo --enable-zlib
 
 ifeq ($(DEB_HOST_GNU_CPU),$(filter $(DEB_HOST_GNU_CPU),x86_64 i386))
   QB_LIBS_FLAGS += --enable-cg --disable-rpiled --enable-sse
@@ -141,15 +139,15 @@ execute_before_dh_auto_configure-arch:
 # See ./configure --help for valid flags for the QuickBuild framework or visit
 # https://git.libretro.com/libretro/RetroArch/-/blob/master/qb/config.params.sh
 override_dh_auto_configure-arch:
-	if env $(MAKEARGS) $(SHELL) -eux -o pipefail -c $(CURDIR)/configure -- \
-		--build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --bindir=/usr/games \
-		--datarootdir=/usr/share --docdir=/usr/share/doc/retroarch \
-		--mandir=/usr/share/man --sysconfdir=/etc \
-		--with-assets_dir=/usr/share/libretro \
+	if env $(MAKEARGS) $(SHELL) -euo pipefail -c '"$${0}" "$${@}"' \
+		$(CURDIR)/configure --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr \
+		--bindir=/usr/games --datarootdir=/usr/share \
+		--docdir=/usr/share/doc/retroarch --mandir=/usr/share/man \
+		--sysconfdir=/etc --with-assets_dir=/usr/share/libretro \
 		--with-core_info_dir=/usr/share/libretro \
 		--with-filters_dir=/usr/lib/$(DEB_HOST_MULTIARCH)/retroarch \
 		$(QB_LIBS_FLAGS); then echo -e \
-	'\n ⁂ Build config output file, config.mk, contents…\n' && \
+	'\n ⁂ Build config output file (config.mk) contents…\n' && \
 	cat "$(CURDIR)/config.mk" && echo -e '\n\t\t+++===+++EOF+++===+++\n'; fi
 
 # Nothing to do here, the Doxygen configuration is performed by a quilt patch.

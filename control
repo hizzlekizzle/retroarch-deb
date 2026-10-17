@@ -39,7 +39,8 @@ Build-Depends-Arch: chrpath, dh-package-notes (>= 0.14), dh-sequence-dwz,
  x11proto-xext-dev, zlib1g-dev (>= 1:1.1.4)
 Build-Depends-Indep: dh-builtusing (>= 0.0.9) <!nodoc>,
  dh-sequence-builtusing <!nodoc>, dh-sequence-doxygen <!nodoc>,
- doxygen (>= 1.9.4-4) <!nodoc>, libjs-mathjax <!nodoc>, pdf2svg <!nodoc>
+ doxygen (>= 1.9.4-4) <!nodoc>, doxygen-awesome-css <!nodoc>,
+ libjs-mathjax <!nodoc>, pdf2svg <!nodoc>
 Standards-Version: 4.7.4
 Homepage: https://www.libretro.com/
 Vcs-Git: https://git.launchpad.net/~libretro/libretro/+git/RetroArch-debian
@@ -123,7 +124,7 @@ Package: retroarch-dev-doc
 Architecture: all
 Multi-Arch: foreign
 Section: doc
-Depends: libjs-jquery, libjs-mathjax
+Depends: doxygen-awesome-css, libjs-jquery, libjs-mathjax
 Suggests: retroarch-dev (= ${binary:Version})
 Breaks: libretro-dev-doc (<< 1.22.2+ds1~)
 Replaces: libretro-dev-doc (<< 1.22.2+ds1~)
